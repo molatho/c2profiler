@@ -1,3 +1,8 @@
+// References:
+// - https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_main.htm
+// - https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2-extend_main.htm
+// - https://bigb0sss.github.io/posts/redteam-cobalt-strike-malleable-profile/
+
 export interface IProfile extends IHasOptions {
     http_get?: IBlockHttpGet;
     http_post?: IBlockHttpPost;
