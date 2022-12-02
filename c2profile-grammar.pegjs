@@ -22,6 +22,7 @@
 
   const OPTION = "option";
   const HEADER = "header";
+  const PARAMETER = "parameter";
   const DSL = "header";
   const TERMINATION = "header";
   const COMMAND = "block::stage::command";
@@ -41,6 +42,8 @@
   const BLOCKHTTPPOSTSERVER = "block::http::post::server";
   const BLOCKHTTPPOSTSERVEROUTPUT = "block::http::post::server::output";
   const BLOCKHTTPSTAGER = "block::http::stager";
+  const BLOCKHTTPSTAGERCLIENT = "block::http::stager::client";
+  const BLOCKHTTPSTAGERSERVER = "block::http::stager::server";
   const BLOCKHTTPSTAGEROUTPUT = "block::http::stager::output";
   const BLOCKHTTPCONFIG = "block::http::config";
   const BLOCKHTTPSCERT = "block::https::certificate";
@@ -93,21 +96,24 @@ option
 headerset
 	= "header" _+ name:string _* value:string ";" comment? { return mk(HEADER, { "name": name, "value": value }); }
 
+parameterset
+	= "parameter" _+ name:string _* value:string ";" comment? { return mk(PARAMETER, { "name": name, "value": value }); }
+
 datatransform
-	= "append" _ operand:string _* ";" comment? { return mk(DSL, { "name": "append", "operand": operand }); }
-	/ "prepend" _ operand:string _* ";"{ return mk(DSL, { "name": "prepend", "operand": operand }); }
-    / "base64;" { return mk(DSL, { "name": "base64" }); }
-    / "base64url;" { return mk(DSL, { "name": "base64url" }); }
-    / "mask;" { return mk(DSL, { "name": "mask" }); }
-    / "netbios;" { return mk(DSL, { "name": "netbios" }); }
-    / "netbiosu;" { return mk(DSL, { "name": "netbiosu" }); }
+	= "append" _ operand:string _* ";" comment? { return mk(DSL, { "type": "append", "operand": operand }); }
+	/ "prepend" _ operand:string _* ";"{ return mk(DSL, { "type": "prepend", "operand": operand }); }
+    / "base64;" { return mk(DSL, { "type": "base64" }); }
+    / "base64url;" { return mk(DSL, { "type": "base64url" }); }
+    / "mask;" { return mk(DSL, { "type": "mask" }); }
+    / "netbios;" { return mk(DSL, { "type": "netbios" }); }
+    / "netbiosu;" { return mk(DSL, { "type": "netbiosu" }); }
     / _
     
 termination
-	= "header" _+ operand:string ";" comment? { return mk(TERMINATION, { "name": "header", "operand": operand }); }
-	/ "parameter" _+ operand:string ";" comment? { return mk(TERMINATION, { "name": "parameter", "operand": operand }); }
-	/ "print;" { return mk(TERMINATION, { "name": "print" }); }
-	/ "uri-append;"{ return mk(TERMINATION, { "name": "uri-append" }); }
+	= "header" _+ operand:string ";" comment? { return mk(TERMINATION, { "type": "header", "operand": operand }); }
+	/ "parameter" _+ operand:string ";" comment? { return mk(TERMINATION, { "type": "parameter", "operand": operand }); }
+	/ "print;" { return mk(TERMINATION, { "type": "print" }); }
+	/ "uri-append;"{ return mk(TERMINATION, { "type": "uri-append" }); }
 
 block_code_signer
 	= "code-signer" _* "{" _* body:block_options_only* _* "}"  { return mk(BLOCKCODESIGNER, { "options": filter(body, OPTION)}); }
@@ -140,19 +146,26 @@ block_http
         "options": filter(body, OPTION),
         "headers": filter(body, HEADER),
         }); }
-    / "https-certificate" _* variant:string? _* "{" _* body:block_options_only* _* "}" { return mk(BLOCKHTTPCERTIFICATE, {
+    / "https-certificate" _* variant:string? _* "{" _* body:block_options_only* _* "}" { return mk(BLOCKHTTPSCERT, {
         "options": filter(body, OPTION),
         "variant": variant
         }); }
 
+block_http_transformation_elements_head
+    = (comment / _)* datatransform _* (comment / _)*
+
+block_http_transformation_elements_tail
+    = (comment / _)* termination (comment / _)*
+
 block_http_transformation
-	= transforms:(datatransform)* term:termination { return mk(BLOCKTRANFORMINFORMATION, { "transforms": filter(transforms, DSL), "termination": clean(term) }); }
+	= transforms:block_http_transformation_elements_head+ term:block_http_transformation_elements_tail { return mk(BLOCKTRANFORMINFORMATION, { "transforms": filter(transforms, DSL), "termination": first(term, TERMINATION) }); }
 
 block_http_get
 	= option
     / "client" _+ "{" _* body:block_http_get_client* _* "}" { return mk(BLOCKHTTPGETCLIENT, {
         "headers": filter(body, HEADER),
-        "metadata": first(body, BLOCKHTTPGETCLIENTMETADATA)
+        "metadata": first(body, BLOCKHTTPGETCLIENTMETADATA),
+        "parameter": first(body, PARAMETER)
         }); }
 	/ "server" _+ "{" _* body:block_http_get_server* _* "}" { return mk(BLOCKHTTPGETSERVER, {
         "headers": filter(body, HEADER),
@@ -164,6 +177,7 @@ block_http_get
 
 block_http_get_client
 	= headerset
+    / parameterset
 	/ "metadata" _+ "{" _* transforminfo:block_http_transformation _* "}" { return mk(BLOCKHTTPGETCLIENTMETADATA, clean(transforminfo)); }
     / comment
     / _
@@ -198,14 +212,14 @@ block_http_post_server
 
 block_http_stager
 	= option
-    / "client" _+ "{" _* body:block_http_stager_client _* "}" { return mk("block::http::stager::client", { "body": body.filter(e => e) }); }
-    / "server" _+ "{" _* body:block_http_stager_server _* "}" { return mk("block::http::stager::server", { "body": body.filter(e => e) }); }
+    / "client" _+ "{" _* body:block_http_stager_client* _* "}" { return mk(BLOCKHTTPSTAGERCLIENT, { "body": body.filter(e => e) }); }
+    / "server" _+ "{" _* body:block_http_stager_server* _* "}" { return mk(BLOCKHTTPSTAGERSERVER, { "body": body.filter(e => e) }); }
 	/ comment
     / _
 
 block_http_stager_client
-	= termination
-    / headerset
+	= headerset
+    / parameterset
     / comment
     / _
     
@@ -279,8 +293,8 @@ block_process_inject_execute_body
     / _
 
 block_process_inject_execute_commands
-	= "CreateThread" _+ str:string ";" comment? { return mk("block::process::inject::execute::CreateThread", { "value": str }); }
-	/ "CreateRemoteThread" _+ str:string ";" comment? { return mk("block::process::inject::execute::CreateRemoteThread", { "value": str }); }
+	= "CreateThread" _+ str:string ";" comment? { return mk("block::process::inject::execute::CreateThread", { "operand": str }); }
+	/ "CreateRemoteThread;" comment? { return mk("block::process::inject::execute::CreateRemoteThread", {}); }
 	/ "NtQueueApcThread;" comment? { return mk("block::process::inject::execute::NtQueueApcThread", { }); }
 	/ "NtQueueApcThread-s;" comment? { return mk("block::process::inject::execute::NtQueueApcThreads", { }); }
 	/ "RtlCreateUserThread;" comment? { return mk("block::process::inject::execute::RtlCreateUserThread", { }); }
