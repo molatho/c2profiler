@@ -128,6 +128,12 @@ http-get {
 		}
 	}
 }
+
+http-get "My Variant" { 
+    client {
+        parameter "bar" "blah";
+    }
+}
 # define indicators for an set POST
 http-post {
 	set uri "/api/v1/Telemetry/Id/";

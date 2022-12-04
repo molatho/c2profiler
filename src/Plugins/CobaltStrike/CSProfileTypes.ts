@@ -19,16 +19,16 @@ export const TopBlockDisplayNames: Map<TopBlockName, string> = new Map<TopBlockN
     ["process_inject", "Process Inject"],
 ]);
 export interface ICSProfile extends ICSHasOptions {
-    http_get?: ICSVariantContainer<ICSBlockHttpGet>;
-    http_post?: ICSVariantContainer<ICSBlockHttpPost>;
-    http_stager?: ICSVariantContainer<ICSBlockHttpStager>;
-    http_config?: ICSVariantContainer<ICSBlockHttpConfig>;
-    https_certificate?: ICSBlockHttpsCertificate;
-    stage?: ICSBlockStage;
-    dns_beacon?: ICSVariantContainer<ICSBlockDnsBeacon>;
-    post_ex?: ICSBlockPostEx;
-    code_signer?: ICSBlockCodeSigner;
-    process_inject?: ICSBlockProcessInject;
+    http_get: ICSVariantContainer<ICSBlockHttpGet> | null;
+    http_post: ICSVariantContainer<ICSBlockHttpPost> | null;
+    http_stager: ICSVariantContainer<ICSBlockHttpStager> | null;
+    http_config: ICSVariantContainer<ICSBlockHttpConfig> | null;
+    https_certificate: ICSBlockHttpsCertificate | null;
+    stage: ICSBlockStage | null;
+    dns_beacon: ICSVariantContainer<ICSBlockDnsBeacon> | null;
+    post_ex: ICSBlockPostEx | null;
+    code_signer: ICSBlockCodeSigner | null;
+    process_inject: ICSBlockProcessInject | null;
 }
 
 export class CSProfileHelper {
@@ -121,7 +121,7 @@ export class CSProfileHelper {
     }
 
     static remove_top_block = (profile: ICSProfile, blockName: TopBlockName): ICSProfile => {
-        profile[blockName] = undefined;
+        profile[blockName] = null;
         return profile;
     }
 
@@ -152,7 +152,7 @@ export class CSProfileHelper {
     }
 }
 
-export interface ICSVariantContainer<T> {
+export interface ICSVariantContainer<T extends ICSHasVariant> {
     baseline: T;
     variants: T[];
 }
@@ -223,7 +223,7 @@ export interface ICSBlockHttpPostServer extends ICSBlockHttpBaseServer {
     output?: ICSBlockTransformInformation;
 }
 
-export interface ICSBlockHttpConfig extends ICSHasOptions, ICSHasHeaders { }
+export interface ICSBlockHttpConfig extends ICSHasOptions, ICSHasHeaders, ICSHasVariant { }
 
 export interface ICSBlockHttpsCertificate extends ICSHasOptions, ICSHasVariant { }
 

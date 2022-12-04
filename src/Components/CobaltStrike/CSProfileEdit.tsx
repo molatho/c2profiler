@@ -1,18 +1,10 @@
-import Chip from "@mui/material/Chip";
-import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import { Stack } from "@mui/system";
 import { CSProfileHelper, ICSProfile, TopBlockDisplayNames, TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { PaperItem } from "../PaperItems/PaperItem";
-import { OptionsBlock } from "./EditBlocks/Controls/CSOptionsBlock";
-import AddIcon from '@mui/icons-material/Add';
-import IndentedAccordeon from "../IndentedAccordeon";
+import { CSOptionsList } from "./EditBlocks/Controls/CSOptionsList";
 import { BaseBlock } from "./EditBlocks/BaseBlock";
-
-const ListItem = styled('li')(({ theme }) => ({
-    margin: theme.spacing(0.5),
-}));
+import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
+import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 
 interface Props {
     profile: any;
@@ -40,51 +32,35 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
     return <>
         {/* Chips: one for each block */}
         <PaperItem>
-            <>{missingBlocks.length > 0 ? <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography>Blocks:</Typography>
-                <Paper
-                    sx={{
-                        background: 'none',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        flexWrap: 'wrap',
-                        listStyle: 'none',
-                        p: 0.5,
-                        m: 0,
-                    }}
-                    component="ul"
-                    elevation={0}
-                > {missingBlocks.map((b, idx) => <ListItem key={idx}>
-                    <Chip
-                        icon={<AddIcon />}
-                        label={TopBlockDisplayNames.get(b)}
-                        size="small"
-                        variant="outlined"
-                        onClick={() => handleBlockAdd(b)}
-                    />
-                </ListItem>)}
-                </Paper>
-            </Stack> : <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography sx={{ fontStyle: 'italic' }}>Your profile is fully populated.</Typography>
-            </Stack>}
-            </>
+            <CSAddBlockList missingBlocks={missingBlocks} onBlockAdd={handleBlockAdd} />
         </PaperItem>
 
         {/* Global: Has only blocks */}
         <PaperItem small>
-            <OptionsBlock titleOverride="Global Options" titleVariant="h6" blockMetaName="global" blockOptions={csprofile.options} onBlockOptionsChanged={(opts) => onProfileChanged({
-                ...profile,
-                options: [...opts]
-            })} />
+            <BaseBlock titleVariant="h6" title="Global Options">
+                <CSOptionsList blockMetaName="global" blockOptions={csprofile.options} onBlockOptionsChanged={(opts) => onProfileChanged({
+                    ...profile,
+                    options: [...opts]
+                })} />
+            </BaseBlock>
         </PaperItem>
+
         {/* Simple blocks (options/headers only) */}
         {csprofile.code_signer &&
             <PaperItem small>
-                <BaseBlock title={(TopBlockDisplayNames.get("code_signer") as string)} identifier="code_signer">
-                    <OptionsBlock blockMetaName="code_signer" blockOptions={csprofile.code_signer.options} onBlockOptionsChanged={(opts) => {
+                <BaseBlock titleVariant="h6" title={(TopBlockDisplayNames.get("code_signer") as string)} identifier="code_signer" onBlockRemoved={handleBlockRemoval}>
+                    <CSOptionsList blockMetaName="code_signer" blockOptions={csprofile.code_signer.options} onBlockOptionsChanged={(opts) => {
                         profile.code_signer.options = opts;
                         onProfileChanged({ ...profile })
                     }} />
+                </BaseBlock>
+            </PaperItem>}
+
+        {/* Variants blocks (e.g. http-get) */}
+        {csprofile.http_get &&
+            <PaperItem small>
+                <BaseBlock titleVariant="h6" title={(TopBlockDisplayNames.get("http_get") as string)} identifier="http_get" onBlockRemoved={handleBlockRemoval}>
+                    <CSVariants container={csprofile.http_get} itemView={(i) => <div></div>} createVariant={(c, n) => { }} />
                 </BaseBlock>
             </PaperItem>}
     </>

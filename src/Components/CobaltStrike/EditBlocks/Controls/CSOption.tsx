@@ -1,4 +1,4 @@
-import { Checkbox, Stack, Tooltip, Typography } from "@mui/material";
+import { Checkbox, Stack, Switch, TextField, Tooltip, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useState } from "react";
 import { ICSProfile } from "../../../../Plugins/CobaltStrike/CSProfileTypes"
@@ -17,20 +17,40 @@ interface Props {
 }
 
 export const CSOption = ({ enabled, name, value, defaultValue, description, type, onEnabledChanged, onValueChanged }: Props) => {
-    const [_value, setValue] = useState(value ? value : defaultValue);
-
     const getTypeView = () => {
         switch (type) {
             case "number":
-                return <div>Number {name}: {_value}</div>; //TODO: Number
+                return <TextField
+                    type="number"
+                    value={parseInt(value ? value : "0") | 0}
+                    onChange={(ev) => onValueChanged(name, ev.target.value.toString())}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    size="small"
+                    disabled={!enabled}
+                />;
             case "boolean":
-                return <div>Boolean {name}: {_value}</div>; //TODO: Slider
+                return <Switch
+                    checked={value == "true"}
+                    onChange={(ev) => onValueChanged(name, ev.target.checked ? "true" : "false")}
+                    disabled={!enabled}
+                />;
         }
-        return <div>String {name}: {_value}</div>; //TODO: Text
+        return <TextField
+            value={value ? value : defaultValue}
+            onChange={(ev) => onValueChanged(name, ev.target.value)}
+            InputLabelProps={{
+                shrink: true,
+            }}
+            size="small"
+            fullWidth
+            disabled={!enabled}
+        />;
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onEnabledChanged(name, _value, event.target.checked);
+        onEnabledChanged(name, value ? value : defaultValue, event.target.checked);
     };
 
     const hasDescription = () => description != undefined && description != null && description.length > 0;

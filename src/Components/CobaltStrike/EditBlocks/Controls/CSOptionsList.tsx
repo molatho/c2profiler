@@ -9,15 +9,12 @@ import { TopBlockMetaName } from "../../CSProfileEdit";
 import { Variants } from "../../../../Misc/Styles";
 
 interface Props {
-    titleOverride?: string;
-    titleVariant?: Variants;
     blockOptions: ICSOption[];
     onBlockOptionsChanged: (options: ICSOption[]) => void;
     blockMetaName: TopBlockMetaName;
-    startExpanded?: boolean;
 }
 
-export const OptionsBlock = ({ titleOverride, titleVariant, blockOptions, onBlockOptionsChanged, blockMetaName, startExpanded = true }: Props) => {
+export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaName }: Props) => {
     const _opts = options[blockMetaName] as IMetaOption[];
     const getOption = (name: string) => blockOptions.filter(o => o.name === name);
     const isEnabled = (name: string) => getOption(name).length > 0;
@@ -28,21 +25,21 @@ export const OptionsBlock = ({ titleOverride, titleVariant, blockOptions, onBloc
         onBlockOptionsChanged([...blockOptions]);
     }
 
-    const getTitle = () => `${titleOverride ? titleOverride : "Options"} ${_opts.filter(o => isEnabled(o.name)).length}/${_opts.length}`
+    const handleValueChange = (name: string, value: string) => {
+        getOption(name)[0].value = value;
+        onBlockOptionsChanged([...blockOptions]);
+    }
 
-    return <>
-        <IndentedAccordeon title={getTitle()} titleVariant={titleVariant} startExpanded={startExpanded}>
-            <>{_opts.map((opt, idx) => <CSOption
-                key={idx}
-                enabled={isEnabled(opt.name)}
-                name={opt.name}
-                type={opt.type}
-                value={isEnabled(opt.name) ? getOption(opt.name)[0].value : undefined}
-                description={opt.description}
-                defaultValue={opt.defaultValue}
-                onEnabledChanged={handleEnabledChange}
-                onValueChanged={console.log}
-            />)}
-            </>
-        </IndentedAccordeon></>
+    return <>{_opts.map((opt, idx) => <CSOption
+        key={idx}
+        enabled={isEnabled(opt.name)}
+        name={opt.name}
+        type={opt.type}
+        value={isEnabled(opt.name) ? getOption(opt.name)[0].value : undefined}
+        description={opt.description}
+        defaultValue={opt.defaultValue}
+        onEnabledChanged={handleEnabledChange}
+        onValueChanged={handleValueChange}
+    />)}
+    </>
 }
