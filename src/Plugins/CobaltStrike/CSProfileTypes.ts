@@ -32,6 +32,28 @@ export interface ICSProfile extends ICSHasOptions {
 }
 
 export class CSProfileHelper {
+    static create_http_post_variant(name?: string): ICSBlockHttpPost {
+        return {
+            options: [],
+            variant: name
+        };
+    }
+    static create_http_stager_variant(name?: string): ICSBlockHttpStager {
+        return {
+            server: {
+                output: CSProfileHelper.create_default_transform_info(),
+                headers: []
+            },
+            options: [],
+            variant: name
+        }
+    }
+    static create_dns_beacon_variant(name?: string): ICSBlockDnsBeacon {
+        return {
+            options: [],
+            variant: name
+        }
+    }
     static create_http_config(profile: ICSProfile): ICSProfile {
         profile.http_config = {
             baseline: {
@@ -63,7 +85,7 @@ export class CSProfileHelper {
     }
     static create_dns_beacon(profile: ICSProfile): ICSProfile {
         profile.dns_beacon = {
-            baseline: { options: [] },
+            baseline: CSProfileHelper.create_dns_beacon_variant(),
             variants: []
         }
         return profile;
@@ -84,28 +106,28 @@ export class CSProfileHelper {
     }
     static create_http_stager(profile: ICSProfile): ICSProfile {
         profile.http_stager = {
-            baseline: {
-                server: {
-                    output: CSProfileHelper.create_default_transform_info(),
-                    headers: []
-                },
-                options: []
-            },
+            baseline: CSProfileHelper.create_http_stager_variant(),
             variants: []
         }
         return profile;
     }
     static create_http_get = (profile: ICSProfile): ICSProfile => {
         profile.http_get = {
-            baseline: { options: [] },
+            baseline: CSProfileHelper.create_http_get_variant(),
             variants: []
         }
         return profile;
     }
+    static create_http_get_variant = (name?: string): ICSBlockHttpGet => {
+        return {
+            options: [],
+            variant: name
+        }
+    }
 
     static create_http_post(profile: ICSProfile): ICSProfile {
         profile.http_post = {
-            baseline: { options: [] },
+            baseline: CSProfileHelper.create_http_get_variant(),
             variants: []
         }
         return profile;
@@ -147,6 +169,24 @@ export class CSProfileHelper {
                 return CSProfileHelper.create_code_signer(profile);
             case "process_inject":
                 return CSProfileHelper.create_process_inject(profile);
+        }
+        return profile;
+    }
+
+    static create_variant = (profile: ICSProfile, blockName: "http_get" | "http_post" | "http_stager" | "http_config" | "dns_beacon", name: string): ICSProfile => {
+        switch (blockName) {
+            case "http_get":
+                profile.http_get?.variants.push(CSProfileHelper.create_http_get_variant(name))
+                break;
+            case "http_post":
+                profile.http_post?.variants.push(CSProfileHelper.create_http_post_variant(name))
+                break;
+            case "http_stager":
+                profile.http_stager?.variants.push(CSProfileHelper.create_http_stager_variant(name))
+                break;
+            case "dns_beacon":
+                profile.dns_beacon?.variants.push(CSProfileHelper.create_dns_beacon_variant(name))
+                break;
         }
         return profile;
     }

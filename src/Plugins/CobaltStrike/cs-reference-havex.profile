@@ -78,6 +78,8 @@ stage {
 }
 
 http-get "Bing" {
+	set uri "/öSAOIJFÖAOSKDF";
+
 	client {
 		header "Referer" "http://www.bing.com";
     }

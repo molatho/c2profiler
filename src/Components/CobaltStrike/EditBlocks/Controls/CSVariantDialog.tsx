@@ -14,14 +14,31 @@ interface Props {
     onCancel: () => void;
 }
 
+const EMPTY_ERR = "Enter a name!";
+
 export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }: Props) {
     const [name, setName] = useState("");
-    const [error, setError] = useState("Enter a name!");
+    const [error, setError] = useState(EMPTY_ERR);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
         setError(onValidate(event.target.value));
     };
+
+    const reset = () => {
+        setName("");
+        setError(EMPTY_ERR);
+    }
+
+    const handleCancel = () => {
+        onCancel();
+        reset();
+    }
+
+    const handleSubmit = () => {
+        onSubmit(name);
+        reset();
+    }
 
     return (
         <div>
@@ -46,8 +63,8 @@ export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => onCancel()}>Cancel</Button>
-                    <Button onClick={() => onSubmit(name)} disabled={error.length > 0}>Add</Button>
+                    <Button onClick={handleCancel}>Cancel</Button>
+                    <Button onClick={handleSubmit} disabled={error.length > 0}>Add</Button>
                 </DialogActions>
             </Dialog>
         </div>

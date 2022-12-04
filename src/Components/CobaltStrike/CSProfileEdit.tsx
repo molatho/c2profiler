@@ -5,6 +5,7 @@ import { CSOptionsList } from "./EditBlocks/Controls/CSOptionsList";
 import { BaseBlock } from "./EditBlocks/BaseBlock";
 import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
+import { CSHttpGet } from "./EditBlocks/Controls/CSHttpGet";
 
 interface Props {
     profile: any;
@@ -60,7 +61,10 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
         {csprofile.http_get &&
             <PaperItem small>
                 <BaseBlock titleVariant="h6" title={(TopBlockDisplayNames.get("http_get") as string)} identifier="http_get" onBlockRemoved={handleBlockRemoval}>
-                    <CSVariants container={csprofile.http_get} itemView={(i) => <div></div>} createVariant={(c, n) => { }} />
+                    <CSVariants profile={csprofile} container={csprofile.http_get} itemView={(i, opc) => <CSHttpGet profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+                        c.variants.push(CSProfileHelper.create_http_get_variant(n))
+                        onProfileChanged({ ...profile })
+                    }} />
                 </BaseBlock>
             </PaperItem>}
     </>
