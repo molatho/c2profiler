@@ -7,6 +7,7 @@ import MuiAccordionSummary, {
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
+import { Variants } from '../Misc/Styles';
 
 const Accordion = styled((props: AccordionProps) => (
     <MuiAccordion disableGutters elevation={0} {...props} />
@@ -17,6 +18,7 @@ const Accordion = styled((props: AccordionProps) => (
     '&:before': {
         display: 'none',
     },
+    background: 'none'
 }));
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
@@ -47,17 +49,21 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 
 interface Props {
     title: string;
-    children?: JSX.Element[];
+    titleVariant?: Variants;
+    titleElement?: JSX.Element;
+    children?: JSX.Element;
     startExpanded?: boolean;
 }
 
-export default function IndentedAccordeon({ title, children, startExpanded = false }: Props) {
+export default function IndentedAccordeon({ title, titleVariant, titleElement, children, startExpanded = false }: Props) {
     const [expanded, setExpanded] = useState(startExpanded);
+
+    const _title = titleElement ? titleElement : <Typography variant={titleVariant}>{title}</Typography>;
 
     return (
         <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
             <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-                <Typography>{title}</Typography>
+                {_title}
             </AccordionSummary>
             <AccordionDetails>
                 {children}

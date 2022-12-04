@@ -32,7 +32,17 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+.App-Title-Container {
+  flex-grow: 1;
+}
+
+.App-Title {
+  text-align: "center";
+  flex-grow: 1;
 }

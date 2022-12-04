@@ -69,7 +69,7 @@
             "type": "string"
         }
     ],
-    "code-signer": [
+    "code_signer": [
         {
             "name": "keystore",
             "defaultValue": "keystore.jks",
@@ -96,14 +96,14 @@
             "type": "string"
         }
     ],
-    "http-get": [
+    "http_get": [
         {
             "name": "uri",
             "defaultValue": "/api/v1/Updates",
             "type": "string"
         }
     ],
-    "http-post": [
+    "http_post": [
         {
             "name": "uri",
             "defaultValue": "/api/v1/Telemetry/Id/",
@@ -115,7 +115,7 @@
             "type": "string"
         }
     ],
-    "http-config": [
+    "http_config": [
         {
             "name": "headers",
             "defaultValue": "Date, Server, Content-Length, Keep-Alive, Connection, Content-Type",
@@ -334,5 +334,7 @@
             "defaultValue": "GetAsyncKeyState",
             "type": "string"
         }
-    ]
+    ],
+    "process_inject": [],
+    "http_stager": []
 }
