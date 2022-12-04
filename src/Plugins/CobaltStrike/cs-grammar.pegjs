@@ -15,12 +15,24 @@
 
   function mk(type, data) {
     return {
-        ...data,
+        ...(data ?? {}),
         "CTYPE": type
     }
   }
 
+  function splitvariants(objects) {
+    if (objects.length == 0) return null;
+    var baseline = objects.filter(o => !o.variant);
+    if (!baseline) throw "Missing baseline profile!";
+    if (baseline.length > 1) throw "Multiple baseline profiles!";
+    return {
+        "baseline": baseline[0],
+        "variants": objects.filter(o => o.variant)
+    }
+  }
+
   const OPTION = "option";
+  const COMMENT = "comment"
   const HEADER = "header";
   const PARAMETER = "parameter";
   const DSL = "header";
@@ -44,27 +56,30 @@
   const BLOCKHTTPSTAGER = "block::http::stager";
   const BLOCKHTTPSTAGERCLIENT = "block::http::stager::client";
   const BLOCKHTTPSTAGERSERVER = "block::http::stager::server";
-  const BLOCKHTTPSTAGEROUTPUT = "block::http::stager::output";
+  const BLOCKHTTPSTAGERSERVEROUTPUT = "block::http::stager::server::output";
   const BLOCKHTTPCONFIG = "block::http::config";
   const BLOCKHTTPSCERT = "block::https::certificate";
   const BLOCKSTAGE = "block::stage";
   const BLOCKDNSBEACON = "block::dns::beacon";
   const BLOCKPOSTEX = "block::post::ex";
   const BLOCKPROCESSINJECT = "block::process::inject";
+  const BLOCKPROCESSINJECTEXECUTE = "block::process::inject::execute";
+  const BLOCKPROCESSINJECTEXECUTECOMMAND = "block::process::inject::execute::command";
 }}
 
+// TODO: Extract comments on all entities instead of stripping them
 
 profile
 	= entities:entity+  { return {
         "options": filter(entities, OPTION),
         "code_signer": first(entities, BLOCKCODESIGNER),
-        "http_get": first(entities, BLOCKHTTPGET),
-        "http_post": first(entities, BLOCKHTTPPOST),
-        "http_stager": first(entities, BLOCKHTTPSTAGER),
+        "http_get": splitvariants(filter(entities, BLOCKHTTPGET)),
+        "http_post": splitvariants(filter(entities, BLOCKHTTPPOST)),
+        "http_stager": splitvariants(filter(entities, BLOCKHTTPSTAGER)),
         "http_config": first(entities, BLOCKHTTPCONFIG),
-        "https_certificate": first(entities, BLOCKHTTPSCERT),
+        "https_certificate": splitvariants(filter(entities, BLOCKHTTPSCERT)),
         "stage": first(entities, BLOCKSTAGE),
-        "dns_beacon": first(entities, BLOCKDNSBEACON),
+        "dns_beacon": splitvariants(filter(entities, BLOCKDNSBEACON)),
         "post_ex" : first(entities, BLOCKPOSTEX),
         "process_inject": first(entities, BLOCKPROCESSINJECT)
     } }
@@ -81,8 +96,8 @@ entity
     / _
 
 comment
-	= "#"  str:[^\r\n]* [\r\n]  { return null }
-    //= "#" str:[^\r\n]* [\r\n] { return mk("comment", { "value": str.join("") }); }
+	//= _* "#" str:[^\r\n]* [\r\n]  { return null }
+    = "#" _* str:[^\r\n]* [\r\n] { return str.join(""); }
     
 id
 	= p:[a-zA-Z_] b:[a-zA-Z0-9\-_]* { return p + b.join(""); }
@@ -119,10 +134,10 @@ block_code_signer
 	= "code-signer" _* "{" _* body:block_options_only* _* "}"  { return mk(BLOCKCODESIGNER, { "options": filter(body, OPTION)}); }
 
 block_dns_beacon
-	= "dns-beacon" _* variant:string? _* "{" _* body:block_options_only* _* "}"  { return mk("block::dns::beacon", { "body": body.filter(e => e), "variant": variant}); }
+	= "dns-beacon" _* variant:string? _* "{" _* body:block_options_only* _* "}"  { return mk(BLOCKDNSBEACON, { "options": filter(body, OPTION), "variant": variant}); }
 
 block_post_ex
-	= "post-ex" _* "{" _* body:block_options_only* _* "}"  { return mk("block::post::ex", { "body": body.filter(e => e)}); }
+	= "post-ex" _* "{" _* body:block_options_only* _* "}"  { return mk(BLOCKPOSTEX, { "options": filter(body, OPTION) }); }
 
 block_http
 	= "http-get" _* variant:string? _* "{" _* body:block_http_get* _* "}" { return mk(BLOCKHTTPGET, {
@@ -169,8 +184,7 @@ block_http_get
         }); }
 	/ "server" _+ "{" _* body:block_http_get_server* _* "}" { return mk(BLOCKHTTPGETSERVER, {
         "headers": filter(body, HEADER),
-        "output": first(body, BLOCKHTTPGETSERVEROUTPUT),
-        "body": body.filter(e => e)
+        "output": first(body, BLOCKHTTPGETSERVEROUTPUT)
         }); }
     / comment
     / _
@@ -191,29 +205,41 @@ block_http_get_server
 
 block_http_post
 	= option
-    / "client" _+ "{" _* body:block_http_post_client* _* "}" { return mk("block::http::post::client", { "body": body.filter(e => e) }); }
-	/ "server" _+ "{" _* body:block_http_post_server* _* "}" { return mk("block::http::post::server", { "body": body.filter(e => e) }); }
+    / "client" _+ "{" _* body:block_http_post_client* _* "}" { return mk(BLOCKHTTPPOSTCLIENT, {
+        "headers": filter(body, HEADER),
+        "output": first(body, BLOCKHTTPPOSTCLIENTOUTPUT),
+        "id": first(body, BLOCKHTTPPOSTCLIENTID)
+        }); }
+	/ "server" _+ "{" _* body:block_http_post_server* _* "}" { return mk(BLOCKHTTPPOSTSERVER, {
+        "output": first(body, BLOCKHTTPPOSTSERVEROUTPUT),
+        }); }
     / comment
     / _
 
 block_http_post_client
 	= headerset
-	/ "id" _+ "{" _* body:block_http_transformation _* "}" { return mk("block::http::post::client::id", { "body": body }); }
-    / "output" _+ "{" _* body:block_http_transformation _* "}" { return mk("block::http::post::client::output", { "body": body }); }
+	/ "id" _+ "{" _* transforminfo:block_http_transformation _* "}" { return mk(BLOCKHTTPPOSTCLIENTID, clean(transforminfo)); }
+    / "output" _+ "{" _* transforminfo:block_http_transformation _* "}" { return mk(BLOCKHTTPPOSTCLIENTOUTPUT, clean(transforminfo)); }
     / comment
     / _
 
 
 block_http_post_server
 	= headerset
-    / "output" _+ "{" _* body:block_http_transformation _* "}" { return mk("block::http::post::server::output", { "body": body }); }
+    / "output" _+ "{" _* transforminfo:block_http_transformation _* "}" { return mk(BLOCKHTTPPOSTSERVEROUTPUT, clean(transforminfo)); }
     / comment
     / _
 
 block_http_stager
 	= option
-    / "client" _+ "{" _* body:block_http_stager_client* _* "}" { return mk(BLOCKHTTPSTAGERCLIENT, { "body": body.filter(e => e) }); }
-    / "server" _+ "{" _* body:block_http_stager_server* _* "}" { return mk(BLOCKHTTPSTAGERSERVER, { "body": body.filter(e => e) }); }
+    / "client" _+ "{" _* body:block_http_stager_client* _* "}" { return mk(BLOCKHTTPSTAGERCLIENT, {
+        "headers": filter(body, HEADER),
+        "parameter": first(body, PARAMETER)
+        }); }
+    / "server" _+ "{" _* body:block_http_stager_server* _* "}" { return mk(BLOCKHTTPSTAGERSERVER, {
+        "headers": filter(body, HEADER),
+        "output": first(body, BLOCKHTTPSTAGERSERVEROUTPUT)
+        }); }
 	/ comment
     / _
 
@@ -225,7 +251,7 @@ block_http_stager_client
     
 block_http_stager_server
 	= headerset
-    / "output" _+ "{" _* body:block_http_transformation _* "}" { return mk("block::http::stager::server::output", { "body": body }); }
+    / "output" _+ "{" _* transforminfo:block_http_transformation _* "}" { return mk(BLOCKHTTPSTAGERSERVEROUTPUT, clean(transforminfo)); }
     / comment
     / _
     
@@ -274,7 +300,10 @@ block_transform_operation
     / "strrep" _+ orig:string _+ repl:string ";" comment? { return mk(TRANSFORMOPERATION, { "type": "strrep", "operand1": orig, "operand2": repl }); }
 
 block_process_inject
-	= "process-inject" _+ "{" _* body:block_process_inject_body* _* "}" { return mk("block::process:inject", { "body": body.filter(e => e) }); }
+	= "process-inject" _+ "{" _* body:block_process_inject_body* _* "}" { return mk(BLOCKPROCESSINJECT, {
+        "transforms": filter(body, TRANSFORM),
+        "execute": first(body, BLOCKPROCESSINJECTEXECUTE)
+        }); }
 
 block_process_inject_body
 	= option
@@ -284,7 +313,9 @@ block_process_inject_body
     / _
 
 block_process_inject_execute
-	= "execute" _+ "{" _* body:block_process_inject_execute_body* _* "}" { return mk("block::process:inject::execute", { "body": body.filter(e => e) }); }
+	= "execute" _+ "{" _* body:block_process_inject_execute_body* _* "}" { return mk(BLOCKPROCESSINJECTEXECUTE, {
+        "commands": filter(body, BLOCKPROCESSINJECTEXECUTECOMMAND)
+        }); }
 
 block_process_inject_execute_body
 	= option
@@ -293,12 +324,14 @@ block_process_inject_execute_body
     / _
 
 block_process_inject_execute_commands
-	= "CreateThread" _+ str:string ";" comment? { return mk("block::process::inject::execute::CreateThread", { "operand": str }); }
-	/ "CreateRemoteThread;" comment? { return mk("block::process::inject::execute::CreateRemoteThread", {}); }
-	/ "NtQueueApcThread;" comment? { return mk("block::process::inject::execute::NtQueueApcThread", { }); }
-	/ "NtQueueApcThread-s;" comment? { return mk("block::process::inject::execute::NtQueueApcThreads", { }); }
-	/ "RtlCreateUserThread;" comment? { return mk("block::process::inject::execute::RtlCreateUserThread", { }); }
-	/ "SetThreadContext;" comment? { return mk("block::process::inject::execute::SetThreadContext", { }); }
+	= "CreateThread" _+ str:string ";" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "CreateThread",  "operand": str }); }
+	/ "CreateRemoteThread" _+ str:string ";" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "CreateRemoteThread", "operand": str }); }
+    / "CreateThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "CreateThread" }); }
+	/ "CreateRemoteThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "CreateRemoteThread" }); }
+	/ "NtQueueApcThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "NtQueueApcThread" }); }
+	/ "NtQueueApcThread-s;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "NtQueueApcThreads"}); }
+	/ "RtlCreateUserThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "tlCreateUserThread"}); }
+	/ "SetThreadContext;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "SetThreadContext" }); }
 
 _ "whitespace"
   = [ \t\n\r] { return null; }
