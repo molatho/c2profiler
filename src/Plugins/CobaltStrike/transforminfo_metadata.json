@@ -1,0 +1,50 @@
+{
+    "transforms": {
+        "append": {
+            "operand": true,
+            "description": ""
+        },
+        "prepend": {
+            "operand": true,
+            "description": ""
+        },
+        "base64": {
+            "operand": false,
+            "description": ""
+        },
+        "base64url": {
+            "operand": false,
+            "description": ""
+        },
+        "mask": {
+            "operand": false,
+            "description": ""
+        },
+        "netbios": {
+            "operand": false,
+            "description": ""
+        },
+        "netbiosu": {
+            "operand": false,
+            "description": ""
+        }
+    },
+    "terminations": {
+        "header": {
+            "operand": true,
+            "description": ""
+        },
+        "parameter": {
+            "operand": true,
+            "description": ""
+        },
+        "print": {
+            "operand": false,
+            "description": ""
+        },
+        "uri-append": {
+            "operand": false,
+            "description": ""
+        }
+    }
+}

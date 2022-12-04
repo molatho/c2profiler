@@ -2,7 +2,7 @@ import { ICSOption, ICSProfile } from "../../../../Plugins/CobaltStrike/CSProfil
 import IndentedAccordeon from "../../../IndentedAccordeon";
 import options from "../../../../Plugins/CobaltStrike/options_metadata.json"
 import { CSOption } from './CSOption';
-import { IMetaOption } from "../../../../Plugins/CobaltStrike/CSOptionsMetadataTypes";
+import { IMetaOption } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { Button, IconButton, Stack } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TopBlockMetaName } from "../../CSProfileEdit";
