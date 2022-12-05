@@ -1,7 +1,7 @@
 import { Stack, Typography, Paper, Chip } from "@mui/material";
-import { TopBlockDisplayNames, TopBlockName } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
+import { TopBlockName, TopBlockDisplayNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 
 
 const ListItem = styled('li')(({ theme }) => ({

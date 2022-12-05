@@ -5,6 +5,7 @@
   }
   
   function filter(objects, type) {
+    if (!objects.filter) console.log(objects, type)
   	return objects.filter(o => o != null && o.CTYPE && o.CTYPE.startsWith(type)).map(o => clean(o));
   }
 
@@ -35,8 +36,8 @@
   const COMMENT = "comment"
   const HEADER = "header";
   const PARAMETER = "parameter";
-  const DSL = "header";
-  const TERMINATION = "header";
+  const DSL = "dsl";
+  const TERMINATION = "termination";
   const COMMAND = "block::stage::command";
   const TRANSFORM = "block::stage::transform";
   const TRANSFORMOPERATION = "block::stage::transform::operation";
@@ -167,13 +168,13 @@ block_http
         }); }
 
 block_http_transformation_elements_head
-    = (comment / _)* datatransform _* (comment / _)*
+    = (comment / _)* transform:datatransform (comment / _)* { return transform; }
 
 block_http_transformation_elements_tail
-    = (comment / _)* termination (comment / _)*
+    = (comment / _)* term:termination (comment / _)* { return term; }
 
 block_http_transformation
-	= transforms:block_http_transformation_elements_head+ term:block_http_transformation_elements_tail { return mk(BLOCKTRANFORMINFORMATION, { "transforms": filter(transforms, DSL), "termination": first(term, TERMINATION) }); }
+	= transforms:block_http_transformation_elements_head+ term:block_http_transformation_elements_tail { return mk(BLOCKTRANFORMINFORMATION, { "transforms": filter(transforms, DSL), "termination": clean(term) }); }
 
 block_http_get
 	= option

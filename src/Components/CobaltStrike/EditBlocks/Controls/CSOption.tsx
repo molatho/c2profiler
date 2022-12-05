@@ -58,7 +58,7 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
     return <>
         <PaperItem small>
             <Grid container>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <Stack direction="row" alignItems="center" spacing={2}>
                         <Checkbox checked={enabled} onChange={handleChange} />
                         <Typography>{name}</Typography>

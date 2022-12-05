@@ -1,11 +1,12 @@
-import { styled } from "@mui/material/styles";
-import { CSProfileHelper, ICSProfile, TopBlockDisplayNames, TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSProfileTypes";
+import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { PaperItem } from "../PaperItems/PaperItem";
 import { CSOptionsList } from "./EditBlocks/Controls/CSOptionsList";
 import { BaseBlock } from "./EditBlocks/BaseBlock";
 import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 import { CSHttpGet } from "./EditBlocks/Controls/CSHttpGet";
+import { TopBlockName, TopBlockNames, TopBlockDisplayNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
+import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
 
 interface Props {
     profile: any;

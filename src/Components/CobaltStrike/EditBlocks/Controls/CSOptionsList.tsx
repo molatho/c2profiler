@@ -1,12 +1,8 @@
-import { ICSOption, ICSProfile } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
-import IndentedAccordeon from "../../../IndentedAccordeon";
-import options from "../../../../Plugins/CobaltStrike/options_metadata.json"
+import { ICSOption } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
+import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 import { CSOption } from './CSOption';
-import { IMetaOption } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
-import { Button, IconButton, Stack } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { IMetaOptionDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { TopBlockMetaName } from "../../CSProfileEdit";
-import { Variants } from "../../../../Misc/Styles";
 
 interface Props {
     blockOptions: ICSOption[];
@@ -15,7 +11,7 @@ interface Props {
 }
 
 export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaName }: Props) => {
-    const _opts = options[blockMetaName] as IMetaOption[];
+    const _opts = metadata.options[blockMetaName] as IMetaOptionDefinition[];
     const getOption = (name: string) => blockOptions.filter(o => o.name === name);
     const isEnabled = (name: string) => getOption(name).length > 0;
 
