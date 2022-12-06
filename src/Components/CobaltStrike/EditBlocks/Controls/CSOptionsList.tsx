@@ -3,6 +3,7 @@ import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 import { CSOption } from './CSOption';
 import { IMetaOptionDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { TopBlockMetaName } from "../../CSProfileEdit";
+import { TableContainer, Paper, Table, TableBody } from "@mui/material";
 
 interface Props {
     blockOptions: ICSOption[];
@@ -26,16 +27,21 @@ export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaNa
         onBlockOptionsChanged([...blockOptions]);
     }
 
-    return <>{_opts.map((opt, idx) => <CSOption
-        key={idx}
-        enabled={isEnabled(opt.name)}
-        name={opt.name}
-        type={opt.type}
-        value={isEnabled(opt.name) ? getOption(opt.name)[0].value : undefined}
-        description={opt.description}
-        defaultValue={opt.defaultValue}
-        onEnabledChanged={handleEnabledChange}
-        onValueChanged={handleValueChange}
-    />)}
-    </>
+    return <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
+        <Table size="small" stickyHeader>
+            <TableBody>
+                {_opts.map((opt, idx) => <CSOption
+                    key={idx}
+                    enabled={isEnabled(opt.name)}
+                    name={opt.name}
+                    type={opt.type}
+                    value={isEnabled(opt.name) ? getOption(opt.name)[0].value : undefined}
+                    description={opt.description}
+                    defaultValue={opt.defaultValue}
+                    onEnabledChanged={handleEnabledChange}
+                    onValueChanged={handleValueChange}
+                />)}
+            </TableBody>
+        </Table>
+    </TableContainer>
 }

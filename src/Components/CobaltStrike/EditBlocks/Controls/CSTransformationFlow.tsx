@@ -1,33 +1,32 @@
 // Tranforms: (append [i][+]) (mask[i][+])
 // Flow (append [operand][h/s][x]) => (mask [x]) =>  
 
-import { Tooltip, Chip, Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton } from "@mui/material";
+import { Tooltip, Chip, Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup } from "@mui/material";
 import { IMetaTransformDefinition, TransformDisplayNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { ICSBlockTransformInformation, ICSDataTransform } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 import InfoIcon from '@mui/icons-material/Info';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './CSTransformationFlow.css';
 
 
 interface InfoAddChipProps {
     label?: string;
-    description?: string;
+    description: string;
     onClick: () => void;
 }
 
 const InfoAddChip = ({ label, description, onClick }: InfoAddChipProps) => {
-    const icon = description ? <Tooltip title={description}><InfoIcon /></Tooltip> : undefined;
-
     return (
         <Chip
             label={label}
             variant="outlined"
             onDelete={() => onClick()}
             deleteIcon={<AddCircleIcon />}
-            icon={icon}
+            icon={<Tooltip title={description}><InfoIcon /></Tooltip>}
         />
     )
 }
@@ -35,56 +34,55 @@ const InfoAddChip = ({ label, description, onClick }: InfoAddChipProps) => {
 interface TransformItemProps {
     meta: IMetaTransformDefinition;
     transform: ICSDataTransform;
+    isFirst: boolean;
+    isLast: boolean;
     onChanged: () => void;
     onRemove: () => void;
+    onMove: (dir: number) => void;
+    idx: number;
 }
 
-const TransformItem = ({ meta, transform, onChanged, onRemove }: TransformItemProps) => {
+
+const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, onMove, idx }: TransformItemProps) => {
     const onValueChanged = (value: string) => {
         transform.operand = value;
         onChanged();
     }
 
-    return <Card sx={{ maxWidth: 300 }} variant="outlined">
-        <CardContent className="TranformCard">
-            <Grid container spacing={1} alignItems="center">
-                <Grid item xs={12}>
-                    <Grid container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center">
-                        <Grid item>
-                            <Typography>{TransformDisplayNames.get(transform.type)}</Typography>
-                        </Grid>
-                        <Grid item>
-                            <IconButton color="error" size="small" onClick={onRemove}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                {meta.operand && <>
-                    <Grid item xs>
-                        <TextField
-                            value={transform.operand ? transform.operand : ""}
-                            onChange={(ev) => onValueChanged(ev.target.value)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            size="small"
-                            multiline
-                            fullWidth
-                        />
-                    </Grid>
-                    <Grid item>
-                        <Button variant="contained" size="small" sx={{ minWidth: 0 }}>
-                            H
-                        </Button>
-                    </Grid>
-                </>}
-            </Grid>
-        </CardContent>
-    </Card>
+    return <TableRow
+        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+        <TableCell>{`${idx + 1}. ${TransformDisplayNames.get(transform.type)}`}</TableCell>
+        <TableCell component="th" scope="row">
+            {meta.operand ?
+                <TextField
+                    value={transform.operand ? transform.operand : ""}
+                    onChange={(ev) => onValueChanged(ev.target.value)}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    size="small"
+                    multiline
+                    fullWidth
+                    error={!transform.operand ? true : false}
+                    placeholder="Value required"
+                /> :
+                <Typography sx={{fontStyle:'italic'}}>n/a</Typography>}
+        </TableCell>
+        <TableCell align="right" sx={{ width: '1px', whiteSpace: 'nowrap' }}>
+            <ButtonGroup variant="text">
+                <IconButton color="primary" disabled={isFirst} onClick={() => onMove(-1)}>
+                    <KeyboardArrowUpIcon />
+                </IconButton>
+                <IconButton color="primary" disabled={isLast} onClick={() => onMove(1)}>
+                    <KeyboardArrowDownIcon />
+                </IconButton>
+                <IconButton color="error" onClick={onRemove}>
+                    <DeleteIcon />
+                </IconButton>
+            </ButtonGroup>
+        </TableCell>
+    </TableRow>;
 }
 
 interface Props {
@@ -106,31 +104,63 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
         onProfileChanged({ ...profile });
     }
 
+    const handleMove = (idx: number, dir: number) => {
+        const tmp = flow.transforms[idx];
+        flow.transforms[idx] = flow.transforms[idx + dir];
+        flow.transforms[idx + dir] = tmp;
+        onProfileChanged({ ...profile });
+    }
+
     const getMetadata = (name: TransformName): IMetaTransformDefinition => metadata.transforms[name] as IMetaTransformDefinition;
 
     return <>
         <Grid container spacing={2}>
+            {/* Transform selection */}
             <Grid item xs={12}>
-                {/* Transform selection */}
-                <Stack direction="row" alignItems="center" spacing={2}>
-                    <Typography>Transformations:</Typography>
+                <Typography>Transformations:</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Stack direction="row" alignItems="center" spacing={2} sx={{
+                    background: 'none',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexWrap: 'wrap',
+                    listStyle: 'none',
+                    p: 0.5,
+                    m: 0,
+                }}>
                     {TransformNames.map((n, i) => <InfoAddChip key={i} label={TransformDisplayNames.get(n)} description={getMetadata(n).description} onClick={() => addTransform(n)} />)}
                 </Stack>
             </Grid>
+            {/* Flow display */}
             <Grid item xs={12}>
-                {/* Flow display */}
-                <Grid container alignItems="center" spacing={2}>
-                    <Grid item xs>
-                        <Typography>Resulting chain:</Typography>
-                    </Grid>
-
-                    {flow.transforms.length > 0
-                        ? flow.transforms.map((t, i) => <Grid item xs={2}>
-                            <TransformItem meta={getMetadata(t.type)} transform={t} onChanged={() => onProfileChanged(profile)} onRemove={() => removeTransform(i)} />
-                        </Grid>)
-                        : <Typography sx={{ fontStyle: 'italic' }}>Empty - Add transformation steps!</Typography>}
-
-                </Grid>
+                <Typography>Resulting chain:</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <TableContainer component={Paper}>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Transform</TableCell>
+                                <TableCell align="center">Operand</TableCell>
+                                <TableCell align="right">Actions</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {flow.transforms && flow.transforms.map((t, i) => <TransformRow
+                                key={i}
+                                meta={getMetadata(t.type)}
+                                transform={t}
+                                onChanged={() => onProfileChanged({ ...profile })}
+                                onRemove={() => removeTransform(i)}
+                                isFirst={i == 0}
+                                isLast={i == flow.transforms.length - 1}
+                                onMove={(dir) => handleMove(i, dir)}
+                                idx={i}
+                            />)}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Grid>
         </Grid>
     </>

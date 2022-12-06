@@ -1,9 +1,5 @@
-import { Checkbox, Stack, Switch, TextField, Tooltip, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import { useState } from "react";
-import { ICSProfile } from "../../../../Plugins/CobaltStrike/CSProfileTypes"
-import { PaperItem } from "../../../PaperItems/PaperItem";
-import InfoIcon from '@mui/icons-material/Info';
+import { Checkbox, Stack, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { InfoIconToolTip } from "../../../InfoIconToolTip";
 
 interface Props {
     enabled: boolean;
@@ -28,14 +24,18 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
                         shrink: true,
                     }}
                     size="small"
+                    fullWidth
                     disabled={!enabled}
                 />;
             case "boolean":
-                return <Switch
-                    checked={value == "true"}
-                    onChange={(ev) => onValueChanged(name, ev.target.checked ? "true" : "false")}
-                    disabled={!enabled}
-                />;
+                return <Stack direction="row" alignItems="center" spacing={2}>
+                    <Switch
+                        checked={value == "true"}
+                        onChange={(ev) => onValueChanged(name, ev.target.checked ? "true" : "false")}
+                        disabled={!enabled}
+                    />
+                    <Typography>{value == "true" ? "True" : "False"}</Typography>
+                </Stack>;
         }
         return <TextField
             value={value ? value : defaultValue}
@@ -53,25 +53,16 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
         onEnabledChanged(name, value ? value : defaultValue, event.target.checked);
     };
 
-    const hasDescription = () => description != undefined && description != null && description.length > 0;
-
-    return <>
-        <PaperItem small>
-            <Grid container>
-                <Grid item xs={4}>
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                        <Checkbox checked={enabled} onChange={handleChange} />
-                        <Typography>{name}</Typography>
-                        {hasDescription() &&
-                            <Tooltip title={description}>
-                                <InfoIcon />
-                            </Tooltip>}
-                    </Stack>
-                </Grid>
-                <Grid item xs={8}>
-                    {getTypeView()}
-                </Grid>
-            </Grid>
-        </PaperItem></>
-        ;
+    return <TableRow
+        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+        <TableCell padding="checkbox"> <Checkbox checked={enabled} onChange={handleChange} /></TableCell>
+        <TableCell>
+            <Stack direction="row" alignItems="center" spacing={2}>
+                <Typography>{name}</Typography>
+                {description && <InfoIconToolTip description={description} />}
+            </Stack>
+        </TableCell>
+        <TableCell> {getTypeView()}</TableCell>
+    </TableRow>;
 }

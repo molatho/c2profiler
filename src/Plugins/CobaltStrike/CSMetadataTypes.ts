@@ -39,10 +39,10 @@ export const TerminatioNames: TerminationName[] = ["header", "parameter", "print
 
 export interface IMetaTransformDefinition {
     operand: boolean;
-    description?: string;
+    description: string;
 }
 
 export interface IMetaTerminationDefinition {
     operand: boolean;
-    description?: string;
+    description: string;
 }
