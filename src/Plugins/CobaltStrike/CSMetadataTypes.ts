@@ -13,11 +13,19 @@ export const TopBlockDisplayNames: Map<TopBlockName, string> = new Map<TopBlockN
     ["process_inject", "Process Inject"],
 ]);
 
-export interface IMetaOptionDefinition {
+export interface IHasDocumentation {
+    description?: string;
+    link?: string;
+}
+
+export interface IMetaTopBlockDefinition extends IHasDocumentation {
+}
+
+
+export interface IMetaOptionDefinition extends IHasDocumentation {
     name: string;
     type: "string" | "number" | "boolean";
     defaultValue: string;
-    description?: string;
     opsec?: boolean;
 }
 
@@ -35,14 +43,18 @@ export const TransformDisplayNames: Map<TransformName, string> = new Map<Transfo
 
 
 export type TerminationName = "header" | "parameter" | "print" | "uri-append";
-export const TerminatioNames: TerminationName[] = ["header", "parameter", "print", "uri-append"];
+export const TerminationNames: TerminationName[] = ["header", "parameter", "print", "uri-append"];
+export const TerminationDisplayNames: Map<TerminationName, string> = new Map<TerminationName, string>([
+    ["header", "Header"],
+    ["parameter", "Parameter"],
+    ["print", "Print"],
+    ["uri-append", "URI Append"]
+]);
 
-export interface IMetaTransformDefinition {
+export interface IMetaTransformDefinition extends IHasDocumentation {
     operand: boolean;
-    description: string;
 }
 
-export interface IMetaTerminationDefinition {
+export interface IMetaTerminationDefinition extends IHasDocumentation {
     operand: boolean;
-    description: string;
 }

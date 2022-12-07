@@ -1,9 +1,11 @@
 import { ICSHeader } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
-import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, TextField, IconButton, ButtonGroup, Typography, Stack } from "@mui/material";
+import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, TextField, IconButton, ButtonGroup, Typography, Stack, Button } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircle from '@mui/icons-material/AddCircle';
+import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useState } from "react";
 
 interface HeaderProps {
     header: ICSHeader;
@@ -15,14 +17,23 @@ interface HeaderProps {
 }
 
 const CSHeader = ({ header, onChanged, onRemove, isFirst, isLast, onMove }: HeaderProps) => {
+    const [update, setUpdate] = useState<NodeJS.Timeout|null>(null);
+
+    const refreshTimeout = () => {
+        if (update) clearTimeout(update);
+        setUpdate(setTimeout(() => {
+            onChanged();
+        }, 500));
+    }
+
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         header.name = event.currentTarget.value;
-        onChanged();
+        refreshTimeout();
     }
 
     const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         header.value = event.currentTarget.value;
-        onChanged();
+        refreshTimeout();
     }
 
     return <TableRow
@@ -118,8 +129,8 @@ export const CSHeadersList = ({ headers, onHeadersChanged }: Props) => {
             </TableBody>
         </Table>
     </TableContainer>
-        <IconButton color="success" onClick={headerAdd}>
-            <AddCircle />
-        </IconButton>
+        <Button variant="contained" size="small" color="success" startIcon={<AddIcon />} onClick={headerAdd}>
+            Add
+        </Button>
     </>
 }

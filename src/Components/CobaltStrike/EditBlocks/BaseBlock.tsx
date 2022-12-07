@@ -2,19 +2,18 @@ import { Stack, IconButton, Typography, Grid } from "@mui/material";
 import IndentedAccordeon from "../../IndentedAccordeon";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Variants } from "../../../Misc/Styles";
-import { InfoIconToolTip } from "../../InfoIconToolTip";
+import { SupportIconTooltip, SupportIconTooltipProps } from "../../SupportIconTooltip";
 
-interface Props<I> {
+interface Props<I> extends SupportIconTooltipProps {
     identifier?: I;
     onBlockRemoved?: (identifier: I) => void;
-    description?: string;
     title: string;
     titleVariant?: Variants;
     children?: JSX.Element;
     startExpanded?: boolean;
 }
 
-export const BaseBlock = <I extends unknown>({ identifier, onBlockRemoved, description, title, titleVariant, children, startExpanded = false }: Props<I>) => {
+export const BaseBlock = <I extends unknown>({ identifier, onBlockRemoved, link, description, title, titleVariant, children, startExpanded = false }: Props<I>) => {
     const titleElement = <Grid container
         direction="row"
         justifyContent="space-between"
@@ -22,13 +21,13 @@ export const BaseBlock = <I extends unknown>({ identifier, onBlockRemoved, descr
         <Grid item>
             <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography variant={titleVariant}>{title}</Typography>
-                {description && <InfoIconToolTip description={description} />}
+                {(description || link) && <SupportIconTooltip link={link} description={description} />}
             </Stack>
 
 
         </Grid>
         <Grid item>
-            {onBlockRemoved && identifier && <IconButton color="error" size="small" onClick={() => onBlockRemoved(identifier)}>
+            {onBlockRemoved && identifier != undefined && <IconButton color="error" size="small" onClick={() => onBlockRemoved(identifier)}>
                 <DeleteIcon />
             </IconButton>}
         </Grid>

@@ -1,4 +1,36 @@
 {
+    "blocks": {
+        "code_signer": {
+            "link": "https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_code-signing-certificate.htm#_Toc65482849"
+        },
+        "http_get": {
+            "description": ""
+        },
+        "http_post": {
+            "description": ""
+        },
+        "http_stager": {
+            "description": ""
+        },
+        "http_config": {
+            "description": ""
+        },
+        "https_certificate": {
+            "description": ""
+        },
+        "stage": {
+            "description": ""
+        },
+        "dns_beacon": {
+            "description": ""
+        },
+        "post_ex": {
+            "description": ""
+        },
+        "process_inject": {
+            "description": ""
+        }
+    },
     "options": {
         "global": [
             {

@@ -1,5 +1,5 @@
 import { Checkbox, Stack, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
-import { InfoIconToolTip } from "../../../InfoIconToolTip";
+import { SupportIconTooltip } from "../../../SupportIconTooltip";
 
 interface Props {
     enabled: boolean;
@@ -60,7 +60,7 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
         <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography>{name}</Typography>
-                {description && <InfoIconToolTip description={description} />}
+                {description && <SupportIconTooltip description={description} />}
             </Stack>
         </TableCell>
         <TableCell> {getTypeView()}</TableCell>

@@ -1,35 +1,16 @@
 // Tranforms: (append [i][+]) (mask[i][+])
 // Flow (append [operand][h/s][x]) => (mask [x]) =>  
 
-import { Tooltip, Chip, Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup } from "@mui/material";
-import { IMetaTransformDefinition, TransformDisplayNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
+import { Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup, SelectChangeEvent, Select, MenuItem, Icon } from "@mui/material";
+import { IMetaTerminationDefinition, IMetaTransformDefinition, TerminationDisplayNames, TerminationName, TerminationNames, TransformDisplayNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { ICSBlockTransformInformation, ICSDataTransform } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
-import InfoIcon from '@mui/icons-material/Info';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './CSTransformationFlow.css';
-
-
-interface InfoAddChipProps {
-    label?: string;
-    description: string;
-    onClick: () => void;
-}
-
-const InfoAddChip = ({ label, description, onClick }: InfoAddChipProps) => {
-    return (
-        <Chip
-            label={label}
-            variant="outlined"
-            onDelete={() => onClick()}
-            deleteIcon={<AddCircleIcon />}
-            icon={<Tooltip title={description}><InfoIcon /></Tooltip>}
-        />
-    )
-}
+import { SupportIconTooltip } from "../../../SupportIconTooltip";
+import { InfoAddChip } from "../../../InfoAddChip";
 
 interface TransformItemProps {
     meta: IMetaTransformDefinition;
@@ -67,7 +48,7 @@ const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, o
                     error={!transform.operand ? true : false}
                     placeholder="Value required"
                 /> :
-                <Typography sx={{fontStyle:'italic'}}>n/a</Typography>}
+                <Typography sx={{ fontStyle: 'italic' }}>n/a</Typography>}
         </TableCell>
         <TableCell align="right" sx={{ width: '1px', whiteSpace: 'nowrap' }}>
             <ButtonGroup variant="text">
@@ -111,13 +92,28 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
         onProfileChanged({ ...profile });
     }
 
-    const getMetadata = (name: TransformName): IMetaTransformDefinition => metadata.transforms[name] as IMetaTransformDefinition;
+    const handleTerminationSelect = (event: SelectChangeEvent) => {
+        flow.termination.type = event.target.value as TerminationName;
+        onProfileChanged({ ...profile });
+    };
+
+    const handleTerminationOperand = (event: React.ChangeEvent<HTMLInputElement>) => {
+        flow.termination.operand = event.currentTarget.value;
+        onProfileChanged({ ...profile });
+    };
+
+    const getTransformMetadata = (name: TransformName): IMetaTransformDefinition => metadata.transforms[name] as IMetaTransformDefinition;
+    const getTerminationMetadata = (name: TerminationName): IMetaTerminationDefinition => metadata.terminations[name] as IMetaTerminationDefinition;
 
     return <>
         <Grid container spacing={2}>
+            {/* Help */}
+            <Grid item xs={12}>
+                <Typography variant="body2">Cobalt Strike's &quot;Data Transformation Language&quot; allows you to define a sequence of transformations applied to data sent via beacons. You need to specify where the data is stored, the &quot;termination&quot;. </Typography>
+            </Grid>
             {/* Transform selection */}
             <Grid item xs={12}>
-                <Typography>Transformations:</Typography>
+                <Typography variant="subtitle1">Transformations:</Typography>
             </Grid>
             <Grid item xs={12}>
                 <Stack direction="row" alignItems="center" spacing={2} sx={{
@@ -129,12 +125,12 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                     p: 0.5,
                     m: 0,
                 }}>
-                    {TransformNames.map((n, i) => <InfoAddChip key={i} label={TransformDisplayNames.get(n)} description={getMetadata(n).description} onClick={() => addTransform(n)} />)}
+                    {TransformNames.map((n, i) => <InfoAddChip key={i} label={TransformDisplayNames.get(n)} description={getTransformMetadata(n).description} onClick={() => addTransform(n)} />)}
                 </Stack>
             </Grid>
             {/* Flow display */}
-            <Grid item xs={12}>
-                <Typography>Resulting chain:</Typography>
+            <Grid item xs={12} sx={{ marginTop: 4 }}>
+                <Typography variant="subtitle1">Resulting chain:</Typography>
             </Grid>
             <Grid item xs={12}>
                 <TableContainer component={Paper}>
@@ -149,7 +145,7 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                         <TableBody>
                             {flow.transforms && flow.transforms.map((t, i) => <TransformRow
                                 key={i}
-                                meta={getMetadata(t.type)}
+                                meta={getTransformMetadata(t.type)}
                                 transform={t}
                                 onChanged={() => onProfileChanged({ ...profile })}
                                 onRemove={() => removeTransform(i)}
@@ -161,6 +157,39 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                         </TableBody>
                     </Table>
                 </TableContainer>
+            </Grid>
+            {/* Termination */}
+            <Grid item xs={12} sx={{ marginTop: 4 }}>
+                <Typography variant="subtitle1">Termination:</Typography>
+            </Grid>
+            <Grid item xs={6}>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                    <Typography>Type:</Typography>
+                    <Select
+                        value={flow.termination.type}
+                        size="small"
+                        onChange={handleTerminationSelect}
+                    >
+                        {TerminationNames.map((n, i) => <MenuItem key={i} value={n}>
+                            <Stack direction="row" spacing={2}>
+                                <Typography> {TerminationDisplayNames.get(n)} </Typography>
+                                <SupportIconTooltip description={getTerminationMetadata(n).description} />
+                            </Stack>
+                        </MenuItem>)}
+                    </Select>
+                </Stack>
+            </Grid>
+            <Grid item xs={6}>
+                <TextField
+                    value={flow.termination.operand ? flow.termination.operand : ""}
+                    onChange={handleTerminationOperand}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                    size="small"
+                    fullWidth
+                    disabled={!getTerminationMetadata(flow.termination.type).operand}
+                />
             </Grid>
         </Grid>
     </>

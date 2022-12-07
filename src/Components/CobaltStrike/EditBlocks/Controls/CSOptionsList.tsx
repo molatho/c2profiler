@@ -4,6 +4,7 @@ import { CSOption } from './CSOption';
 import { IMetaOptionDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { TopBlockMetaName } from "../../CSProfileEdit";
 import { TableContainer, Paper, Table, TableBody } from "@mui/material";
+import { useState } from "react";
 
 interface Props {
     blockOptions: ICSOption[];
@@ -15,6 +16,7 @@ export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaNa
     const _opts = metadata.options[blockMetaName] as IMetaOptionDefinition[];
     const getOption = (name: string) => blockOptions.filter(o => o.name === name);
     const isEnabled = (name: string) => getOption(name).length > 0;
+
 
     const handleEnabledChange = (name: string, value: string, enabled: boolean) => {
         if (isEnabled(name)) blockOptions = blockOptions.filter(o => o.name !== name);

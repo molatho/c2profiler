@@ -1,8 +1,8 @@
 import { Stack, Typography, Paper, Chip } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
-import { TopBlockName, TopBlockDisplayNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
-
+import { TopBlockName, TopBlockDisplayNames, IMetaTopBlockDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
+import { InfoAddChip } from "../../../InfoAddChip";
+import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 
 const ListItem = styled('li')(({ theme }) => ({
     margin: theme.spacing(0.5),
@@ -14,6 +14,9 @@ interface Props {
 }
 
 export const CSAddBlockList = ({ missingBlocks, onBlockAdd }: Props) => {
+
+    const getMetaData = (name: TopBlockName): IMetaTopBlockDefinition => metadata.blocks[name];
+
     return <>{missingBlocks.length > 0 ? <Stack direction="row" alignItems="center" spacing={2}>
         <Typography>Blocks:</Typography>
         <Paper
@@ -29,11 +32,10 @@ export const CSAddBlockList = ({ missingBlocks, onBlockAdd }: Props) => {
             component="ul"
             elevation={0}
         > {missingBlocks.map((b, idx) => <ListItem key={idx}>
-            <Chip
-                icon={<AddIcon />}
+            <InfoAddChip
                 label={TopBlockDisplayNames.get(b)}
-                size="small"
-                variant="outlined"
+                description={getMetaData(b).description}
+                link={getMetaData(b).link}
                 onClick={() => onBlockAdd(b)}
             />
         </ListItem>)}
