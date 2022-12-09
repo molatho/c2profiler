@@ -7,9 +7,8 @@ export interface SupportIconTooltipProps {
     description?: string;
 }
 
-//TODO: Add option to specifiy documentation URL and generate link instead
 export const SupportIconTooltip = ({ link, description }: SupportIconTooltipProps) => {
-    return <Tooltip title={link ? "Open documentation" : description}>
+    return <Tooltip title={link ? `Open documentation\n${link}` : description}>
         {link
             ? <IconButton size="small" target="_blank" href={link} sx={{padding:0}}>
                 <OpenInNewIcon fontSize="inherit" color="disabled" />

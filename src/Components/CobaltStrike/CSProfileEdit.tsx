@@ -5,8 +5,9 @@ import { BaseBlock } from "./EditBlocks/BaseBlock";
 import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 import { CSHttpGet } from "./EditBlocks/Controls/CSHttpGet";
-import { TopBlockName, TopBlockNames, TopBlockDisplayNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
+import { TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
 import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
+import metadata from "../../Plugins/CobaltStrike/metadata.json"
 
 interface Props {
     profile: any;
@@ -50,7 +51,7 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
         {/* Simple blocks (options/headers only) */}
         {csprofile.code_signer &&
             <PaperItem small>
-                <BaseBlock titleVariant="h6" title={(TopBlockDisplayNames.get("code_signer") as string)} identifier="code_signer" onBlockRemoved={handleBlockRemoval}>
+                <BaseBlock titleVariant="h6" title={(metadata.blocks["code_signer"].displayName)} identifier="code_signer" onBlockRemoved={handleBlockRemoval}>
                     <CSOptionsList blockMetaName="code_signer" blockOptions={csprofile.code_signer.options} onBlockOptionsChanged={(opts) => {
                         profile.code_signer.options = opts;
                         onProfileChanged({ ...profile })
@@ -61,7 +62,7 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
         {/* Variants blocks (e.g. http-get) */}
         {csprofile.http_get &&
             <PaperItem small>
-                <BaseBlock titleVariant="h6" title={(TopBlockDisplayNames.get("http_get") as string)} identifier="http_get" onBlockRemoved={handleBlockRemoval}>
+                <BaseBlock titleVariant="h6" title={(metadata.blocks["http_get"].displayName)} identifier="http_get" onBlockRemoved={handleBlockRemoval}>
                     <CSVariants profile={csprofile} container={csprofile.http_get} itemView={(i, opc) => <CSHttpGet profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
                         c.variants.push(CSProfileHelper.create_http_get_variant(n))
                         onProfileChanged({ ...profile })

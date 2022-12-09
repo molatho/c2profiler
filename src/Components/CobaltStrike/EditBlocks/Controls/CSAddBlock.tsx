@@ -1,6 +1,6 @@
 import { Stack, Typography, Paper, Chip } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { TopBlockName, TopBlockDisplayNames, IMetaTopBlockDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
+import { TopBlockName, IMetaTopBlockDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { InfoAddChip } from "../../../InfoAddChip";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 
@@ -33,7 +33,7 @@ export const CSAddBlockList = ({ missingBlocks, onBlockAdd }: Props) => {
             elevation={0}
         > {missingBlocks.map((b, idx) => <ListItem key={idx}>
             <InfoAddChip
-                label={TopBlockDisplayNames.get(b)}
+                label={metadata.blocks[b].displayName}
                 description={getMetaData(b).description}
                 link={getMetaData(b).link}
                 onClick={() => onBlockAdd(b)}

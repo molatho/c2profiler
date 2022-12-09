@@ -1,4 +1,4 @@
-import { ICSHeader } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
+import { ICSHeader, ICSKeyValue } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, TextField, IconButton, ButtonGroup, Typography, Stack, Button } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircle from '@mui/icons-material/AddCircle';
@@ -7,8 +7,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from "react";
 
-interface HeaderProps {
-    header: ICSHeader;
+interface ItemProps {
+    item: ICSKeyValue;
     onChanged: () => void;
     onRemove: () => void;
     isFirst: boolean;
@@ -16,7 +16,7 @@ interface HeaderProps {
     onMove: (dir: number) => void;
 }
 
-const CSHeader = ({ header, onChanged, onRemove, isFirst, isLast, onMove }: HeaderProps) => {
+const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove }: ItemProps) => {
     const [update, setUpdate] = useState<NodeJS.Timeout|null>(null);
 
     const refreshTimeout = () => {
@@ -27,12 +27,12 @@ const CSHeader = ({ header, onChanged, onRemove, isFirst, isLast, onMove }: Head
     }
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        header.name = event.currentTarget.value;
+        item.name = event.currentTarget.value;
         refreshTimeout();
     }
 
     const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        header.value = event.currentTarget.value;
+        item.value = event.currentTarget.value;
         refreshTimeout();
     }
 
@@ -45,14 +45,14 @@ const CSHeader = ({ header, onChanged, onRemove, isFirst, isLast, onMove }: Head
                     Name:
                 </Typography>
                 <TextField
-                    value={header.name}
+                    value={item.name}
                     onChange={handleNameChange}
                     InputLabelProps={{
                         shrink: true,
                     }}
                     size="small"
                     fullWidth
-                    error={header.name.length == 0}
+                    error={item.name.length == 0}
                 />
             </Stack>
         </TableCell>
@@ -62,14 +62,14 @@ const CSHeader = ({ header, onChanged, onRemove, isFirst, isLast, onMove }: Head
                     Value:
                 </Typography>
                 <TextField
-                    value={header.value}
+                    value={item.value}
                     onChange={handleValueChange}
                     InputLabelProps={{
                         shrink: true,
                     }}
                     size="small"
                     fullWidth
-                    error={header.value.length == 0}
+                    error={item.value.length == 0}
                 />
             </Stack>
         </TableCell>
@@ -90,40 +90,40 @@ const CSHeader = ({ header, onChanged, onRemove, isFirst, isLast, onMove }: Head
 }
 
 interface Props {
-    headers: ICSHeader[];
-    onHeadersChanged: (headers: ICSHeader[]) => void;
+    list: ICSKeyValue[];
+    onListChanged: (list: ICSKeyValue[]) => void;
 }
 
-export const CSHeadersList = ({ headers, onHeadersChanged }: Props) => {
+export const CSKeyValueList = ({ list, onListChanged }: Props) => {
     const headerAdd = () => {
-        onHeadersChanged([...headers, { name: "", value: "" }])
+        onListChanged([...list, { name: "", value: "" }])
     }
 
     const headerRemove = (idx: number) => {
-        onHeadersChanged(headers.filter((h, i) => i != idx));
+        onListChanged(list.filter((h, i) => i != idx));
     }
 
     const handleHeaderChange = () => {
-        onHeadersChanged([...headers]);
+        onListChanged([...list]);
     }
 
     const moveHeader = (idx: number, dir: number) => {
-        const tmp = headers[idx];
-        headers[idx] = headers[idx + dir];
-        headers[idx + dir] = tmp;
-        onHeadersChanged([...headers]);
+        const tmp = list[idx];
+        list[idx] = list[idx + dir];
+        list[idx + dir] = tmp;
+        onListChanged([...list]);
     }
 
     return <><TableContainer component={Paper} sx={{ maxHeight: 440 }}>
         <Table size="small" stickyHeader>
             <TableBody>
-                {headers.map((header, idx) => <CSHeader
+                {list.map((item, idx) => <CSHeader
                     key={idx}
-                    header={header}
+                    item={item}
                     onChanged={handleHeaderChange}
                     onRemove={() => headerRemove(idx)}
                     isFirst={idx == 0}
-                    isLast={idx == headers.length - 1}
+                    isLast={idx == list.length - 1}
                     onMove={(dir) => moveHeader(idx, dir)}
                 />)}
             </TableBody>

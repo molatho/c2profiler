@@ -414,7 +414,7 @@ function peg$parse(input, options) {
   var peg$f29 = function(body) { return mk(BLOCKHTTPGETCLIENT, {
         "headers": filter(body, HEADER),
         "metadata": first(body, BLOCKHTTPGETCLIENTMETADATA),
-        "parameter": first(body, PARAMETER)
+        "parameters": filter(body, PARAMETER)
         }); };
   var peg$f30 = function(body) { return mk(BLOCKHTTPGETSERVER, {
         "headers": filter(body, HEADER),

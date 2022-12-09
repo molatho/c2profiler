@@ -1,11 +1,12 @@
-import { ICSBlockHttpGet, ICSBlockHttpGetClient, ICSBlockTransformInformation, ICSHasVariant, ICSHeader, ICSOption } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
+import { ICSBlockHttpGet, ICSBlockHttpGetClient, ICSBlockTransformInformation, ICSHasVariant, ICSHeader, ICSOption, ICSParameter } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import { BaseBlock } from "../BaseBlock";
-import { CSHeadersList } from "./CSHeaderList";
+import { CSKeyValueList } from "./CSKeyValueList";
 import { CSOptionsList } from "./CSOptionsList";
 import { CSTransformationFlow } from "./CSTransformationFlow";
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from "@mui/material";
 import { CSCreateNew } from "./CSCreateNew";
+import { CSProfileHelper } from "../../../../Plugins/CobaltStrike/CSProfileHelper";
 
 interface Props {
     profile: any;
@@ -30,9 +31,19 @@ export const CSHttpGet = ({ item, onProfileChanged, profile }: Props) => {
         })
     }
 
+    const clientParametersChanged = (parameters: ICSParameter[]) => {
+        if (http_get.client) http_get.client.parameters = parameters;
+        onProfileChanged({
+            ...profile
+        })
+    }
+
     const getClient = (client: ICSBlockHttpGetClient) => <>
         <BaseBlock titleVariant="h6" title="Headers" description="List of headers the beacon sends">
-            <CSHeadersList onHeadersChanged={clientHeadersChanged} headers={client.headers} />
+            <CSKeyValueList onListChanged={clientHeadersChanged} list={client.headers} />
+        </BaseBlock>
+        <BaseBlock titleVariant="h6" title="Parameters" description="List of parameters the beacon appends in URLs">
+            <CSKeyValueList onListChanged={clientParametersChanged} list={client.parameters} />
         </BaseBlock>
         <BaseBlock titleVariant="h6" title="Metadata" description="Transformation of data sent by beacons" identifier={1} onBlockRemoved={client.metadata ? removeClientMetadata : undefined}>
             <CSCreateNew item={client.metadata} onCreate={createClientMetadata} itemView={getClientMetadata} />
@@ -40,7 +51,10 @@ export const CSHttpGet = ({ item, onProfileChanged, profile }: Props) => {
     </>;
 
     const createClient = () => {
-        http_get.client = { headers: [] };
+        http_get.client = {
+            headers: [],
+            parameters: []
+        };
         onProfileChanged({ ...profile });
     }
 

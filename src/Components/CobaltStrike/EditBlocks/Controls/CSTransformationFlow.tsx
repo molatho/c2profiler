@@ -2,7 +2,7 @@
 // Flow (append [operand][h/s][x]) => (mask [x]) =>  
 
 import { Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup, SelectChangeEvent, Select, MenuItem, Icon } from "@mui/material";
-import { IMetaTerminationDefinition, IMetaTransformDefinition, TerminationDisplayNames, TerminationName, TerminationNames, TransformDisplayNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
+import { IMetaTerminationDefinition, IMetaTransformDefinition, TerminationName, TerminationNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { ICSBlockTransformInformation, ICSDataTransform } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -33,7 +33,7 @@ const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, o
     return <TableRow
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-        <TableCell>{`${idx + 1}. ${TransformDisplayNames.get(transform.type)}`}</TableCell>
+        <TableCell>{`${idx + 1}. ${metadata.transforms[transform.type].displayName}`}</TableCell>
         <TableCell component="th" scope="row">
             {meta.operand ?
                 <TextField
@@ -125,7 +125,7 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                     p: 0.5,
                     m: 0,
                 }}>
-                    {TransformNames.map((n, i) => <InfoAddChip key={i} label={TransformDisplayNames.get(n)} description={getTransformMetadata(n).description} onClick={() => addTransform(n)} />)}
+                    {TransformNames.map((n, i) => <InfoAddChip key={i} label={metadata.transforms[n].displayName} description={getTransformMetadata(n).description} onClick={() => addTransform(n)} />)}
                 </Stack>
             </Grid>
             {/* Flow display */}
@@ -172,7 +172,7 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                     >
                         {TerminationNames.map((n, i) => <MenuItem key={i} value={n}>
                             <Stack direction="row" spacing={2}>
-                                <Typography> {TerminationDisplayNames.get(n)} </Typography>
+                                <Typography> {metadata.terminations[n].displayName} </Typography>
                                 <SupportIconTooltip description={getTerminationMetadata(n).description} />
                             </Stack>
                         </MenuItem>)}

@@ -25,20 +25,16 @@ export interface ICSVariantContainer<T extends ICSHasVariant> {
     variants: T[];
 }
 
-export interface ICSOption {
+export interface ICSKeyValue {
     name: string;
     value: string;
 }
 
-export interface ICSHeader {
-    name: string;
-    value: string;
-}
+export interface ICSOption extends ICSKeyValue { }
 
-export interface ICSParameter {
-    name: string;
-    value: string;
-}
+export interface ICSHeader extends ICSKeyValue { }
+
+export interface ICSParameter extends ICSKeyValue { }
 
 export interface ICSHasOptions {
     options: ICSOption[];
@@ -54,14 +50,15 @@ export interface ICSHasHeaders {
 
 // HTTP
 
-export interface ICSBlockHttpBaseClient extends ICSHasHeaders { }
+export interface ICSBlockHttpBaseClient extends ICSHasHeaders {
+    parameters: ICSParameter[];
+}
 
 export interface ICSBlockHttpBaseServer extends ICSHasHeaders { }
 
 export interface ICSBlockHttpGet extends ICSHasOptions, ICSHasVariant {
     client?: ICSBlockHttpGetClient;
     server?: ICSBlockHttpGetServer;
-    parameter?: ICSParameter;
 }
 
 export interface ICSBlockHttpPost extends ICSHasOptions, ICSHasVariant {

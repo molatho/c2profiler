@@ -181,7 +181,7 @@ block_http_get
     / "client" _+ "{" _* body:block_http_get_client* _* "}" { return mk(BLOCKHTTPGETCLIENT, {
         "headers": filter(body, HEADER),
         "metadata": first(body, BLOCKHTTPGETCLIENTMETADATA),
-        "parameter": first(body, PARAMETER)
+        "parameters": filter(body, PARAMETER)
         }); }
 	/ "server" _+ "{" _* body:block_http_get_server* _* "}" { return mk(BLOCKHTTPGETSERVER, {
         "headers": filter(body, HEADER),
