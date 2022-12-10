@@ -31,7 +31,7 @@ function App() {
   const inSetup = !c2Provider || !c2Profile;
 
   const getView = () => {
-    if (inSetup) return <C2SetupView onSetupDone={(provider, profile) => { setC2Provider(provider); setC2Profile(profile); }} />
+    if (inSetup) return <C2SetupView onSetupDone={(provider, profile) => { console.log(profile); setC2Provider(provider); setC2Profile(profile); }} />
     else return c2Provider?.editView({ "profile": c2Profile, "onProfileChanged": (p:any)=>setC2Profile(p) });
   }
 

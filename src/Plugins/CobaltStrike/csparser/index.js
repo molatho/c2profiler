@@ -43,7 +43,8 @@
   const DSL = "dsl";
   const TERMINATION = "termination";
   const COMMAND = "block::stage::command";
-  const TRANSFORM = "block::stage::transform";
+  const TRANSFORMX86 = "block::stage::transform::x86";
+  const TRANSFORMX64 = "block::stage::transform::x64";
   const TRANSFORMOPERATION = "block::stage::transform::operation";
   const BLOCKTRANFORMINFORMATION = "block::transform";
   const BLOCKCODESIGNER = "block::code::signer";
@@ -425,9 +426,11 @@ function peg$parse(input, options) {
   var peg$f33 = function(body) { return mk(BLOCKHTTPPOSTCLIENT, {
         "headers": filter(body, HEADER),
         "output": first(body, BLOCKHTTPPOSTCLIENTOUTPUT),
-        "id": first(body, BLOCKHTTPPOSTCLIENTID)
+        "id": first(body, BLOCKHTTPPOSTCLIENTID),
+        "parameters": filter(body, PARAMETER)
         }); };
   var peg$f34 = function(body) { return mk(BLOCKHTTPPOSTSERVER, {
+        "headers": filter(body, HEADER),
         "output": first(body, BLOCKHTTPPOSTSERVEROUTPUT),
         }); };
   var peg$f35 = function(transforminfo) { return mk(BLOCKHTTPPOSTCLIENTID, clean(transforminfo)); };
@@ -444,19 +447,21 @@ function peg$parse(input, options) {
   var peg$f40 = function(transforminfo) { return mk(BLOCKHTTPSTAGERSERVEROUTPUT, clean(transforminfo)); };
   var peg$f41 = function(body) { return mk(BLOCKSTAGE, { 
         "options": filter(body, OPTION),
-        "transforms": filter(body, TRANSFORM),
+        "transform-x86": first(body, TRANSFORMX86),
+        "transform-x64": first(body, TRANSFORMX64),
         "commands": filter(body, COMMAND) 
         }); };
   var peg$f42 = function(str) { return mk(COMMAND, { "type": "stringw", "operand": str }); };
   var peg$f43 = function(str) { return mk(COMMAND, { "type": "string", "operand": str }); };
   var peg$f44 = function(str) { return mk(COMMAND, { "type": "data", "operand": str }); };
-  var peg$f45 = function(body) {return mk(TRANSFORM, { "type": "x86", "operations": filter(body, TRANSFORMOPERATION) }); };
-  var peg$f46 = function(body) {return mk(TRANSFORM, { "type": "x64", "operations": filter(body, TRANSFORMOPERATION) }); };
+  var peg$f45 = function(body) {return mk(TRANSFORMX86, { "type": "x86", "operations": filter(body, TRANSFORMOPERATION) }); };
+  var peg$f46 = function(body) {return mk(TRANSFORMX64, { "type": "x64", "operations": filter(body, TRANSFORMOPERATION) }); };
   var peg$f47 = function(str) { return mk(TRANSFORMOPERATION, { "type": "prepend", "operand1": str }); };
   var peg$f48 = function(str) { return mk(TRANSFORMOPERATION, { "type": "append", "operand1": str }); };
   var peg$f49 = function(orig, repl) { return mk(TRANSFORMOPERATION, { "type": "strrep", "operand1": orig, "operand2": repl }); };
   var peg$f50 = function(body) { return mk(BLOCKPROCESSINJECT, {
-        "transforms": filter(body, TRANSFORM),
+        "transform-x86": first(body, TRANSFORMX86),
+        "transform-x64": first(body, TRANSFORMX64),
         "execute": first(body, BLOCKPROCESSINJECTEXECUTE)
         }); };
   var peg$f51 = function(body) { return mk(BLOCKPROCESSINJECTEXECUTE, {

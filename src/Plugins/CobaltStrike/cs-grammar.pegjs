@@ -39,7 +39,8 @@
   const DSL = "dsl";
   const TERMINATION = "termination";
   const COMMAND = "block::stage::command";
-  const TRANSFORM = "block::stage::transform";
+  const TRANSFORMX86 = "block::stage::transform::x86";
+  const TRANSFORMX64 = "block::stage::transform::x64";
   const TRANSFORMOPERATION = "block::stage::transform::operation";
   const BLOCKTRANFORMINFORMATION = "block::transform";
   const BLOCKCODESIGNER = "block::code::signer";
@@ -209,9 +210,11 @@ block_http_post
     / "client" _+ "{" _* body:block_http_post_client* _* "}" { return mk(BLOCKHTTPPOSTCLIENT, {
         "headers": filter(body, HEADER),
         "output": first(body, BLOCKHTTPPOSTCLIENTOUTPUT),
-        "id": first(body, BLOCKHTTPPOSTCLIENTID)
+        "id": first(body, BLOCKHTTPPOSTCLIENTID),
+        "parameters": filter(body, PARAMETER)
         }); }
 	/ "server" _+ "{" _* body:block_http_post_server* _* "}" { return mk(BLOCKHTTPPOSTSERVER, {
+        "headers": filter(body, HEADER),
         "output": first(body, BLOCKHTTPPOSTSERVEROUTPUT),
         }); }
     / comment
@@ -270,7 +273,8 @@ block_options_only
 block_stage
 	= "stage" _+ "{" _* body:block_stage_body* _* "}" { return mk(BLOCKSTAGE, { 
         "options": filter(body, OPTION),
-        "transforms": filter(body, TRANSFORM),
+        "transform-x86": first(body, TRANSFORMX86),
+        "transform-x64": first(body, TRANSFORMX64),
         "commands": filter(body, COMMAND) 
         }); }
     
@@ -287,8 +291,8 @@ block_stage_command
     / "data" _+ str:string ";" comment? { return mk(COMMAND, { "type": "data", "operand": str }); }
 
 block_stage_transform
-	= "transform-x86" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORM, { "type": "x86", "operations": filter(body, TRANSFORMOPERATION) }); }
-    / "transform-x64" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORM, { "type": "x64", "operations": filter(body, TRANSFORMOPERATION) }); }
+	= "transform-x86" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORMX86, { "type": "x86", "operations": filter(body, TRANSFORMOPERATION) }); }
+    / "transform-x64" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORMX64, { "type": "x64", "operations": filter(body, TRANSFORMOPERATION) }); }
     
 block_transform_body
 	= block_transform_operation
@@ -302,7 +306,8 @@ block_transform_operation
 
 block_process_inject
 	= "process-inject" _+ "{" _* body:block_process_inject_body* _* "}" { return mk(BLOCKPROCESSINJECT, {
-        "transforms": filter(body, TRANSFORM),
+        "transform-x86": first(body, TRANSFORMX86),
+        "transform-x64": first(body, TRANSFORMX64),
         "execute": first(body, BLOCKPROCESSINJECTEXECUTE)
         }); }
 

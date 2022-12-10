@@ -48,7 +48,6 @@ export class CSProfileHelper {
     }
     static create_process_inject(profile: ICSProfile): ICSProfile {
         profile.process_inject = {
-            transforms: [],
             options: []
         }
         return profile;
@@ -62,7 +61,6 @@ export class CSProfileHelper {
     }
     static create_stage(profile: ICSProfile): ICSProfile {
         profile.stage = {
-            transforms: [],
             commands: [],
             options: []
         }
@@ -97,7 +95,7 @@ export class CSProfileHelper {
 
     static create_http_post(profile: ICSProfile): ICSProfile {
         profile.http_post = {
-            baseline: CSProfileHelper.create_http_get_variant(),
+            baseline: CSProfileHelper.create_http_post_variant(),
             variants: []
         }
         return profile;

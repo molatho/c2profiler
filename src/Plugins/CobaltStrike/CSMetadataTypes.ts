@@ -24,14 +24,27 @@ export interface IMetaOptionDefinition extends IHasDocumentation {
 export type TransformName = "append" | "prepend" | "base64" | "base64url" | "mask" | "netbios" | "netbiosu";
 export const TransformNames: TransformName[] = ["append", "prepend", "base64", "base64url", "mask", "netbios", "netbiosu"];
 
-
-export type TerminationName = "header" | "parameter" | "print" | "uri-append";
-export const TerminationNames: TerminationName[] = ["header", "parameter", "print", "uri-append"];
-
 export interface IMetaTransformDefinition extends IHasDocumentation, IHasDisplayName {
     operand: boolean;
 }
 
+export type TerminationName = "header" | "parameter" | "print" | "uri-append";
+export const TerminationNames: TerminationName[] = ["header", "parameter", "print", "uri-append"];
+
 export interface IMetaTerminationDefinition extends IHasDocumentation, IHasDisplayName {
     operand: boolean;
+}
+
+export type PayloadTransformName = "append" | "prepend" | "strrep";
+export const PayloadTransformNames: PayloadTransformName[] = ["append", "prepend", "strrep"];
+
+
+export interface IMetaPayloadTransformDefinition extends IHasDocumentation, IHasDisplayName {
+    operand2: boolean;
+}
+
+export type PayloadCommandName = "string" | "stringw" | "data";
+export const PayloadCommandNames: PayloadCommandName[] = ["string", "stringw", "data"];
+
+export interface IMetaPayloadCommandDefinition extends IHasDocumentation, IHasDisplayName {
 }

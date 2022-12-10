@@ -1,8 +1,8 @@
 import { Stack, IconButton, Typography, Grid } from "@mui/material";
-import IndentedAccordeon from "../../IndentedAccordeon";
+import IndentedAccordeon from "./IndentedAccordeon";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Variants } from "../../../Misc/Styles";
-import { SupportIconTooltip, SupportIconTooltipProps } from "../../SupportIconTooltip";
+import { Variants } from "../Misc/Styles";
+import { SupportIconTooltip, SupportIconTooltipProps } from "./SupportIconTooltip";
 
 interface Props<I> extends SupportIconTooltipProps {
     identifier?: I;

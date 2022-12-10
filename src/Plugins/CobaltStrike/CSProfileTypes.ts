@@ -137,7 +137,8 @@ export interface ICSPayloadCommand {
 // Stage
 
 export interface ICSBlockStage extends ICSHasOptions {
-    transforms: ICSPayloadTransform[];
+    "transform-x86"?: ICSPayloadTransform;
+    "transform-x64"?: ICSPayloadTransform;
     commands: ICSPayloadCommand[];
 }
 
@@ -156,7 +157,8 @@ export interface ICSBlockCodeSigner extends ICSHasOptions { }
 // Process-Inject
 
 export interface ICSBlockProcessInject extends ICSHasOptions {
-    transforms: ICSPayloadTransform[];
+    "transform-x86"?: ICSPayloadTransform;
+    "transform-x64"?: ICSPayloadTransform;
     execute?: ICSProcessInjectExecute;
 }
 

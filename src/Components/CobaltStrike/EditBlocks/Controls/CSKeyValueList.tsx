@@ -1,11 +1,11 @@
-import { ICSHeader, ICSKeyValue } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
+import { ICSKeyValue } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, TextField, IconButton, ButtonGroup, Typography, Stack, Button } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import AddCircle from '@mui/icons-material/AddCircle';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useState } from "react";
+import { CodeTextField } from "../../../CodeTextField";
 
 interface ItemProps {
     item: ICSKeyValue;
@@ -14,10 +14,11 @@ interface ItemProps {
     isFirst: boolean;
     isLast: boolean;
     onMove: (dir: number) => void;
+    idx: number;
 }
 
-const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove }: ItemProps) => {
-    const [update, setUpdate] = useState<NodeJS.Timeout|null>(null);
+const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove, idx }: ItemProps) => {
+    const [update, setUpdate] = useState<NodeJS.Timeout | null>(null);
 
     const refreshTimeout = () => {
         if (update) clearTimeout(update);
@@ -39,12 +40,13 @@ const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove }: ItemPr
     return <TableRow
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
+        <TableCell padding="checkbox">{`${idx + 1}.`}</TableCell>
         <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography>
                     Name:
                 </Typography>
-                <TextField
+                <CodeTextField
                     value={item.name}
                     onChange={handleNameChange}
                     InputLabelProps={{
@@ -61,7 +63,7 @@ const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove }: ItemPr
                 <Typography>
                     Value:
                 </Typography>
-                <TextField
+                <CodeTextField
                     value={item.value}
                     onChange={handleValueChange}
                     InputLabelProps={{
@@ -125,6 +127,7 @@ export const CSKeyValueList = ({ list, onListChanged }: Props) => {
                     isFirst={idx == 0}
                     isLast={idx == list.length - 1}
                     onMove={(dir) => moveHeader(idx, dir)}
+                    idx={idx}
                 />)}
             </TableBody>
         </Table>

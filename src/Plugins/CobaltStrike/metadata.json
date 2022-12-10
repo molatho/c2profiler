@@ -71,13 +71,13 @@
         "name": "pipename",
         "defaultValue": "msagent_##",
         "type": "string",
-        "description": "Default name of pipe to use for SMB Beacon’s peer-to- peer communication. Each # is replaced with a random hex value."
+        "description": "Default name of pipe to use for SMB Beacon's peer-to- peer communication. Each # is replaced with a random hex value."
       },
       {
         "name": "pipename_stager",
         "defaultValue": "status_##",
         "type": "string",
-        "description": "Name of pipe to use for SMB Beacon’s named pipe stager. Each # is replaced with a random hex value."
+        "description": "Name of pipe to use for SMB Beacon's named pipe stager. Each # is replaced with a random hex value."
       },
       {
         "name": "sample_name",
@@ -267,82 +267,110 @@
       {
         "name": "allocator",
         "defaultValue": "MapViewOfFile",
-        "type": "string"
+        "type": "string",
+        "description": "HeapAlloc, MapViewOfFile, and VirtualAlloc"
       },
       {
         "name": "cleanup",
         "defaultValue": "true",
-        "type": "boolean"
+        "type": "boolean",
+        "description": "Ask Beacon to attempt to free memory associated with the Reflective DLL package that initialized it."
       },
       {
         "name": "magic_mz_x86",
         "defaultValue": "MZAR",
-        "type": "string"
+        "type": "string",
+        "description": "Override the first bytes (MZ header included) of Beacon's Reflective DLL. Valid x86 instructions are required. Follow instructions that change CPU state with instructions that undo the change."
+      },
+      {
+        "name": "magic_mz_x64",
+        "defaultValue": "MZAR",
+        "type": "string",
+        "description": "Override the first bytes (MZ header included) of Beacon's Reflective DLL. Valid x86 instructions are required. Follow instructions that change CPU state with instructions that undo the change."
       },
       {
         "name": "magic_pe",
         "defaultValue": "PE",
-        "type": "string"
+        "type": "string",
+        "description": "Override PE marker with something else."
       },
       {
         "name": "module_x86",
         "defaultValue": "xpsservices.dll",
-        "type": "string"
+        "type": "string",
+        "description": "Ask the x86 ReflectiveLoader to load the specified library and overwrite its space instead of allocating memory with VirtualAlloc.\nOnly works with VirtualAlloc."
       },
       {
         "name": "module_x64",
         "defaultValue": "xpsservices.dll",
-        "type": "string"
+        "type": "string",
+        "description": "Ask the x86 ReflectiveLoader to load the specified library and overwrite its space instead of allocating memory with VirtualAlloc.\nOnly works with VirtualAlloc."
       },
       {
         "name": "obfuscate",
         "defaultValue": "false",
-        "type": "boolean"
+        "type": "boolean",
+        "description": "Obfuscate the Reflective DLL's import table, overwrite unused header content, and ask ReflectiveLoader to copy Beacon to new memory without its DLL headers."
       },
       {
         "name": "sleep_mask",
         "defaultValue": "false",
-        "type": "boolean"
+        "type": "boolean",
+        "description": "Obfuscate Beacon, in-memory, prior to sleeping."
       },
       {
         "name": "smartinject",
         "defaultValue": "true",
-        "type": "boolean"
+        "type": "boolean",
+        "description": "Use embedded function pointer hints to bootstrap Beacon agent without walking kernel32 EAT."
       },
       {
         "name": "stomppe",
         "defaultValue": "true",
-        "type": "boolean"
+        "type": "boolean",
+        "description": "Ask ReflectiveLoader to stomp MZ, PE, and e_lfanew values after it loads Beacon payload."
       },
       {
         "name": "userwx",
         "defaultValue": "false",
-        "type": "boolean"
-      },
-      {
-        "name": "compile_time",
-        "defaultValue": "14 Jul 2018 8:14:00",
-        "type": "string"
-      },
-      {
-        "name": "image_size_x86",
-        "defaultValue": "512000",
-        "type": "number"
-      },
-      {
-        "name": "image_size_x64",
-        "defaultValue": "512000",
-        "type": "number"
-      },
-      {
-        "name": "entry_point",
-        "defaultValue": "92145",
-        "type": "number"
+        "type": "boolean",
+        "description": "Ask ReflectiveLoader to use (true) or avoid RWX permissions (false) for Beacon DLL in memory."
       },
       {
         "name": "name",
         "defaultValue": "beacon.x64.dll",
-        "type": "string"
+        "type": "string",
+        "description": "The Exported name of the Beacon DLL."
+      },
+      {
+        "name": "compile_time",
+        "defaultValue": "14 Jul 2018 8:14:00",
+        "type": "string",
+        "description": "Compile time of the Beacon DLL.\nCopy from peclone."
+      },
+      {
+        "name": "image_size_x86",
+        "defaultValue": "512000",
+        "type": "number",
+        "description": "Copy from peclone."
+      },
+      {
+        "name": "image_size_x64",
+        "defaultValue": "512000",
+        "type": "number",
+        "description": "Copy from peclone."
+      },
+      {
+        "name": "entry_point",
+        "defaultValue": "92145",
+        "type": "number",
+        "description": "Copy from peclone."
+      },
+      {
+        "name": "rich_header",
+        "defaultValue": "\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00",
+        "type": "string",
+        "description": "Copy from peclone."
       }
     ],
     "dns_beacon": [
@@ -484,6 +512,37 @@
       "displayName": "URI-append",
       "operand": false,
       "description": "Append to URI"
+    }
+  },
+  "payloadTransforms": {
+    "append": {
+      "displayName": "Append",
+      "operand2": false,
+      "description": "Appends a string"
+    },
+    "prepend": {
+      "displayName": "Prepend",
+      "operand2": false,
+      "description": "Prepends a string"
+    },
+    "strrep": {
+      "displayName": "String Replace",
+      "operand2": true,
+      "description": "Replaces a string"
+    }
+  },
+  "payloadCommands": {
+    "string": {
+      "displayName": "String",
+      "description": "Appends a string"
+    },
+    "stringw": {
+      "displayName": "String (wide)",
+      "description": "Appends a wide string"
+    },
+    "data": {
+      "displayName": "Data",
+      "description": "Appends raw bytes"
     }
   }
 }

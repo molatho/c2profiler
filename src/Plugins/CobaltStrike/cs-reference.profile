@@ -217,8 +217,8 @@ set magic_mz_x86 "MZAR";
     set userwx "false";
     # PE header cloning - see "petool", skipped for now
     set compile_time "14 Jul 2018 8:14:00";
-set image_size_x86 "512000";
-set image_size_x64 "512000";
+    set image_size_x86 "512000";
+    set image_size_x64 "512000";
     set entry_point "92145";
     #The Exported name of the Beacon DLL
     set name "beacon.x64.dll";

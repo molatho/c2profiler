@@ -1,4 +1,5 @@
 import { Checkbox, Stack, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { CodeTextField } from "../../../CodeTextField";
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
 
 interface Props {
@@ -16,7 +17,7 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
     const getTypeView = () => {
         switch (type) {
             case "number":
-                return <TextField
+                return <CodeTextField
                     type="number"
                     value={parseInt(value ? value : "0") | 0}
                     onChange={(ev) => onValueChanged(name, ev.target.value.toString())}
@@ -37,7 +38,7 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
                     <Typography>{value == "true" ? "True" : "False"}</Typography>
                 </Stack>;
         }
-        return <TextField
+        return <CodeTextField
             value={value ? value : defaultValue}
             onChange={(ev) => onValueChanged(name, ev.target.value)}
             InputLabelProps={{

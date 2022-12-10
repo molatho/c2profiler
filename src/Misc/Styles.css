@@ -1,0 +1,14 @@
+body {
+    --ff-mono: ui-monospace,
+        "Cascadia Mono",
+        "Segoe UI Mono",
+        "Liberation Mono",
+        Menlo,
+        Monaco,
+        Consolas,
+        monospace;
+}
+
+.code {
+    font-family: var(--ff-mono) !important;
+}

@@ -1,13 +1,15 @@
 import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { PaperItem } from "../PaperItems/PaperItem";
 import { CSOptionsList } from "./EditBlocks/Controls/CSOptionsList";
-import { BaseBlock } from "./EditBlocks/BaseBlock";
+import { BaseBlock } from "../BaseBlock";
 import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
-import { CSHttpGet } from "./EditBlocks/Controls/CSHttpGet";
+import { CSHttpGet } from "./EditBlocks/CSHttpGet";
 import { TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
 import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
 import metadata from "../../Plugins/CobaltStrike/metadata.json"
+import { CSHttpPost } from "./EditBlocks/CSHttpPost";
+import { CSStage } from "./EditBlocks/CSStage";
 
 interface Props {
     profile: any;
@@ -67,6 +69,23 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
                         c.variants.push(CSProfileHelper.create_http_get_variant(n))
                         onProfileChanged({ ...profile })
                     }} />
+                </BaseBlock>
+            </PaperItem>}
+        {csprofile.http_post &&
+            <PaperItem small>
+                <BaseBlock titleVariant="h6" title={(metadata.blocks["http_post"].displayName)} identifier="http_post" onBlockRemoved={handleBlockRemoval}>
+                    <CSVariants profile={csprofile} container={csprofile.http_post} itemView={(i, opc) => <CSHttpPost profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+                        c.variants.push(CSProfileHelper.create_http_post_variant(n))
+                        onProfileChanged({ ...profile })
+                    }} />
+                </BaseBlock>
+            </PaperItem>}
+
+        {/* Individual blocks (e.g. stage) */}
+        {csprofile.stage &&
+            <PaperItem small>
+                <BaseBlock titleVariant="h6" title={(metadata.blocks["stage"].displayName)} identifier="stage" onBlockRemoved={handleBlockRemoval}>
+                    <CSStage profile={csprofile} stage={csprofile.stage} onProfileChanged={onProfileChanged} />
                 </BaseBlock>
             </PaperItem>}
     </>
