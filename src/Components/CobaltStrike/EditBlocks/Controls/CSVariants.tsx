@@ -65,24 +65,25 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
         setShowDiag(false);
     }
 
-    return <><Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={idx} onChange={handleChange} aria-label="basic tabs example">
-            <Tab label="Baseline" sx={{ textTransform: 'none' }} />
-            {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
-            <Tab
-                sx={{ textTransform: 'none' }}
-                icon={<AddCircleIcon color="success" />}
-                iconPosition="start"
-                label=" "
-            />
-            {idx > 0 && <Tab
-                sx={{ textTransform: 'none' }}
-                iconPosition="start"
-                icon={<DeleteIcon color="error" />}
-                label={`Remove "${container.variants[idx - 1].variant}"`}
-            />}
-        </Tabs>
-    </Box>
+    return <>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs value={idx} onChange={handleChange} aria-label="basic tabs example">
+                <Tab label="Baseline" sx={{ textTransform: 'none' }} />
+                {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
+                <Tab
+                    sx={{ textTransform: 'none' }}
+                    icon={<AddCircleIcon color="success" sx={{ padding: 0 }} />}
+                    iconPosition="start"
+                    label=" "
+                />
+                {idx > 0 && <Tab
+                    sx={{ textTransform: 'none' }}
+                    iconPosition="start"
+                    icon={<DeleteIcon color="error" />}
+                    label={`Remove "${container.variants[idx - 1].variant}"`}
+                />}
+            </Tabs>
+        </Box>
         <TabPanel value={idx} index={0}>
             {itemView(container.baseline, onProfileChanged)}
         </TabPanel>

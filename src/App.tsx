@@ -35,11 +35,13 @@ function App() {
     setC2Profile(profile);
   }
 
-  const getView = () => {
-    if (inSetup) return <C2SetupView onSetupDone={handleSetupDone} />
-    else return c2Provider?.editView({ profile: c2Profile, onProfileChanged: (p: any) => setC2Profile(p) });
+  const getEditView = () => {
+    if (c2Provider) {
+      const EditView: (profile: any, onProfileChanged: (profile: any) => void) => JSX.Element = c2Provider && c2Provider.editView;
+      return <EditView profile={c2Profile} onProfileChanged={setC2Profile} />
+    }
+    return <></>
   }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -56,7 +58,10 @@ function App() {
       <main>
         <Container>
           {/* Current View */}
-          {getView()}
+          {inSetup
+            ? <C2SetupView onSetupDone={handleSetupDone} />
+            : getEditView()
+          }
           {/* End */}
         </Container>
       </main>

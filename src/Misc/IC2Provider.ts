@@ -11,6 +11,8 @@ export interface IC2Provider {
     compile: (profile: any) => string;
 }
 
+export type ExportChangedCb = (profile: any) => void;
+
 export interface IC2EditProps {
     profile: any;
     onProfileChanged: (profile: any) => void;
@@ -36,6 +38,7 @@ export const CobaltStrike: IC2Provider = {
             "name": "Import existing profile",
             "view": CSProfileImport
         }
+        //TODO: Upload file
     ],
     editView: CSProfileEdit,
     compile: (profile) => ""

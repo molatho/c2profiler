@@ -11,28 +11,68 @@ import metadata from "../../Plugins/CobaltStrike/metadata.json"
 import { CSHttpPost } from "./EditBlocks/CSHttpPost";
 import { CSStage } from "./EditBlocks/CSStage";
 import Typography from "@mui/material/Typography";
+import { useState } from "react";
+import { ExportChangedCb } from "../../Misc/IC2Provider";
+import { Tabs, Tab, AppBar } from "@mui/material";
 
 interface Props {
     profile: any;
-    onProfileChanged: (profile: any) => void;
+    onProfileChanged: ExportChangedCb;
 }
 
 export type TopBlockMetaName = "global" | TopBlockName;
 const TopBlockMetaNames: string[] = ["global"].concat(TopBlockNames);
 
+//TODO: Add TopBlockMetaName and render views conditionally
+const TAB_DATA = [
+    {
+        name: "Global Options",
+        view: (csprofile: ICSProfile, onProfileChanged: ExportChangedCb) => <CSOptionsList blockMetaName="global" blockOptions={csprofile.options} onBlockOptionsChanged={(opts) => onProfileChanged({
+            ...csprofile,
+            options: [...opts]
+        })} />
+    },
+    {
+        name: "Code Signer",
+        view: (csprofile: ICSProfile, onProfileChanged: ExportChangedCb) => csprofile.code_signer && <CSOptionsList blockMetaName="code_signer" blockOptions={csprofile.code_signer.options} onBlockOptionsChanged={(opts) => {
+            if (csprofile.code_signer) csprofile.code_signer.options = opts;
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
+        name: "HTTP Get",
+        view: (csprofile: ICSProfile, onProfileChanged: ExportChangedCb) => csprofile.http_get && <CSVariants profile={csprofile} container={csprofile.http_get} itemView={(i, opc) => <CSHttpGet profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+            c.variants.push(CSProfileHelper.create_http_get_variant(n))
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
+        name: "HTTP Post",
+        view: (csprofile: ICSProfile, onProfileChanged: ExportChangedCb) => csprofile.http_post && <CSVariants profile={csprofile} container={csprofile.http_post} itemView={(i, opc) => <CSHttpPost profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+            c.variants.push(CSProfileHelper.create_http_post_variant(n))
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
+        name: "Stage",
+        view: (csprofile: ICSProfile, onProfileChanged: ExportChangedCb) => csprofile.stage && <CSStage profile={csprofile} stage={csprofile.stage} onProfileChanged={onProfileChanged} />
+    }
+]
+
 export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
+    const [viewIdx, setViewIdx] = useState(0);
     const csprofile = profile as ICSProfile;
 
-    const hasBlock = (blockName: TopBlockName) => csprofile[blockName];
+    const hasBlock = (blockName: TopBlockName) => csprofile && csprofile[blockName];
     const existingBlocks: TopBlockName[] = TopBlockNames.filter(b => hasBlock(b));
     const missingBlocks: TopBlockName[] = TopBlockNames.filter(b => !hasBlock(b));
 
     const handleBlockRemoval = (blockName: TopBlockName) => {
-        onProfileChanged({ ...CSProfileHelper.remove_top_block(profile as ICSProfile, blockName) });
+        onProfileChanged({ ...CSProfileHelper.remove_top_block(csprofile, blockName) });
     }
 
     const handleBlockAdd = (blockName: TopBlockName) => {
-        onProfileChanged({ ...CSProfileHelper.create_top_block(profile as ICSProfile, blockName) });
+        onProfileChanged({ ...CSProfileHelper.create_top_block(csprofile, blockName) });
     }
 
     return <>
@@ -50,51 +90,14 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
 
         {/* Global: Has only blocks */}
         <PaperItem small>
-            <BaseBlock titleVariant="h6" title="Global Options">
-                <CSOptionsList blockMetaName="global" blockOptions={csprofile.options} onBlockOptionsChanged={(opts) => onProfileChanged({
-                    ...profile,
-                    options: [...opts]
-                })} />
-            </BaseBlock>
-        </PaperItem>
-
-        {/* Simple blocks (options/headers only) */}
-        {csprofile.code_signer &&
-            <PaperItem small>
-                <BaseBlock titleVariant="h6" title={(metadata.blocks["code_signer"].displayName)} identifier="code_signer" onBlockRemoved={handleBlockRemoval}>
-                    <CSOptionsList blockMetaName="code_signer" blockOptions={csprofile.code_signer.options} onBlockOptionsChanged={(opts) => {
-                        profile.code_signer.options = opts;
-                        onProfileChanged({ ...profile })
-                    }} />
-                </BaseBlock>
-            </PaperItem>}
-
-        {/* Variants blocks (e.g. http-get) */}
-        {csprofile.http_get &&
-            <PaperItem small>
-                <BaseBlock titleVariant="h6" title={(metadata.blocks["http_get"].displayName)} identifier="http_get" onBlockRemoved={handleBlockRemoval}>
-                    <CSVariants profile={csprofile} container={csprofile.http_get} itemView={(i, opc) => <CSHttpGet profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
-                        c.variants.push(CSProfileHelper.create_http_get_variant(n))
-                        onProfileChanged({ ...profile })
-                    }} />
-                </BaseBlock>
-            </PaperItem>}
-        {csprofile.http_post &&
-            <PaperItem small>
-                <BaseBlock titleVariant="h6" title={(metadata.blocks["http_post"].displayName)} identifier="http_post" onBlockRemoved={handleBlockRemoval}>
-                    <CSVariants profile={csprofile} container={csprofile.http_post} itemView={(i, opc) => <CSHttpPost profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
-                        c.variants.push(CSProfileHelper.create_http_post_variant(n))
-                        onProfileChanged({ ...profile })
-                    }} />
-                </BaseBlock>
-            </PaperItem>}
-
-        {/* Individual blocks (e.g. stage) */}
-        {csprofile.stage &&
-            <PaperItem small>
-                <BaseBlock titleVariant="h6" title={(metadata.blocks["stage"].displayName)} identifier="stage" onBlockRemoved={handleBlockRemoval}>
-                    <CSStage profile={csprofile} stage={csprofile.stage} onProfileChanged={onProfileChanged} />
-                </BaseBlock>
-            </PaperItem>}
+            <>
+                <AppBar position="sticky">
+                    <Tabs value={viewIdx} onChange={(_, newIdx) => setViewIdx(newIdx)}>
+                        {TAB_DATA.filter(() => true).map((d, i) => <Tab label={d.name} />)}
+                    </Tabs>
+                </AppBar>
+                {TAB_DATA[viewIdx].view(csprofile, onProfileChanged)}
+            </>
+        </PaperItem >
     </>
 }
