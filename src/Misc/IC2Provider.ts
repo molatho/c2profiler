@@ -1,5 +1,6 @@
 import { AnyCnameRecord } from "dns";
 import { AppFooter } from "../Components/AppFooter";
+import { CSProfileCreate } from "../Components/CobaltStrike/CSProfileCreate";
 import { CSProfileEdit } from "../Components/CobaltStrike/CSProfileEdit";
 import { CSProfileImport } from "../Components/CobaltStrike/CSProfileImport";
 
@@ -28,7 +29,11 @@ export const CobaltStrike: IC2Provider = {
     name: "Cobalt Strike",
     importers: [
         {
-            "name": "Profile import",
+            "name": "Create new",
+            "view": CSProfileCreate
+        },
+        {
+            "name": "Import existing profile",
             "view": CSProfileImport
         }
     ],

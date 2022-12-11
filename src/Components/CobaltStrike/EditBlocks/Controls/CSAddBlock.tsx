@@ -26,7 +26,6 @@ export const CSAddBlockList = ({ missingBlocks, onBlockAdd }: Props) => {
                 justifyContent: 'center',
                 flexWrap: 'wrap',
                 listStyle: 'none',
-                p: 0.5,
                 m: 0,
             }}
             component="ul"
@@ -41,6 +40,7 @@ export const CSAddBlockList = ({ missingBlocks, onBlockAdd }: Props) => {
         </ListItem>)}
         </Paper>
     </Stack> : <Stack direction="row" alignItems="center" spacing={2}>
+        <Typography>Blocks:</Typography>
         <Typography sx={{ fontStyle: 'italic' }}>Your profile is fully populated.</Typography>
     </Stack>}
     </>

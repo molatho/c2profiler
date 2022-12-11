@@ -54,20 +54,24 @@ interface Props {
     titleElement?: JSX.Element;
     children?: JSX.Element;
     startExpanded?: boolean;
+    renderChildrenCollapsed?: boolean;
 }
 
-export default function IndentedAccordeon({ title, titleVariant, titleElement, children, startExpanded = false }: Props) {
+export default function IndentedAccordeon({ title, titleVariant, titleElement, children, startExpanded = false, renderChildrenCollapsed = false }: Props) {
     const [expanded, setExpanded] = useState(startExpanded);
 
     const _title = titleElement ? titleElement : <Typography variant={titleVariant}>{title}</Typography>;
+    const renderChildren = expanded || renderChildrenCollapsed;
+
+    const toggleExpanded = () => setExpanded(!expanded);
 
     return (
-        <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
+        <Accordion expanded={expanded} onChange={toggleExpanded}>
             <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
                 {_title}
             </AccordionSummary>
             <AccordionDetails>
-                {children}
+                {renderChildren && children}
             </AccordionDetails>
         </Accordion>
     )

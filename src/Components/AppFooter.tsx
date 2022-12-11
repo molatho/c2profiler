@@ -7,12 +7,13 @@ export const AppFooter = () => {
         <Typography variant="h6">
           c2profiler
         </Typography>
+        <Typography> - </Typography>
         <Typography
           variant="subtitle1"
           color="text.secondary"
           component="p"
         >
-          lulululululul
+          Malleable profiles made easy.
         </Typography>
       </Stack>
     </Box>

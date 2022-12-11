@@ -1,8 +1,9 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { CobaltStrike, IC2Provider } from "../Misc/IC2Provider";
 import { C2ImporterHost } from "./C2ImporterHost";
 import { C2ProviderSelector } from "./C2ProviderSelector";
+import { PaperItem } from "./PaperItems/PaperItem";
 import { PaperItemStep } from "./PaperItems/PaperItemStep";
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 
 const PROVIDERS: IC2Provider[] = [CobaltStrike];
 
-export const C2SetupView = ({ onSetupDone } : Props) => {
+export const C2SetupView = ({ onSetupDone }: Props) => {
     const [c2Provider, setC2Provider] = useState<IC2Provider | null>(null);
     const [c2Profile, setC2Profile] = useState<any | null>(null);
 
@@ -20,11 +21,21 @@ export const C2SetupView = ({ onSetupDone } : Props) => {
         <>{/* 1. C2 Selection */}
             <Grid container >
                 <Grid item xs={12}>
+                    <PaperItem>
+                        <>
+                            <Typography align="center" variant="h4" gutterBottom>Malleable Profile Setup</Typography>
+                            <Typography align="center">Welcome to c2profiler! This tool allows you to import, view, edit, export, lint, and (somewhat) test your malleable profiles. In this first view, you'll import or create the profile to work on.</Typography>
+                        </>
+                    </PaperItem>
+                </Grid>
+
+                <Grid item xs={12}>
                     <PaperItemStep
-                        layout="line"
                         stepNumber={1}
                         stepTitle={"Select your C2"}
-                        state="normal">
+                        state={c2Provider ? "done" : "error"}
+                        description="As a first step, select the provider of your C2."
+                    >
                         <C2ProviderSelector c2s={PROVIDERS} onSelect={setC2Provider} />
                     </PaperItemStep>
                 </Grid>
@@ -32,10 +43,11 @@ export const C2SetupView = ({ onSetupDone } : Props) => {
                 {/* 2. Start selection */}
                 {c2Provider && <Grid item xs={12}>
                     <PaperItemStep
-                        layout="stacked"
                         stepNumber={2}
                         stepTitle={"Import or create a profile"}
-                        state="normal">
+                        state={c2Profile ? "done" : "error"}
+                        description="Now import or create your profile."
+                    >
                         <C2ImporterHost c2={c2Provider} onImported={(profile) => onSetupDone(c2Provider, profile)} />
                     </PaperItemStep>
                 </Grid>

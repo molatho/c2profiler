@@ -18,7 +18,7 @@ const theme = createTheme({
   },
 });
 
-const styles= {
+const styles = {
   appTitle: {
     align: "center"
   }
@@ -30,9 +30,14 @@ function App() {
 
   const inSetup = !c2Provider || !c2Profile;
 
+  const handleSetupDone = (provider: IC2Provider, profile: any) => {
+    setC2Provider(provider);
+    setC2Profile(profile);
+  }
+
   const getView = () => {
-    if (inSetup) return <C2SetupView onSetupDone={(provider, profile) => { console.log(profile); setC2Provider(provider); setC2Profile(profile); }} />
-    else return c2Provider?.editView({ "profile": c2Profile, "onProfileChanged": (p:any)=>setC2Profile(p) });
+    if (inSetup) return <C2SetupView onSetupDone={handleSetupDone} />
+    else return c2Provider?.editView({ profile: c2Profile, onProfileChanged: (p: any) => setC2Profile(p) });
   }
 
   return (
@@ -44,9 +49,6 @@ function App() {
             <GradingIcon sx={{ mr: 2 }} />
             <Typography variant="h6" color="inherit" noWrap>
               c2profiler
-            </Typography>
-            <Typography variant="h6" color="inherit" noWrap className="App-Title">
-              {inSetup ? "Setup" : "Configuration" }
             </Typography>
           </Stack>
         </Toolbar>

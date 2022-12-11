@@ -10,6 +10,7 @@ import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
 import metadata from "../../Plugins/CobaltStrike/metadata.json"
 import { CSHttpPost } from "./EditBlocks/CSHttpPost";
 import { CSStage } from "./EditBlocks/CSStage";
+import Typography from "@mui/material/Typography";
 
 interface Props {
     profile: any;
@@ -35,6 +36,13 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
     }
 
     return <>
+        {/* CS Help */}
+        <PaperItem>
+            <>
+                <Typography align="center" variant="h4" gutterBottom>Malleable Profile Editing</Typography>
+                <Typography align="center">Here you can edit your Cobalt Strike malleable profile and add, remove, and configure blocks.</Typography>
+            </>
+        </PaperItem>
         {/* Chips: one for each block */}
         <PaperItem>
             <CSAddBlockList missingBlocks={missingBlocks} onBlockAdd={handleBlockAdd} />
