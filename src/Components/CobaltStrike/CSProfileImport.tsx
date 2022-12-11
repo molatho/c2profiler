@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 import { Button, Grid, Typography } from "@mui/material";
 import CodeMirror from '@uiw/react-codemirror';
 import { PeggySyntaxError } from "../../csparser";
+import { EditorView } from "@codemirror/view";
+import { Diagnostic, linter } from "@codemirror/lint";
 
 export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
     const [profileInput, setProfileInput] = useState<string>("");
@@ -33,12 +35,27 @@ export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
         }
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        parseInput(event.currentTarget.value);
+    const handleChange = (value: string) => {
+        parseInput(value);
     }
 
-    const handleChange2 = (value: string) => {
-        parseInput(value);
+    const csLint = (view: EditorView) : Diagnostic[] => {
+        try {
+            parse(view.state.doc.toString())
+        } catch (ex) {
+            if (ex instanceof Error) {
+                const _ex = ex as unknown as PeggySyntaxError;
+                return [
+                    {
+                        from: _ex.location.start.offset,
+                        to: _ex.location.end.offset,
+                        message: _ex.message,
+                        severity: "error"
+                    }
+                ]   
+            }
+        }
+        return [];
     }
 
     const hasError = inputError.length > 0;
@@ -50,7 +67,8 @@ export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
                     value={profileInput}
                     height="400px"
                     theme="dark"
-                    onChange={handleChange2}
+                    onChange={handleChange}
+                    extensions={[linter(csLint)]}
                 />
             </Grid>
             {hasError && <Grid item xs={12}>

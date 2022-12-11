@@ -18,23 +18,18 @@ interface ItemProps {
 }
 
 const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove, idx }: ItemProps) => {
-    const [update, setUpdate] = useState<NodeJS.Timeout | null>(null);
-
-    const refreshTimeout = () => {
-        if (update) clearTimeout(update);
-        setUpdate(setTimeout(() => {
-            onChanged();
-        }, 500));
-    }
-
-    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        item.name = event.currentTarget.value;
-        refreshTimeout();
-    }
-
-    const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        item.value = event.currentTarget.value;
-        refreshTimeout();
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        switch (event.target.id) {
+            case "name":
+                item.name = event.target.value;
+                break;
+            case "value":
+                item.value = event.target.value;
+                break;
+            default:
+                return;
+        }
+        onChanged();
     }
 
     return <TableRow
@@ -47,8 +42,9 @@ const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove, idx }: I
                     Name:
                 </Typography>
                 <CodeTextField
+                    id="name"
                     value={item.name}
-                    onChange={handleNameChange}
+                    onChange={handleChange}
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -64,8 +60,9 @@ const CSHeader = ({ item, onChanged, onRemove, isFirst, isLast, onMove, idx }: I
                     Value:
                 </Typography>
                 <CodeTextField
+                    id="value"
                     value={item.value}
-                    onChange={handleValueChange}
+                    onChange={handleChange}
                     InputLabelProps={{
                         shrink: true,
                     }}

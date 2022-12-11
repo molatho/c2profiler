@@ -24,7 +24,7 @@ export const C2SetupView = ({ onSetupDone }: Props) => {
                     <PaperItem>
                         <>
                             <Typography align="center" variant="h4" gutterBottom>Malleable Profile Setup</Typography>
-                            <Typography align="center">Welcome to c2profiler! This tool allows you to import, view, edit, export, lint, and (somewhat) test your malleable profiles. In this first view, you'll import or create the profile to work on.</Typography>
+                            <Typography align="center">Welcome to c2profiler! This tool allows you to import, view, edit, export, lint, and (somewhat) test your malleable profiles. In this first step you'll import or create the profile to work on.</Typography>
                         </>
                     </PaperItem>
                 </Grid>
