@@ -10,14 +10,14 @@ import { CSHttpPost } from "./EditBlocks/CSHttpPost";
 import { CSStage } from "./EditBlocks/CSStage";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { ExportChangedCb } from "../../Misc/IC2Provider";
+import { ProfileChangedCb } from "../../Misc/IC2Provider";
 import { Tabs, Tab, AppBar, Stack, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CSHttpStager } from "./EditBlocks/CSHttpStager";
 
 interface Props {
     profile: any;
-    onProfileChanged: ExportChangedCb;
+    onProfileChanged: ProfileChangedCb;
 }
 
 export type TopBlockMetaName = "global" | TopBlockName;
@@ -27,7 +27,7 @@ const TopBlockMetaNames: string[] = ["global"].concat(TopBlockNames);
 
 interface TabViewProps {
     csprofile: ICSProfile;
-    onProfileChanged: ExportChangedCb;
+    onProfileChanged: ProfileChangedCb;
 }
 
 const TAB_DATA = [
@@ -112,13 +112,6 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
     }
 
     return <>
-        {/* CS Help */}
-        <PaperItem>
-            <>
-                <Typography align="center" variant="h4" gutterBottom>Malleable Profile Editing</Typography>
-                <Typography align="center">Here you can edit your Cobalt Strike malleable profile and add, remove, and configure blocks.</Typography>
-            </>
-        </PaperItem>
         {/* Chips: one for each block */}
         <PaperItem>
             <CSAddBlockList missingBlocks={missingBlocks} onBlockAdd={handleBlockAdd} />

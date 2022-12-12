@@ -50,7 +50,7 @@ export const CSStage = ({ profile, stage, onProfileChanged }: Props) => {
         <BaseBlock titleVariant="h6" title="Transform x64" description="TODO" identifier="transform-x64" onBlockRemoved={stage["transform-x64"] ? removeTransform : undefined}>
             <CSCreateNew item={stage["transform-x64"]} onCreate={() => createTransform("transform-x64")} itemView={() => getTransform(stage["transform-x64"] as ICSPayloadTransform)} />
         </BaseBlock>
-        {/* TODO: Commands */}
+        {/* Commands */}
         <BaseBlock titleVariant="h6" title="Commands" startExpanded>
             <CSPayloadCommandList list={stage.commands} onListChanged={handleCommdandsChange} />
         </BaseBlock>

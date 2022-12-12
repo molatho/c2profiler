@@ -1,0 +1,1 @@
+export type AppFlow = "setup" | "edit" | "test";

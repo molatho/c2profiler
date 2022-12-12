@@ -21,15 +21,6 @@ export const C2SetupView = ({ onSetupDone }: Props) => {
         <>{/* 1. C2 Selection */}
             <Grid container >
                 <Grid item xs={12}>
-                    <PaperItem>
-                        <>
-                            <Typography align="center" variant="h4" gutterBottom>Malleable Profile Setup</Typography>
-                            <Typography align="center">Welcome to c2profiler! This tool allows you to import, view, edit, export, lint, and (somewhat) test your malleable profiles. In this first step you'll import or create the profile to work on.</Typography>
-                        </>
-                    </PaperItem>
-                </Grid>
-
-                <Grid item xs={12}>
                     <PaperItemStep
                         stepNumber={1}
                         stepTitle={"Select your C2"}
