@@ -1,4 +1,4 @@
-import { Box, Tabs, Tab } from "@mui/material";
+import { Box, Tabs, Tab, Stack, Typography, IconButton } from "@mui/material";
 import { useState } from "react";
 import { ICSHasVariant, ICSVariantContainer } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import CSVariantDialog from "./CSVariantDialog";
@@ -41,18 +41,15 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
     const [showDiag, setShowDiag] = useState(false);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        if (newValue == container.variants.length + 1) {
-            setShowDiag(true);
-            // Add new variant to container
-            setIdx(idx); // Restore former index
-        } else if (newValue == container.variants.length + 2) {
-            container.variants = container.variants.filter((_, i) => i != idx - 1);
-            onProfileChanged({ ...profile });
-            setIdx(0); // Restore former index
-        } else {
-            setIdx(newValue);
-        }
+        setIdx(newValue);
     };
+
+    const handleVariantRemove = () => {
+        container.variants = container.variants.filter((_, i) => i != idx - 1);
+        onProfileChanged({ ...profile });
+        if (idx >= container.variants.length - 1)
+            setIdx(container.variants.length - 1);
+    }
 
     const validateVariantName = (name: string) => {
         if (name.length == 0) return "Enter a name!";
@@ -67,22 +64,21 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
 
     return <>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={idx} onChange={handleChange} aria-label="basic tabs example">
-                <Tab label="Baseline" sx={{ textTransform: 'none' }} />
-                {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
-                <Tab
-                    sx={{ textTransform: 'none' }}
-                    icon={<AddCircleIcon color="success" sx={{ padding: 0 }} />}
-                    iconPosition="start"
-                    label=" "
-                />
-                {idx > 0 && <Tab
-                    sx={{ textTransform: 'none' }}
-                    iconPosition="start"
-                    icon={<DeleteIcon color="error" />}
-                    label={`Remove "${container.variants[idx - 1].variant}"`}
-                />}
-            </Tabs>
+            <Stack direction="row" alignItems="center" justifyContent="space-between">
+                <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Variants:</Typography>
+                <Tabs value={idx} onChange={handleChange} variant="scrollable" sx={{ width: '100%' }}>
+                    <Tab label="Baseline" sx={{ textTransform: 'none' }} />
+                    {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
+                </Tabs>
+                <>
+                    <IconButton color="success" onClick={() => setShowDiag(true)}>
+                        <AddCircleIcon />
+                    </IconButton>
+                    <IconButton disabled={idx == 0} color="error" onClick={handleVariantRemove}>
+                        <DeleteIcon />
+                    </IconButton>
+                </>
+            </Stack>
         </Box>
         <TabPanel value={idx} index={0}>
             {itemView(container.baseline, onProfileChanged)}
