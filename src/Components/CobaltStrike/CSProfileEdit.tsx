@@ -77,6 +77,18 @@ const TAB_DATA = [
         }} />
     },
     {
+        name: "HTTPS Certificate",
+        type: "https_certificate",
+        removable: true,
+        view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.https_certificate && <CSVariants profile={csprofile} container={csprofile.https_certificate} itemView={(i, opc) => <CSOptionsList blockMetaName="https_certificate" blockOptions={i.options} onBlockOptionsChanged={(opts) => {
+            i.options = opts;
+            onProfileChanged({ ...csprofile })
+        }} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+            c.variants.push(CSProfileHelper.create_https_certificate_variant(n))
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
         name: "Stage",
         type: "stage",
         removable: true,

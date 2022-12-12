@@ -10,7 +10,7 @@ export interface ICSProfile extends ICSHasOptions {
     http_post: ICSVariantContainer<ICSBlockHttpPost> | null;
     http_stager: ICSVariantContainer<ICSBlockHttpStager> | null;
     http_config: ICSVariantContainer<ICSBlockHttpConfig> | null;
-    https_certificate: ICSBlockHttpsCertificate | null;
+    https_certificate: ICSVariantContainer<ICSBlockHttpsCertificate> | null;
     stage: ICSBlockStage | null;
     dns_beacon: ICSVariantContainer<ICSBlockDnsBeacon> | null;
     post_ex: ICSBlockPostEx | null;

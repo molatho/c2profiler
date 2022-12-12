@@ -1,5 +1,5 @@
 import { TopBlockName } from "./CSMetadataTypes";
-import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation } from "./CSProfileTypes";
+import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation, ICSBlockHttpsCertificate } from "./CSProfileTypes";
 
 export class CSProfileHelper {
     static create_http_post_variant(name?: string): ICSBlockHttpPost {
@@ -64,9 +64,13 @@ export class CSProfileHelper {
     }
     static create_https_certificate(profile: ICSProfile): ICSProfile {
         profile.https_certificate = {
-            options: []
+            baseline: CSProfileHelper.create_https_certificate_variant(),
+            variants: []
         }
         return profile;
+    }
+    static create_https_certificate_variant(name?: string): ICSBlockHttpsCertificate {
+        return { options: [] }
     }
     static create_http_stager(profile: ICSProfile): ICSProfile {
         profile.http_stager = {

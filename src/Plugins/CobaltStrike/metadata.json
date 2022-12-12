@@ -220,7 +220,8 @@
       {
         "name": "C",
         "defaultValue": "US",
-        "type": "string"
+        "type": "string",
+        "description": "Country"
       },
       {
         "name": "CN",
@@ -230,22 +231,26 @@
       {
         "name": "L",
         "defaultValue": "San Francisco",
-        "type": "string"
+        "type": "string",
+        "description": "Location"
       },
       {
         "name": "OU",
         "defaultValue": "IT Services",
-        "type": "string"
+        "type": "string",
+        "description": "Organizational Unit"
       },
       {
         "name": "O",
         "defaultValue": "FooCorp",
-        "type": "string"
+        "type": "string",
+        "description": "Organization Name"
       },
       {
         "name": "ST",
         "defaultValue": "CA",
-        "type": "string"
+        "type": "string",
+        "description": "State"
       },
       {
         "name": "validity",
