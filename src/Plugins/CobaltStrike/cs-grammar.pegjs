@@ -155,6 +155,7 @@ block_http
         "variant": variant
         }); }
     / "http-stager" _* variant:string? _* "{" _* body:block_http_stager* _* "}" { return mk(BLOCKHTTPSTAGER, {
+        "options": filter(body, OPTION),
         "client": first(body, BLOCKHTTPSTAGERCLIENT),
         "server": first(body, BLOCKHTTPSTAGERSERVER),
         "variant": variant
@@ -238,7 +239,7 @@ block_http_stager
 	= option
     / "client" _+ "{" _* body:block_http_stager_client* _* "}" { return mk(BLOCKHTTPSTAGERCLIENT, {
         "headers": filter(body, HEADER),
-        "parameter": first(body, PARAMETER)
+        "parameters": filter(body, PARAMETER)
         }); }
     / "server" _+ "{" _* body:block_http_stager_server* _* "}" { return mk(BLOCKHTTPSTAGERSERVER, {
         "headers": filter(body, HEADER),

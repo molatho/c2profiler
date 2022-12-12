@@ -3,10 +3,7 @@ import { BaseBlock } from "../../BaseBlock";
 import { CSKeyValueList } from "./Controls/CSKeyValueList";
 import { CSOptionsList } from "./Controls/CSOptionsList";
 import { CSTransformationFlow } from "./Controls/CSTransformationFlow";
-import AddIcon from '@mui/icons-material/Add';
-import { Button } from "@mui/material";
 import { CSCreateNew } from "./Controls/CSCreateNew";
-import { CSProfileHelper } from "../../../Plugins/CobaltStrike/CSProfileHelper";
 
 interface Props {
     profile: any;
@@ -19,24 +16,18 @@ export const CSHttpGet = ({ item, onProfileChanged, profile }: Props) => {
 
     const handleOptChange = (opts: ICSOption[]) => {
         http_get.options = opts;
-        onProfileChanged({
-            ...profile
-        });
+        onProfileChanged({ ...profile });
     }
 
     // client
     const clientHeadersChanged = (headers: ICSHeader[]) => {
         if (http_get.client) http_get.client.headers = headers;
-        onProfileChanged({
-            ...profile
-        })
+        onProfileChanged({ ...profile })
     }
 
     const clientParametersChanged = (parameters: ICSParameter[]) => {
         if (http_get.client) http_get.client.parameters = parameters;
-        onProfileChanged({
-            ...profile
-        })
+        onProfileChanged({ ...profile })
     }
 
     const getClient = (client: ICSBlockHttpGetClient) => <>

@@ -10,10 +10,6 @@ export class CSProfileHelper {
     }
     static create_http_stager_variant(name?: string): ICSBlockHttpStager {
         return {
-            server: {
-                output: CSProfileHelper.create_default_transform_info(),
-                headers: []
-            },
             options: [],
             variant: name
         }

@@ -1,13 +1,11 @@
 import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { PaperItem } from "../PaperItems/PaperItem";
 import { CSOptionsList } from "./EditBlocks/Controls/CSOptionsList";
-import { BaseBlock } from "../BaseBlock";
 import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 import { CSHttpGet } from "./EditBlocks/CSHttpGet";
 import { TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
 import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
-import metadata from "../../Plugins/CobaltStrike/metadata.json"
 import { CSHttpPost } from "./EditBlocks/CSHttpPost";
 import { CSStage } from "./EditBlocks/CSStage";
 import Typography from "@mui/material/Typography";
@@ -15,6 +13,7 @@ import { useState } from "react";
 import { ExportChangedCb } from "../../Misc/IC2Provider";
 import { Tabs, Tab, AppBar, Stack, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { CSHttpStager } from "./EditBlocks/CSHttpStager";
 
 interface Props {
     profile: any;
@@ -56,6 +55,15 @@ const TAB_DATA = [
         removable: true,
         view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.http_get && <CSVariants profile={csprofile} container={csprofile.http_get} itemView={(i, opc) => <CSHttpGet profile={csprofile} item={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
             c.variants.push(CSProfileHelper.create_http_get_variant(n))
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
+        name: "HTTP Stager",
+        type: "http_stager",
+        removable: true,
+        view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.http_stager && <CSVariants profile={csprofile} container={csprofile.http_stager} itemView={(i, opc) => <CSHttpStager profile={csprofile} stager={i} onProfileChanged={opc} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+            c.variants.push(CSProfileHelper.create_http_stager_variant(n))
             onProfileChanged({ ...csprofile })
         }} />
     },

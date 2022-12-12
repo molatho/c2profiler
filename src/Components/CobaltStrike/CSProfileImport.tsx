@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IC2ImporterProps } from "../../Misc/IC2Provider";
 import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { parse } from "../../Plugins/CobaltStrike/csparser"
-import TextField from "@mui/material/TextField";
 import { Button, Grid, Typography } from "@mui/material";
 import CodeMirror from '@uiw/react-codemirror';
 import { PeggySyntaxError } from "../../csparser";
 import { EditorView } from "@codemirror/view";
 import { Diagnostic, linter } from "@codemirror/lint";
+import { isFirefox } from "react-device-detect";
 
 export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
     const [profileInput, setProfileInput] = useState<string>("");
@@ -39,7 +39,7 @@ export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
         parseInput(value);
     }
 
-    const csLint = (view: EditorView) : Diagnostic[] => {
+    const csLint = (view: EditorView): Diagnostic[] => {
         try {
             parse(view.state.doc.toString())
         } catch (ex) {
@@ -52,13 +52,19 @@ export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
                         message: _ex.message,
                         severity: "error"
                     }
-                ]   
+                ]
             }
         }
         return [];
     }
 
     const hasError = inputError.length > 0;
+
+    const handlePaste = async () => {
+        try {
+            setProfileInput(await navigator.clipboard.readText());
+        } catch { return false; }
+    };
 
     return (
         <Grid container spacing={1}>
@@ -75,6 +81,9 @@ export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
                 <Typography color="error">
                     {`Error: ${inputError}`}
                 </Typography>
+            </Grid>}
+            {!isFirefox && <Grid item>
+                <Button color="primary" variant="contained" onClick={handlePaste}>Paste</Button>
             </Grid>}
             <Grid item>
                 <Button color="success" disabled={hasError} variant="contained" onClick={() => onImported(profileData)}>Import</Button>

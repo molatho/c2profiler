@@ -1,7 +1,8 @@
-import { ICSBlockStage, ICSOption, ICSPayloadTransform } from "../../../Plugins/CobaltStrike/CSProfileTypes";
+import { ICSBlockStage, ICSOption, ICSPayloadCommand, ICSPayloadTransform } from "../../../Plugins/CobaltStrike/CSProfileTypes";
 import { BaseBlock } from "../../BaseBlock";
 import { CSCreateNew } from "./Controls/CSCreateNew";
 import { CSOptionsList } from "./Controls/CSOptionsList";
+import { CSPayloadCommandList } from "./Controls/CSPayloadCommandList";
 import { CSPayloadTransform } from "./Controls/CSPayloadTransform";
 
 interface Props {
@@ -13,16 +14,12 @@ interface Props {
 export const CSStage = ({ profile, stage, onProfileChanged }: Props) => {
     const handleOptChange = (opts: ICSOption[]) => {
         stage.options = opts;
-        onProfileChanged({
-            ...profile
-        });
+        onProfileChanged({ ...profile });
     }
 
     const removeTransform = (name: "transform-x86" | "transform-x64") => {
         stage[name] = undefined;
-        onProfileChanged({
-            ...profile
-        })
+        onProfileChanged({ ...profile });
     }
 
     const createTransform = (name: "transform-x86" | "transform-x64") => {
@@ -30,12 +27,15 @@ export const CSStage = ({ profile, stage, onProfileChanged }: Props) => {
             type: name,
             operations: []
         }
-        onProfileChanged({
-            ...profile
-        })
+        onProfileChanged({ ...profile });
     }
 
     const getTransform = (transform: ICSPayloadTransform) => <CSPayloadTransform profile={profile} onProfileChanged={onProfileChanged} payload={transform} />
+
+    const handleCommdandsChange = (list: ICSPayloadCommand[]) => {
+        stage.commands = list;
+        onProfileChanged({ ...profile });
+    }
 
     return <>
         {/* Options */}
@@ -51,5 +51,8 @@ export const CSStage = ({ profile, stage, onProfileChanged }: Props) => {
             <CSCreateNew item={stage["transform-x64"]} onCreate={() => createTransform("transform-x64")} itemView={() => getTransform(stage["transform-x64"] as ICSPayloadTransform)} />
         </BaseBlock>
         {/* TODO: Commands */}
+        <BaseBlock titleVariant="h6" title="Commands" startExpanded>
+            <CSPayloadCommandList list={stage.commands} onListChanged={handleCommdandsChange} />
+        </BaseBlock>
     </>
 }

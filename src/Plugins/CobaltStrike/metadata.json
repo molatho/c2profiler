@@ -453,7 +453,20 @@
       }
     ],
     "process_inject": [],
-    "http_stager": []
+    "http_stager": [
+      {
+        "name": "uri_x86",
+        "defaultValue": "/api/v1/GetLicence",
+        "type": "string",
+        "description": "TODO"
+      },
+      {
+        "name": "uri_x64",
+        "defaultValue": "/api/v2/GetLicence",
+        "type": "string",
+        "description": "TODO"
+      }
+    ]
   },
   "transforms": {
     "append": {

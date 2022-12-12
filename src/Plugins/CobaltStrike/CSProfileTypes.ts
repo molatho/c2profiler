@@ -94,15 +94,15 @@ export interface ICSBlockHttpsCertificate extends ICSHasOptions, ICSHasVariant {
 
 export interface ICSBlockHttpStager extends ICSHasOptions, ICSHasVariant {
     client?: ICSBlockHttpStagerClient;
-    server: ICSBlockHttpStagerServer;
+    server?: ICSBlockHttpStagerServer;
 }
 
 export interface ICSBlockHttpStagerClient extends ICSHasHeaders {
-    parameter?: ICSParameter;
+    parameters: ICSParameter[];
 }
 
 export interface ICSBlockHttpStagerServer extends ICSHasHeaders {
-    output: ICSBlockTransformInformation;
+    output?: ICSBlockTransformInformation;
 }
 
 

@@ -397,6 +397,7 @@ function peg$parse(input, options) {
         "variant": variant
         }); };
   var peg$f23 = function(variant, body) { return mk(BLOCKHTTPSTAGER, {
+        "options": filter(body, OPTION),
         "client": first(body, BLOCKHTTPSTAGERCLIENT),
         "server": first(body, BLOCKHTTPSTAGERSERVER),
         "variant": variant
@@ -438,7 +439,7 @@ function peg$parse(input, options) {
   var peg$f37 = function(transforminfo) { return mk(BLOCKHTTPPOSTSERVEROUTPUT, clean(transforminfo)); };
   var peg$f38 = function(body) { return mk(BLOCKHTTPSTAGERCLIENT, {
         "headers": filter(body, HEADER),
-        "parameter": first(body, PARAMETER)
+        "parameters": filter(body, PARAMETER)
         }); };
   var peg$f39 = function(body) { return mk(BLOCKHTTPSTAGERSERVER, {
         "headers": filter(body, HEADER),
