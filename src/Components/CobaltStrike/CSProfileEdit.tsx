@@ -14,6 +14,7 @@ import { ProfileChangedCb } from "../../Misc/IC2Provider";
 import { Tabs, Tab, AppBar, Stack, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CSHttpStager } from "./EditBlocks/CSHttpStager";
+import { CSHttpConfig } from "./EditBlocks/CSHttpConfig";
 
 
 interface Props {
@@ -78,6 +79,12 @@ const TAB_DATA = [
         }} />
     },
     {
+        name: "HTTP Config",
+        type: "http_config",
+        removable: true,
+        view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.http_config && <CSHttpConfig profile={csprofile} config={csprofile.http_config} onProfileChanged={onProfileChanged} />
+    },
+    {
         name: "HTTPS Certificate",
         type: "https_certificate",
         removable: true,
@@ -86,6 +93,18 @@ const TAB_DATA = [
             onProfileChanged({ ...csprofile })
         }} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
             c.variants.push(CSProfileHelper.create_https_certificate_variant(n))
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
+        name: "DNS Beacon",
+        type: "dns_beacon",
+        removable: true,
+        view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.dns_beacon && <CSVariants profile={csprofile} container={csprofile.dns_beacon} itemView={(i, opc) => <CSOptionsList blockMetaName="dns_beacon" blockOptions={i.options} onBlockOptionsChanged={(opts) => {
+            i.options = opts;
+            onProfileChanged({ ...csprofile })
+        }} />} onProfileChanged={onProfileChanged} createVariant={(c, n) => {
+            c.variants.push(CSProfileHelper.create_dns_beacon_variant(n))
             onProfileChanged({ ...csprofile })
         }} />
     },

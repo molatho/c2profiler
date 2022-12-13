@@ -1,6 +1,6 @@
 # c2profiler
 
-Progressive web app for building & linting C2 profiles built in React JS.
+Progressive web app for building, editing and reviewing malleable C2 profiles built in React JS.
 
 ## Install
 ```bash

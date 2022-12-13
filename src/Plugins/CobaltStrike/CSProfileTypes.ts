@@ -9,7 +9,7 @@ export interface ICSProfile extends ICSHasOptions {
     http_get: ICSVariantContainer<ICSBlockHttpGet> | null;
     http_post: ICSVariantContainer<ICSBlockHttpPost> | null;
     http_stager: ICSVariantContainer<ICSBlockHttpStager> | null;
-    http_config: ICSVariantContainer<ICSBlockHttpConfig> | null;
+    http_config: ICSBlockHttpConfig | null;
     https_certificate: ICSVariantContainer<ICSBlockHttpsCertificate> | null;
     stage: ICSBlockStage | null;
     dns_beacon: ICSVariantContainer<ICSBlockDnsBeacon> | null;
@@ -88,7 +88,7 @@ export interface ICSBlockHttpPostServer extends ICSBlockHttpBaseServer {
     output?: ICSBlockTransformInformation;
 }
 
-export interface ICSBlockHttpConfig extends ICSHasOptions, ICSHasHeaders, ICSHasVariant { }
+export interface ICSBlockHttpConfig extends ICSHasOptions, ICSHasHeaders { }
 
 export interface ICSBlockHttpsCertificate extends ICSHasOptions, ICSHasVariant { }
 

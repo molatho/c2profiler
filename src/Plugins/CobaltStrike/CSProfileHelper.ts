@@ -22,11 +22,8 @@ export class CSProfileHelper {
     }
     static create_http_config(profile: ICSProfile): ICSProfile {
         profile.http_config = {
-            baseline: {
-                options: [],
-                headers: []
-            },
-            variants: []
+            options: [],
+            headers: []
         }
         return profile;
     }
