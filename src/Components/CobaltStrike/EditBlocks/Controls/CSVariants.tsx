@@ -66,7 +66,13 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Variants:</Typography>
-                <Tabs value={idx} onChange={handleChange} variant="scrollable" sx={{ width: '100%' }}>
+                <Tabs
+                    value={idx}
+                    onChange={handleChange}
+                    variant="scrollable"
+                    scrollButtons
+                    allowScrollButtonsMobile
+                    sx={{ width: '100%' }}>
                     <Tab label="Baseline" sx={{ textTransform: 'none' }} />
                     {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
                 </Tabs>

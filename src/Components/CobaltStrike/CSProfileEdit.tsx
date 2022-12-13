@@ -15,6 +15,7 @@ import { Tabs, Tab, AppBar, Stack, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CSHttpStager } from "./EditBlocks/CSHttpStager";
 
+
 interface Props {
     profile: any;
     onProfileChanged: ProfileChangedCb;
@@ -134,7 +135,13 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
                 <AppBar position="sticky">
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Blocks:</Typography>
-                        <Tabs value={viewIdx} onChange={(_, newIdx) => setViewIdx(newIdx)} sx={{ width: '100%' }}>
+                        <Tabs
+                            value={viewIdx}
+                            onChange={(_, newIdx) => setViewIdx(newIdx)}
+                            variant="scrollable"
+                            scrollButtons
+                            allowScrollButtonsMobile
+                            sx={{ width: '100%' }}>
                             {getAvailableBlocks().map((d, i) => <Tab key={i} label={d.name} sx={{ textTransform: 'none' }} />)}
                         </Tabs>
                         <IconButton disabled={!currentBlock.removable} color="error" onClick={() => handleBlockRemoval(currentBlock.type as TopBlockName)}>
