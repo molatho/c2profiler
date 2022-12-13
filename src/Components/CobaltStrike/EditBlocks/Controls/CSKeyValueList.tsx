@@ -1,10 +1,9 @@
 import { ICSKeyValue } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
-import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, TextField, IconButton, ButtonGroup, Typography, Stack, Button } from "@mui/material";
+import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, IconButton, ButtonGroup, Typography, Stack, Button } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useState } from "react";
 import { CodeTextField } from "../../../CodeTextField";
 
 interface ItemProps {
@@ -113,22 +112,23 @@ export const CSKeyValueList = ({ list, onListChanged }: Props) => {
         onListChanged([...list]);
     }
 
-    return <><TableContainer component={Paper} sx={{ maxHeight: 440 }}>
-        <Table size="small" stickyHeader>
-            <TableBody>
-                {list.map((item, idx) => <CSHeader
-                    key={idx}
-                    item={item}
-                    onChanged={handleHeaderChange}
-                    onRemove={() => headerRemove(idx)}
-                    isFirst={idx == 0}
-                    isLast={idx == list.length - 1}
-                    onMove={(dir) => moveHeader(idx, dir)}
-                    idx={idx}
-                />)}
-            </TableBody>
-        </Table>
-    </TableContainer>
+    return <>
+        <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
+            <Table size="small" stickyHeader>
+                <TableBody>
+                    {list.map((item, idx) => <CSHeader
+                        key={idx}
+                        item={item}
+                        onChanged={handleHeaderChange}
+                        onRemove={() => headerRemove(idx)}
+                        isFirst={idx == 0}
+                        isLast={idx == list.length - 1}
+                        onMove={(dir) => moveHeader(idx, dir)}
+                        idx={idx}
+                    />)}
+                </TableBody>
+            </Table>
+        </TableContainer>
         <Button variant="contained" size="small" color="success" startIcon={<AddIcon />} onClick={headerAdd}>
             Add
         </Button>

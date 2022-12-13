@@ -3928,14 +3928,11 @@ function peg$parse(input, options) {
   function peg$parseblock_process_inject_execute_body() {
     var s0;
 
-    s0 = peg$parseoption();
+    s0 = peg$parseblock_process_inject_execute_commands();
     if (s0 === peg$FAILED) {
-      s0 = peg$parseblock_process_inject_execute_commands();
+      s0 = peg$parsecomment();
       if (s0 === peg$FAILED) {
-        s0 = peg$parsecomment();
-        if (s0 === peg$FAILED) {
-          s0 = peg$parse_();
-        }
+        s0 = peg$parse_();
       }
     }
 

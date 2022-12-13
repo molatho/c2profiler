@@ -15,6 +15,7 @@ import { Tabs, Tab, AppBar, Stack, IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CSHttpStager } from "./EditBlocks/CSHttpStager";
 import { CSHttpConfig } from "./EditBlocks/CSHttpConfig";
+import { CSProcessInject } from "./EditBlocks/CSProcessInject";
 
 
 interface Props {
@@ -113,7 +114,22 @@ const TAB_DATA = [
         type: "stage",
         removable: true,
         view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.stage && <CSStage profile={csprofile} stage={csprofile.stage} onProfileChanged={onProfileChanged} />
-    }
+    },
+    {
+        name: "Post-Exploitation",
+        type: "post_ex",
+        removable: true,
+        view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.post_ex && <CSOptionsList blockMetaName="post_ex" blockOptions={csprofile.post_ex.options} onBlockOptionsChanged={(opts) => {
+            if (csprofile.post_ex) csprofile.post_ex.options = opts;
+            onProfileChanged({ ...csprofile })
+        }} />
+    },
+    {
+        name: "Process Injection",
+        type: "process_inject",
+        removable: true,
+        view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.process_inject && <CSProcessInject profile={csprofile} pin={csprofile.process_inject} onProfileChanged={onProfileChanged} />
+    }, //TODO: Post-ex & process injection
 ]
 
 export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {

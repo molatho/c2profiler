@@ -325,8 +325,7 @@ block_process_inject_execute
         }); }
 
 block_process_inject_execute_body
-	= option
-    / block_process_inject_execute_commands
+	= block_process_inject_execute_commands
     / comment
     / _
 

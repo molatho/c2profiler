@@ -37,7 +37,7 @@ export const CSOption = ({ enabled, name, value, defaultValue, description, type
                     />
                     <Typography>{value == "true" ? "True" : "False"}</Typography>
                 </Stack>;
-        }
+        } //TODO: Implement select (also in metadata)
         return <CodeTextField
             value={value ? value : defaultValue}
             onChange={(ev) => onValueChanged(name, ev.target.value)}

@@ -457,7 +457,44 @@
         "type": "string"
       }
     ],
-    "process_inject": [],
+    "process_inject": [
+      {
+        "name": "allocator",
+        "defaultValue": "VirtualAllocEx",
+        "type": "string",
+        "description": "The preferred method to allocate memory in the remote process. Specify VirtualAllocEx or NtMapViewOfSection. The NtMapViewOfSection option is for same-architecture injection only. VirtualAllocEx is always used for cross-arch memory allocations."
+      },
+      {
+        "name": "bof_allocator",
+        "defaultValue": "VirtualAllocEx",
+        "type": "string",
+        "description": "The preferred method to allocate memory in the current process to execute a BOF. Specify VirtualAlloc, MapViewOfFile, or HeapAlloc."
+      },
+      {
+        "name": "bof_reuse_memory",
+        "defaultValue": "true",
+        "type": "boolean",
+        "description": "Reuse the allocated memory for subsequent BOF executions otherwise release the memory. Memory will be cleared when not in use. If the available amount of memory is not large enough it will be released and allocated with the larger size."
+      },
+      {
+        "name": "min_alloc",
+        "defaultValue": "16384",
+        "description": "Minimum amount of memory to request for injected or BOF content.",
+        "type": "number"
+      },
+      {
+        "name": "startrwx",
+        "defaultValue": "true",
+        "description": "Use RWX as initial permissions for injected or BOF content. Alternative is RW. When BOF memory is not in use the permissions will be set based on this setting.",
+        "type": "boolean"
+      },
+      {
+        "name": "userwx",
+        "defaultValue": "false",
+        "description": "Use RWX as final permissions for injected or BOF content. Alternative is RX.",
+        "type": "boolean"
+      }
+    ],
     "http_stager": [
       {
         "name": "uri_x86",
@@ -561,6 +598,26 @@
     "data": {
       "displayName": "Data",
       "description": "Appends raw bytes"
+    }
+  },
+  "executeCommands": {
+    "CreateThread": {
+      "operand": true
+    },
+    "CreateRemoteThread": {
+      "operand": true
+    },
+    "NtQueueApcThread": {
+      "operand": false
+    },
+    "NtQueueApcThread-s": {
+      "operand": false
+    },
+    "RtlCreateUserThread": {
+      "operand": false
+    },
+    "SetThreadContext": {
+      "operand": false
     }
   }
 }

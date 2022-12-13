@@ -48,3 +48,10 @@ export const PayloadCommandNames: PayloadCommandName[] = ["string", "stringw", "
 
 export interface IMetaPayloadCommandDefinition extends IHasDocumentation, IHasDisplayName {
 }
+
+export type ExecuteCommandName = "CreateThread" | "CreateRemoteThread" | "NtQueueApcThread" | "NtQueueApcThread-s" | "RtlCreateUserThread" | "SetThreadContext";
+export const ExecuteCommandNames: ExecuteCommandName[] = ["CreateThread", "CreateRemoteThread", "NtQueueApcThread", "NtQueueApcThread-s", "RtlCreateUserThread", "SetThreadContext"];
+
+export interface IMeteExecuteCommandDefinition extends IHasDocumentation {
+    operand: boolean;
+}

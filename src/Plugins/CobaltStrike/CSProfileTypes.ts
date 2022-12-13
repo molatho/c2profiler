@@ -162,7 +162,7 @@ export interface ICSBlockProcessInject extends ICSHasOptions {
     execute?: ICSProcessInjectExecute;
 }
 
-export interface ICSProcessInjectExecute extends ICSHasOptions {
+export interface ICSProcessInjectExecute {
     commands: ICSProcessInjectExecuteCommand[];
 }
 
