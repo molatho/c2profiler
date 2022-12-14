@@ -80,7 +80,7 @@ const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, o
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
         <TableCell>{`${idx + 1}.`}</TableCell>
-        <TableCell>{metadata.payloadTransforms[transform.type].displayName}</TableCell>
+        <TableCell>{meta.displayName}</TableCell>
         <TableCell component="th" scope="row">
             {meta.operand2
                 ? getDoubleOperandRow()
@@ -100,7 +100,7 @@ const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, o
                 </IconButton>
             </ButtonGroup>
         </TableCell>
-    </TableRow>;
+    </TableRow>; //TODO: Fix textboxes not updating when swapping two rows w/ operands
 }
 
 interface Props {

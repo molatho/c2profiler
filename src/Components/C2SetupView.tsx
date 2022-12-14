@@ -26,6 +26,7 @@ export const C2SetupView = ({ onSetupDone }: Props) => {
                         stepTitle={"Select your C2"}
                         state={c2Provider ? "done" : "error"}
                         description="As a first step, select the provider of your C2."
+                        layout="horizontal"
                     >
                         <C2ProviderSelector c2s={PROVIDERS} onSelect={setC2Provider} />
                     </PaperItemStep>

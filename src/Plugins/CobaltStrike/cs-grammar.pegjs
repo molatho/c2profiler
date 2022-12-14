@@ -307,6 +307,7 @@ block_transform_operation
 
 block_process_inject
 	= "process-inject" _+ "{" _* body:block_process_inject_body* _* "}" { return mk(BLOCKPROCESSINJECT, {
+        "options": filter(body, OPTION),
         "transform-x86": first(body, TRANSFORMX86),
         "transform-x64": first(body, TRANSFORMX64),
         "execute": first(body, BLOCKPROCESSINJECTEXECUTE)

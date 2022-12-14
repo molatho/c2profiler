@@ -461,6 +461,7 @@ function peg$parse(input, options) {
   var peg$f48 = function(str) { return mk(TRANSFORMOPERATION, { "type": "append", "operand1": str }); };
   var peg$f49 = function(orig, repl) { return mk(TRANSFORMOPERATION, { "type": "strrep", "operand1": orig, "operand2": repl }); };
   var peg$f50 = function(body) { return mk(BLOCKPROCESSINJECT, {
+        "options": filter(body, OPTION),
         "transform-x86": first(body, TRANSFORMX86),
         "transform-x64": first(body, TRANSFORMX64),
         "execute": first(body, BLOCKPROCESSINJECTEXECUTE)

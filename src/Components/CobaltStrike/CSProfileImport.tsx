@@ -8,13 +8,26 @@ import { PeggySyntaxError } from "../../csparser";
 import { EditorView } from "@codemirror/view";
 import { Diagnostic, linter } from "@codemirror/lint";
 import { isFirefox } from "react-device-detect";
+import { useDropzone } from 'react-dropzone';
+import { DropZone } from "../DropZone";
 
 export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
     const [profileInput, setProfileInput] = useState<string>("");
     const [inputError, setInputError] = useState<string>("Empty profile");
     const [profileData, setProfileData] = useState<ICSProfile | null>(null);
 
-    const parseInput = (newInput: string) => {
+    const onDrop = (files: File[]) => {
+        if (files.length == 0) return;
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            if (!e.target) return;
+            const text = e.target.result as string;
+            setProfileInput(text);
+        };
+        reader.readAsText(files[0])
+    }
+
+    const parseInput = (newInput: string): void => {
         setProfileInput(newInput);
         if (newInput.length > 0) {
             try {
@@ -68,6 +81,9 @@ export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
 
     return (
         <Grid container spacing={1}>
+            <Grid item xs={12}>
+                <DropZone multiple={false} onDropAccepted={onDrop} maxFiles={1} />
+            </Grid>
             <Grid item xs={12}>
                 <CodeMirror
                     value={profileInput}

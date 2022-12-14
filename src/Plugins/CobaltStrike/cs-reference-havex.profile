@@ -133,3 +133,10 @@ http-post {
 		}
 	}
 }
+
+process-inject {
+	transform-x64 {
+          append "a";
+          prepend "p";
+    }
+}

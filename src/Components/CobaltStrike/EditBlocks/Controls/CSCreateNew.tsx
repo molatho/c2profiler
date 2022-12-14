@@ -9,7 +9,7 @@ interface Props<T> {
 
 export const CSCreateNew = <T extends unknown>({ item, itemView, onCreate }: Props<T>) => {
     return <>
-        {item
+        {(item != null && item != undefined)
             ? <>{itemView(item)}</>
             : <Button variant="contained" size="small" color="success" startIcon={<AddIcon />} onClick={onCreate}>
                 Add

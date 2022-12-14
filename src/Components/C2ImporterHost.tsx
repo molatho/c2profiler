@@ -1,4 +1,4 @@
-import { Tabs, Tab, Box, Typography } from "@mui/material";
+import { Tabs, Tab, Box, Typography, AppBar } from "@mui/material";
 import { useState } from "react";
 import { IC2Importer, IC2Provider } from "../Misc/IC2Provider";
 
@@ -9,7 +9,7 @@ interface TabPanelProps {
     shown: boolean;
 }
 
-function TabPanel({ children, shown}: TabPanelProps) {
+function TabPanel({ children, shown }: TabPanelProps) {
     return (
         <div
             role="tabpanel"
@@ -34,14 +34,18 @@ export const C2ImporterHost = ({ c2, onImported }: Props) => {
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setSelectedImporter(c2.importers[newValue]);
-      };
+    };
 
     return (
         <>
-            <Tabs value={c2.importers.indexOf(selectedImporter)} onChange={handleChange}>
-                {c2.importers.map((imp, idx) => <Tab label={imp.name} key={idx}></Tab>)}
-            </Tabs>
-            {c2.importers.map((imp, idx) => <TabPanel key={idx} value={idx} shown={imp == selectedImporter}>{imp.view({"onImported": onImported})}</TabPanel>)}
+            <AppBar position="sticky">
+                <Tabs value={c2.importers.indexOf(selectedImporter)} onChange={handleChange}>
+                    {c2.importers.map((imp, idx) => <Tab label={imp.name} key={idx}></Tab>)}
+                </Tabs>
+            </AppBar>
+            <Box component="main" sx={{ backgroundColor: '#242424' }}>
+                {c2.importers.map((imp, idx) => <TabPanel key={idx} value={idx} shown={imp == selectedImporter}>{imp.view({ "onImported": onImported })}</TabPanel>)}
+            </Box>
         </>
     );
 }

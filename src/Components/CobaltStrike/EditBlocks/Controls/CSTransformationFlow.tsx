@@ -35,9 +35,9 @@ const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, o
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
         <TableCell>{`${idx + 1}.`}</TableCell>
-        <TableCell>{metadata.transforms[transform.type].displayName}</TableCell>
+        <TableCell>{meta.displayName}</TableCell>
         <TableCell component="th" scope="row">
-            {meta.operand ?
+            {meta.operand &&
                 <CodeTextField
                     value={transform.operand ? transform.operand : ""}
                     onChange={(ev) => onValueChanged(ev.target.value)}
@@ -49,8 +49,7 @@ const TransformRow = ({ meta, transform, isFirst, isLast, onChanged, onRemove, o
                     fullWidth
                     error={!transform.operand ? true : false}
                     placeholder="Value required"
-                /> :
-                <Typography sx={{ fontStyle: 'italic' }}>n/a</Typography>}
+                />}
         </TableCell>
         <TableCell align="right" sx={{ width: '1px', whiteSpace: 'nowrap' }}>
             <ButtonGroup variant="text">

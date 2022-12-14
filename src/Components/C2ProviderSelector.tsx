@@ -34,7 +34,6 @@ export const C2ProviderSelector = ({ c2s, onSelect }: Props) => {
                 id="demo-simple-select-error"
                 value={c2 ? c2.name : ""}
                 label="C2"
-                size="small"
                 onChange={handleChange}
             >
                 <MenuItem value="">

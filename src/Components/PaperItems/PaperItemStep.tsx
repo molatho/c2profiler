@@ -9,11 +9,12 @@ interface PaperItemStepProps {
     stepNumber: number;
     stepTitle: string;
     state: "normal" | "done" | "error";
+    layout?: "vertical" | "horizontal";
     description?: string;
     children?: JSX.Element;
 }
 
-export const PaperItemStep: FunctionComponent<PaperItemStepProps> = ({ stepNumber, stepTitle, state, description, children }) => {
+export const PaperItemStep: FunctionComponent<PaperItemStepProps> = ({ stepNumber, stepTitle, state, description, children, layout="vertical" }) => {
     const getStateColor = () => {
         switch (state) {
             case "done":
@@ -33,7 +34,8 @@ export const PaperItemStep: FunctionComponent<PaperItemStepProps> = ({ stepNumbe
 
     return (
         <PaperItem>
-            <Grid container>
+            {layout == "vertical"
+            ? <Grid container>
                 <Grid item xs={12}>
                     {getStepItems()}
                 </Grid>
@@ -41,6 +43,14 @@ export const PaperItemStep: FunctionComponent<PaperItemStepProps> = ({ stepNumbe
                     {children}
                 </Grid>
             </Grid>
+                : <Grid container alignItems="center">
+                    <Grid item xs={6}>
+                        {getStepItems()}
+                    </Grid>
+                    <Grid item xs={6} marginTop={'10px'}>
+                        {children}
+                    </Grid>
+                </Grid>}
         </PaperItem>
     );
 }
