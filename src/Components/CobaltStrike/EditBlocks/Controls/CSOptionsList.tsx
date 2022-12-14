@@ -28,7 +28,7 @@ export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaNa
         getOption(name)[0].value = value;
         onBlockOptionsChanged([...blockOptions]);
     }
-
+    //TODO: Support custom options
     return <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
         <Table size="small" stickyHeader>
             <TableBody>

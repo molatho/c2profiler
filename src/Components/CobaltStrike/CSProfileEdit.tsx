@@ -129,7 +129,7 @@ const TAB_DATA = [
         type: "process_inject",
         removable: true,
         view: ({ csprofile, onProfileChanged }: TabViewProps) => csprofile.process_inject && <CSProcessInject profile={csprofile} pin={csprofile.process_inject} onProfileChanged={onProfileChanged} />
-    }, //TODO: Post-ex & process injection
+    }
 ]
 
 export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {

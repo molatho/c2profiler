@@ -1,15 +1,11 @@
-// Tranforms: (append [i][+]) (mask[i][+])
-// Flow (append [operand][h/s][x]) => (mask [x]) =>  
-
-import { Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup, SelectChangeEvent, Select, MenuItem, Icon } from "@mui/material";
-import { IMetaPayloadTransformDefinition, IMetaTerminationDefinition, IMetaTransformDefinition, PayloadTransformName, PayloadTransformNames, TerminationName, TerminationNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
-import { ICSBlockTransformInformation, ICSDataTransform, ICSPayloadTransform, ICSPayloadTransformOperation } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
+import { Stack, Grid, Typography, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup } from "@mui/material";
+import { IMetaPayloadTransformDefinition, PayloadTransformName, PayloadTransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
+import { ICSPayloadTransform, ICSPayloadTransformOperation } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './CSTransformationFlow.css';
-import { SupportIconTooltip } from "../../../SupportIconTooltip";
 import { InfoAddChip } from "../../../InfoAddChip";
 import { CodeTextField } from "../../../CodeTextField";
 
@@ -144,7 +140,7 @@ export const CSPayloadTransform = ({ profile, payload, onProfileChanged }: Props
             </Grid>
             {/* Transform selection */}
             <Grid item xs={12}>
-                <Typography variant="subtitle1">Transformations:</Typography>
+                <Typography variant="subtitle1">Available transformations:</Typography>
             </Grid>
             <Grid item xs={12}>
                 <Stack direction="row" alignItems="center" spacing={2} sx={{
