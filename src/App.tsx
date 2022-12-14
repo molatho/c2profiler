@@ -52,6 +52,8 @@ function App() {
         return c2Provider?.editView;
       case "test":
         return c2Provider?.testView;
+      case "export":
+        return c2Provider?.exportView;
     }
   }
 
@@ -73,6 +75,14 @@ function App() {
     return <></>
   }
 
+  const getExportView = () => {
+    if (c2Provider) {
+      const ExportView: (profile: any) => JSX.Element = c2Provider && c2Provider.exportView.view;
+      return <ExportView profile={c2Profile} />
+    }
+    return <></>
+  }
+
   const getView = (): JSX.Element => {
     switch (step) {
       case "setup":
@@ -81,6 +91,8 @@ function App() {
         return getEditView();
       case "test":
         return getTestView();
+      case "export":
+        return getExportView();
     }
   }
 
