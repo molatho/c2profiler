@@ -63,7 +63,7 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
     }
 
     return <>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box component="div" sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Variants:</Typography>
                 <Tabs

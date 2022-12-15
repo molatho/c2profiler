@@ -16,7 +16,7 @@ function TabPanel({ children, shown }: TabPanelProps) {
             hidden={!shown}
         >
             {shown && (
-                <Box sx={{ p: 3 }}>
+                <Box component="div" sx={{ p: 3 }}>
                     {children}
                 </Box>
             )}

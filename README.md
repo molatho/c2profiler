@@ -16,3 +16,9 @@ peggy src/Plugins/CobaltStrike/cs-grammar.pegjs -o src/Plugins/CobaltStrike/cspa
 * Cobalt Strike - User Guide ([C&C](https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2_main.htm), [Post-Ex](https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/malleable-c2-extend_main.htm))
 * Cobalt Strike - Reference Profile ([Github](https://github.com/Cobalt-Strike/Malleable-C2-Profiles/blob/master/normal/reference.profile))
 * bigb0sss - Reference Profile ([Github](https://bigb0sss.github.io/posts/redteam-cobalt-strike-malleable-profile/))
+
+
+## Roadmap
+- [ ] Use localStorage for versioning & light persistence
+- [ ] Add OPSEC warnings to test/export views
+- [ ] CS: Add OPSEC values/suggestions to options

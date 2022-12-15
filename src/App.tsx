@@ -13,6 +13,7 @@ import { IC2Provider, Section } from './Misc/IC2Provider';
 import { C2SetupView } from './Components/C2SetupView';
 import { AppFlow } from './Misc/Common';
 import { AppNavigation } from './Components/AppNavigation';
+import { Logo } from './Components/Misc/Logo';
 
 const theme = createTheme({
   palette: {
@@ -102,10 +103,7 @@ function App() {
       <AppBar position="relative" className="App-Title-Container">
         <Toolbar>
           <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
-            <GradingIcon sx={{ mr: 2 }} />
-            <Typography variant="h6" color="inherit" noWrap>
-              c2profiler
-            </Typography>
+            <Logo />
           </Stack>
         </Toolbar>
       </AppBar>
