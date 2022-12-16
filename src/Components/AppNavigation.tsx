@@ -1,5 +1,5 @@
 import { Stack, IconButton, Typography } from "@mui/material";
-import { AppFlow, isFirstFlowStep, isLastFlowStep } from "../Misc/Common";
+import { AppFlow, AppFlowItems, isFirstFlowStep, isLastFlowStep } from "../Misc/Common";
 import { Section } from "../Misc/IC2Provider";
 import { PaperItem } from "./PaperItems/PaperItem"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -17,21 +17,11 @@ export const AppNavigation = ({ section, step, setStep, progressBlocked }: Props
     const canGoForward = !isLastFlowStep(step);
 
     const navigatePrev = () => {
-        switch (step) {
-            case "edit":
-                return setStep("setup");
-            case "test":
-                return setStep("edit");
-        }
+        setStep(AppFlowItems[AppFlowItems.indexOf(step) - 1])
     }
 
     const navigateNext = () => {
-        switch (step) {
-            case "setup":
-                return setStep("edit");
-            case "edit":
-                return setStep("test");
-        }
+        setStep(AppFlowItems[AppFlowItems.indexOf(step) + 1])
     }
 
     return <>

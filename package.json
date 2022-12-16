@@ -1,7 +1,7 @@
 {
   "name": "c2profiler",
   "version": "0.1.0",
-  "homepage": " https://molatho.github.io/c2profiler",
+  "homepage": "https://molatho.github.io/c2profiler",
   "private": true,
   "dependencies": {
     "@codemirror/language": "^6.3.1",

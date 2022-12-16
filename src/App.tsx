@@ -42,6 +42,7 @@ function App() {
   const handleSetupDone = (provider: IC2Provider, profile: any) => {
     setC2Provider(provider);
     setC2Profile(profile);
+    console.log(profile)
     setStep("edit");
   }
 

@@ -337,7 +337,7 @@ block_process_inject_execute_commands
 	/ "CreateRemoteThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "CreateRemoteThread" }); }
 	/ "NtQueueApcThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "NtQueueApcThread" }); }
 	/ "NtQueueApcThread-s;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "NtQueueApcThreads"}); }
-	/ "RtlCreateUserThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "tlCreateUserThread"}); }
+	/ "RtlCreateUserThread;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "RtlCreateUserThread"}); }
 	/ "SetThreadContext;" comment? { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "SetThreadContext" }); }
 
 _ "whitespace"

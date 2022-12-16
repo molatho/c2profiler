@@ -3,6 +3,7 @@ import { StreamLanguage } from '@codemirror/language';
 import { EditorView } from "@codemirror/view";
 import { http } from '@codemirror/legacy-modes/mode/http';
 import { Grid } from '@mui/material';
+import { useState } from 'react';
 
 interface HttpProps {
     text: string;
@@ -57,8 +58,4 @@ export const HttpVisualizer = ({ request, response }: Props) => {
             </Grid>
         </Grid>
     </>
-}
-
-function useState(arg0: boolean): [any, any] {
-    throw new Error('Function not implemented.');
 }

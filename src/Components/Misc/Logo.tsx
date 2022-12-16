@@ -1,6 +1,7 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
 import { Suspense, useRef, useState } from "react"
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OrbitControls } from "@react-three/drei";
 import { Euler } from 'three'
 
@@ -8,20 +9,28 @@ interface FakeRotation {
     rotation: Euler;
 }
 
+const DEG2RAD = Math.PI / 180.0;
+const RAD2DEG = 180.0 / Math.PI;
+
 const Scene = () => {
-    const obj = useLoader(OBJLoader, "logo.obj");
+    const materials = useLoader(MTLLoader, process.env.PUBLIC_URL + "/logo.mtl");
+    const obj = useLoader(OBJLoader, process.env.PUBLIC_URL + "/logo.obj", (loader) => {
+        materials.preload();
+        loader.setMaterials(materials);
+    });
 
     const myMesh = useRef();
 
     useFrame(({ clock }) => {
         const _mesh = myMesh.current as unknown as FakeRotation;
-        const y = Math.sin(clock.getElapsedTime() * (Math.PI / 180) * 20);
-        const x = Math.cos(clock.getElapsedTime() * (Math.PI / 180) * 30);
-        const z = Math.cos(clock.getElapsedTime() * (Math.PI / 180) * 25);
+        const f1 = Math.sin(clock.getElapsedTime() * 0.50);
+        const f2 = Math.sin(clock.getElapsedTime() * 0.70);
+        const f3 = Math.sin(clock.getElapsedTime() * 0.90);
+
         if (_mesh) {
-            _mesh.rotation.y = (y * 5) * (Math.PI / 180);
-            _mesh.rotation.x = 1.5707963 + (x * 20) * (Math.PI / 180);
-            _mesh.rotation.z = (y * 20) * (Math.PI / 180);
+            _mesh.rotation.y = f2 * 2 * DEG2RAD;
+            _mesh.rotation.x = (90 + f1 * 30) * DEG2RAD;
+            _mesh.rotation.z = f3 * 10 * DEG2RAD;
         }
     })
 
@@ -43,8 +52,7 @@ export const Logo = () => {
             }}
         >
             <Suspense fallback={null}>
-                <ambientLight intensity={0.1} />
-                <directionalLight color="grey" position={[0, 0, 5]} />
+                <directionalLight color="white" position={[0, 0, 5]} />
                 <OrbitControls />
                 <Scene />
             </Suspense>

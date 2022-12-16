@@ -475,7 +475,7 @@ function peg$parse(input, options) {
   var peg$f55 = function() { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "CreateRemoteThread" }); };
   var peg$f56 = function() { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "NtQueueApcThread" }); };
   var peg$f57 = function() { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "NtQueueApcThreads"}); };
-  var peg$f58 = function() { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "tlCreateUserThread"}); };
+  var peg$f58 = function() { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "RtlCreateUserThread"}); };
   var peg$f59 = function() { return mk(BLOCKPROCESSINJECTEXECUTECOMMAND, { "type": "SetThreadContext" }); };
   var peg$f60 = function() { return null; };
   var peg$currPos = 0;
