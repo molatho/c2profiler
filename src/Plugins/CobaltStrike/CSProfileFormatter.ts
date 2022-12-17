@@ -15,16 +15,31 @@ export class CSProfileFormatter {
         return defaultVal;
     }
 
+    static decode_string = (input: string): string => {
+        const h2s = (hex: string) => String.fromCharCode(parseInt(hex.substring(2), 16))
+
+        input = input.replaceAll(/\\x[0-9A-Za-z]{1,2}/g, h2s)
+        input = input.replaceAll(/\\n/g, "\n")
+        input = input.replaceAll(/\\t/g, "\t")
+        return input;
+    }
+
     // TODO: Implement other transforms (instead of encoding them as HTML-like tags)
     static format_transforms = (transforms: ICSDataTransform[], name: string = "data") => {
         var chain = `[${name}]`;
         for (const t of transforms) {
             switch (t.type) {
                 case "append":
-                    chain = `${chain}${t.operand ? t.operand : ""}`;
+                    chain = `${chain}${t.operand ? this.decode_string(t.operand) : ""}`;
                     break;
                 case "prepend":
-                    chain = `${t.operand ? t.operand : ""}${chain}`;
+                    chain = `${t.operand ? this.decode_string(t.operand) : ""}${chain}`;
+                    break;
+                case "base64":
+                    chain = btoa(chain)
+                    break;
+                case "base64url":
+                    chain = encodeURI(btoa(chain));
                     break;
                 default:
                     chain = `<dtl:${t.type}>${chain}</dtl:${t.type}>`
