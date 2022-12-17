@@ -1,5 +1,8 @@
 import { IC2TestProps } from "../../Misc/IC2Provider";
-import { HttpVisualizer } from "../Misc/HttpVisualizer";
+import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
+import { ICSBlockHttpGet, ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
+import { HttpView, HttpVisualizer } from "../Misc/HttpVisualizer";
+import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 
 
 const TEST_REQUEST = `GET /echo HTTP/1.1
@@ -25,7 +28,20 @@ Content-Encoding: gzip
 <html><head><title>ReqBin Echo</title></head></html>`
 
 export const CSProfileTest = ({ profile, navigateTo }: IC2TestProps) => {
-    return <>
-        <HttpVisualizer request={TEST_REQUEST} response={TEST_RESPONSE} />
-    </>
+    const csprofile = profile as ICSProfile;
+
+    // <HttpVisualizer verb="GET" request={TEST_REQUEST} response={TEST_RESPONSE} />
+
+    const getHttpVisualizations = (http_get: ICSBlockHttpGet) => {
+        const requests = CSProfileHelper.format_http_get_req(http_get);
+        return <>{requests.map((r, i) => <HttpView key={i} label="Request" text={r} />)}</>
+    }
+
+    return <>{csprofile.http_get && <CSVariants
+        profile={profile}
+        container={csprofile.http_get}
+        onProfileChanged={() => { }}
+        createVariant={() => { }}
+        hideButtons
+        itemView={(i) => getHttpVisualizations(i)} />}</>
 }

@@ -11,6 +11,7 @@ interface Props<T extends ICSHasVariant> {
     onProfileChanged: (profile: any) => void;
     itemView: (item: T, onProfileChanged: (profile: any) => void) => JSX.Element;
     createVariant: (container: ICSVariantContainer<T>, name: string) => void;
+    hideButtons?: boolean;
 }
 
 interface TabPanelProps {
@@ -36,7 +37,7 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
     );
 }
 
-export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProfileChanged, itemView, createVariant }: Props<T>) => {
+export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProfileChanged, itemView, createVariant, hideButtons = false }: Props<T>) => {
     const [idx, setIdx] = useState(0);
     const [showDiag, setShowDiag] = useState(false);
 
@@ -76,14 +77,14 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
                     <Tab label="Baseline" sx={{ textTransform: 'none' }} />
                     {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
                 </Tabs>
-                <>
+                {!hideButtons && <>
                     <IconButton color="success" onClick={() => setShowDiag(true)}>
                         <AddCircleIcon />
                     </IconButton>
                     <IconButton disabled={idx == 0} color="error" onClick={handleVariantRemove}>
                         <DeleteIcon />
                     </IconButton>
-                </>
+                </>}
             </Stack>
         </Box>
         <TabPanel value={idx} index={0}>

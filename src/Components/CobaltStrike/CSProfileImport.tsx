@@ -8,7 +8,6 @@ import { PeggySyntaxError } from "../../csparser";
 import { EditorView } from "@codemirror/view";
 import { Diagnostic, linter } from "@codemirror/lint";
 import { isFirefox } from "react-device-detect";
-import { useDropzone } from 'react-dropzone';
 import { DropZone } from "../DropZone";
 
 export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {

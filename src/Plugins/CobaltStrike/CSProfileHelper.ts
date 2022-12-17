@@ -1,5 +1,7 @@
-import { TopBlockName } from "./CSMetadataTypes";
-import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation, ICSBlockHttpsCertificate } from "./CSProfileTypes";
+import { TopBlockMetaName } from "../../Components/CobaltStrike/CSProfileEdit";
+import { IMetaOptionDefinition, TopBlockName } from "./CSMetadataTypes";
+import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation, ICSBlockHttpsCertificate, ICSOption, ICSDataTransform, ICSHeader, ICSParameter } from "./CSProfileTypes";
+import metadata from "./metadata.json"
 
 export class CSProfileHelper {
     static create_http_post_variant(name?: string): ICSBlockHttpPost {
@@ -154,5 +156,69 @@ export class CSProfileHelper {
                 break;
         }
         return profile;
+    }
+
+    static get_option_value = (options: ICSOption[], key: string, defaultVal: string = "", metaBlock?: TopBlockMetaName): string => {
+        const opt = options.find((v) => v.name == key);
+        if (opt) return opt.value;
+        if (metaBlock) {
+            const metaBlockOptions = metadata.options[metaBlock] as IMetaOptionDefinition[];
+            const metaOpt = metaBlockOptions.find((v) => v.name == key);
+            if (metaOpt) return metaOpt.defaultValue;
+        }
+        return defaultVal;
+    }
+
+    static format_transforms = (transforms: ICSDataTransform[]) => {
+        const chain = transforms.map((t) => metadata.transforms[t.type].operand ? `[${t.type}:"${t.operand}"]` : `[${t.type}]`).join(" => ");
+        return `<Chain>${chain}</Chain>`
+        
+    }
+
+    static format_headers = (headers?: ICSHeader[]) => (headers?.map((h) => `${h.name}: ${h.value}`) || []).join("\n");
+
+    static urienc = (text: string) => encodeURIComponent(text)
+    static encparam = (name: string, value: string) => `${CSProfileHelper.urienc(name)}=${CSProfileHelper.urienc(value)}`
+
+    static format_parameters = (params?: ICSParameter[]) => {
+        return (params?.map((p) => CSProfileHelper.encparam(p.name, p.value)) || []).join("&");
+    }
+
+    static format_http_get_req = (http_get: ICSBlockHttpGet): string[] => {
+
+        const _verb = CSProfileHelper.get_option_value(http_get.options, "verb", "", "http_get");
+        const _uris = CSProfileHelper.get_option_value(http_get.options, "uri", "", "http_get").split(" ");
+        const _protocol = "HTTP/1.1";
+
+        var _headers = CSProfileHelper.format_headers(http_get.client?.headers);
+        if (http_get.client?.metadata?.termination.type == "header")
+            _headers = [
+                _headers,
+                CSProfileHelper.format_headers([{
+                    name: http_get.client?.metadata?.termination.operand as string,
+                    value: CSProfileHelper.format_transforms(http_get.client.metadata.transforms)
+                }])
+            ].join("\n");
+
+        var _params = CSProfileHelper.format_parameters(http_get.client?.parameters);
+        if (http_get.client?.metadata?.termination.type == "parameter")
+            _params = [
+                _params,
+                CSProfileHelper.format_parameters([{
+                    name: http_get.client?.metadata?.termination.operand as string,
+                    value: CSProfileHelper.format_transforms(http_get.client.metadata.transforms)
+                }])
+            ].join("\n");
+
+        const build_request = (uri: string) => {
+            if (_params) uri = `${uri}?${_params}`;
+            const _body = http_get.client?.metadata?.termination.type == "print" ? CSProfileHelper.format_transforms(http_get.client.metadata.transforms) : "";
+            return `${_verb} ${uri} ${_protocol}
+${_headers}
+
+${_body}`;
+        }
+
+        return _uris.map((u) => build_request(u));
     }
 }
