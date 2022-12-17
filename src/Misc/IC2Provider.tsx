@@ -1,4 +1,5 @@
 import { CSProfileCreate } from "../Components/CobaltStrike/CSProfileCreate";
+import { CSProfileCreateFromHttp } from "../Components/CobaltStrike/CSProfileCreateFromHttp";
 import { CSProfileEdit } from "../Components/CobaltStrike/CSProfileEdit";
 import { CSProfileImport } from "../Components/CobaltStrike/CSProfileImport";
 import { CSProfileTest } from "../Components/CobaltStrike/CSProfileTest";
@@ -66,6 +67,10 @@ export const CobaltStrike: IC2Provider = {
         {
             name: "Use existing profile",
             view: CSProfileImport
+        },
+        {
+            name: "Create profile from HTTP traffic",
+            view: CSProfileCreateFromHttp
         },
         {
             name: "Create new",

@@ -19,7 +19,6 @@ export const HttpView = ({ label, text }: HttpProps) => {
 
     return <Grid container>
         <Grid item xs={12}>
-            {/* TODO: Add buttons (e.g. toggle wrapping)*/}
             <Box component="div" sx={{ p: 2, backgroundColor: "#232323" }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                     <Typography variant="h6">{label}</Typography>

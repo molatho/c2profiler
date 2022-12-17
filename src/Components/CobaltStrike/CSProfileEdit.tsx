@@ -12,10 +12,11 @@ import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { ProfileChangedCb } from "../../Misc/IC2Provider";
 import { Tabs, Tab, AppBar, Stack, IconButton } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { CSHttpStager } from "./EditBlocks/CSHttpStager";
 import { CSHttpConfig } from "./EditBlocks/CSHttpConfig";
 import { CSProcessInject } from "./EditBlocks/CSProcessInject";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 interface Props {
@@ -26,14 +27,19 @@ interface Props {
 export type TopBlockMetaName = "global" | TopBlockName;
 const TopBlockMetaNames: string[] = ["global"].concat(TopBlockNames);
 
-//TODO: Add TopBlockMetaName and render views conditionally
-
 interface TabViewProps {
     csprofile: ICSProfile;
     onProfileChanged: ProfileChangedCb;
 }
 
-const TAB_DATA = [
+interface TabInfo {
+    name: string,
+    type: TopBlockMetaName,
+    removable: boolean,
+    view: ({ csprofile, onProfileChanged }: TabViewProps) => JSX.Element | null
+}
+
+const TAB_DATA: TabInfo[] = [
     {
         name: "Global Options",
         type: "global",
@@ -157,6 +163,21 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
         const BlockView: (props: TabViewProps) => JSX.Element | null = currentBlock.view;
         if (BlockView) return <BlockView csprofile={csprofile} onProfileChanged={onProfileChanged} />
         else return <></>
+    }
+
+    //TODO: Fix, throws errors
+    const getTab = (info: TabInfo, index: number) => {
+        if (index == viewIdx)
+            return <Tab key={index} label={
+                <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
+                    {info.name}
+                    <IconButton color="error" disabled={!info.removable} size="small" onClick={() => handleBlockRemoval(info.type as TopBlockName)}>
+                        <HighlightOffIcon />
+                    </IconButton>
+                </Stack>
+            }
+                sx={{ textTransform: 'none', height: "48px" }} />
+        return <Tab key={index} label={info.name} sx={{ textTransform: 'none' }} />;
     }
 
     return <>
