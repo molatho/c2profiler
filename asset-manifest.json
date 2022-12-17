@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/c2profiler/static/css/main.c36f5770.css",
-    "main.js": "/c2profiler/static/js/main.bcd4fa87.js",
+    "main.js": "/c2profiler/static/js/main.d710c59c.js",
     "index.html": "/c2profiler/index.html",
     "main.c36f5770.css.map": "/c2profiler/static/css/main.c36f5770.css.map",
-    "main.bcd4fa87.js.map": "/c2profiler/static/js/main.bcd4fa87.js.map"
+    "main.d710c59c.js.map": "/c2profiler/static/js/main.d710c59c.js.map"
   },
   "entrypoints": [
     "static/css/main.c36f5770.css",
-    "static/js/main.bcd4fa87.js"
+    "static/js/main.d710c59c.js"
   ]
 }
