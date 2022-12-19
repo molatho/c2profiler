@@ -9,6 +9,7 @@ import { useState } from 'react';
 
 interface Props {
     show: boolean;
+    name: string;
     onValidate: (name: string) => string;
     onSubmit: (name: string) => void;
     onCancel: () => void;
@@ -16,17 +17,17 @@ interface Props {
 
 const EMPTY_ERR = "Enter a name!";
 
-export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }: Props) {
-    const [name, setName] = useState("");
-    const [error, setError] = useState(EMPTY_ERR);
+export default function CSVariantDialogRename({ show, name, onValidate, onSubmit, onCancel }: Props) {
+    const [newName, setNewName] = useState(name);
+    const [error, setError] = useState("");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value);
+        setNewName(event.target.value);
         setError(onValidate(event.target.value));
     };
 
     const reset = () => {
-        setName("");
+        setNewName("");
         setError(EMPTY_ERR);
     }
 
@@ -36,7 +37,7 @@ export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }
     }
 
     const handleSubmit = () => {
-        onSubmit(name);
+        onSubmit(newName);
         reset();
     }
 
@@ -46,7 +47,7 @@ export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }
                 <DialogTitle>New variant</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Enter the name of the variant you'd like to add:
+                        {`Enter the new name of the variant "${name}":`}
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -56,7 +57,7 @@ export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }
                         fullWidth
                         variant="outlined"
                         required
-                        value={name}
+                        value={newName}
                         onChange={handleChange}
                         error={error.length > 0}
                         helperText={error}
@@ -64,7 +65,7 @@ export default function CSVariantDialog({ show, onValidate, onSubmit, onCancel }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancel}>Cancel</Button>
-                    <Button onClick={handleSubmit} disabled={error.length > 0}>Add</Button>
+                    <Button onClick={handleSubmit} disabled={error.length > 0}>Update</Button>
                 </DialogActions>
             </Dialog>
         </div>

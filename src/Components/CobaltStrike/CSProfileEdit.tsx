@@ -16,7 +16,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { CSHttpStager } from "./EditBlocks/CSHttpStager";
 import { CSHttpConfig } from "./EditBlocks/CSHttpConfig";
 import { CSProcessInject } from "./EditBlocks/CSProcessInject";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { grey, red } from '@mui/material/colors'
 
 
 interface Props {
@@ -144,11 +144,22 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
 
     const hasMetaBlock = (blockName: TopBlockMetaName) => blockName == "global" || hasBlock(blockName as TopBlockName);
     const hasBlock = (blockName: TopBlockName) => csprofile && csprofile[blockName];
-    const existingBlocks: TopBlockName[] = TopBlockNames.filter(b => hasBlock(b));
     const missingBlocks: TopBlockName[] = TopBlockNames.filter(b => !hasBlock(b));
 
+    const available_blocks = TAB_DATA.filter(d => hasMetaBlock(d.type as TopBlockMetaName)).sort((a, b) => a.name.localeCompare(b.name)) as TabInfo[];
+    const currentBlock = available_blocks[viewIdx];
+
+    const getBlockView = () => {
+        if (!currentBlock) return <></>
+        const BlockView: (props: TabViewProps) => JSX.Element | null = currentBlock.view;
+        if (BlockView) return <BlockView csprofile={csprofile} onProfileChanged={onProfileChanged} />
+        else return <></>
+    }
+
     const handleBlockRemoval = (blockName: TopBlockName) => {
-        if (viewIdx == getAvailableBlocks().length - 1) setViewIdx(viewIdx - 1);
+        console.log(available_blocks);
+        console.log(currentBlock);
+        if (viewIdx == available_blocks.length - 1 && currentBlock.type == blockName) setViewIdx(viewIdx - 1);
         onProfileChanged({ ...CSProfileHelper.remove_top_block(csprofile, blockName) });
     }
 
@@ -156,23 +167,19 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
         onProfileChanged({ ...CSProfileHelper.create_top_block(csprofile, blockName) });
     }
 
-    const getAvailableBlocks = () => TAB_DATA.filter(d => hasMetaBlock(d.type as TopBlockMetaName)).sort((a, b) => a.name.localeCompare(b.name));
-    const currentBlock = getAvailableBlocks()[viewIdx];
 
-    const getBlockView = () => {
-        const BlockView: (props: TabViewProps) => JSX.Element | null = currentBlock.view;
-        if (BlockView) return <BlockView csprofile={csprofile} onProfileChanged={onProfileChanged} />
-        else return <></>
-    }
-
-    //TODO: Fix, throws errors
     const getTab = (info: TabInfo, index: number) => {
-        if (index == viewIdx)
+        if (info.removable)
             return <Tab key={index} label={
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
                     {info.name}
-                    <IconButton color="error" disabled={!info.removable} size="small" onClick={() => handleBlockRemoval(info.type as TopBlockName)}>
-                        <HighlightOffIcon />
+                    <IconButton
+                        component="span"
+                        size="small"
+                        onClick={() => handleBlockRemoval(info.type as TopBlockName)}
+                        sx={{ ml: "0.25em", mr: 0, p: 0, color: index == viewIdx ? red[300] : grey[600] }}
+                    >
+                        <HighlightOffIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
                     </IconButton>
                 </Stack>
             }
@@ -190,7 +197,7 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
             <>
                 <AppBar position="sticky">
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Blocks:</Typography>
+                        <Typography sx={{ pl: 2, pr: 2 }}>Blocks:</Typography>
                         <Tabs
                             value={viewIdx}
                             onChange={(_, newIdx) => setViewIdx(newIdx)}
@@ -198,11 +205,8 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
                             scrollButtons
                             allowScrollButtonsMobile
                             sx={{ width: '100%' }}>
-                            {getAvailableBlocks().map((d, i) => <Tab key={i} label={d.name} sx={{ textTransform: 'none' }} />)}
+                            {available_blocks.map((d, i) => getTab(d, i))}
                         </Tabs>
-                        <IconButton disabled={!currentBlock.removable} color="error" onClick={() => handleBlockRemoval(currentBlock.type as TopBlockName)}>
-                            <DeleteIcon />
-                        </IconButton>
                     </Stack>
                 </AppBar>
                 {getBlockView()}

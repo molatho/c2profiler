@@ -63,7 +63,7 @@ export const CSProfileTest = ({ profile, navigateTo }: IC2TestProps) => {
             <>
                 <AppBar position="sticky">
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
-                        <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Blocks:</Typography>
+                        <Typography sx={{ pl: 2, pr: 2 }}>Blocks:</Typography>
                         <Tabs
                             value={viewIdx}
                             onChange={(_, newIdx) => setViewIdx(newIdx)}

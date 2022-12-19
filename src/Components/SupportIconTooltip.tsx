@@ -10,7 +10,7 @@ export interface SupportIconTooltipProps {
 export const SupportIconTooltip = ({ link, description }: SupportIconTooltipProps) => {
     return <Tooltip title={link ? `Open documentation\n${link}` : description}>
         {link
-            ? <IconButton size="small" target="_blank" href={link} sx={{padding:0}}>
+            ? <IconButton size="small" target="_blank" href={link} sx={{ p: 0 }}>
                 <OpenInNewIcon fontSize="inherit" color="disabled" />
             </IconButton>
             : <InfoIcon fontSize="small" color="disabled" />

@@ -1,9 +1,12 @@
 import { Box, Tabs, Tab, Stack, Typography, IconButton } from "@mui/material";
 import { useState } from "react";
 import { ICSHasVariant, ICSVariantContainer } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
-import CSVariantDialog from "./CSVariantDialog";
+import CSVariantDialogAdd from "./CSVariantDialogAdd";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { grey, red, green } from '@mui/material/colors'
+import CSVariantDialogRename from "./CSVariantDialogRename";
 
 interface Props<T extends ICSHasVariant> {
     profile: any;
@@ -39,16 +42,19 @@ function TabPanel({ children, value, index, ...other }: TabPanelProps) {
 
 export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProfileChanged, itemView, createVariant, hideButtons = false }: Props<T>) => {
     const [idx, setIdx] = useState(0);
-    const [showDiag, setShowDiag] = useState(false);
+    const [showDiagAdd, setShowDiagAdd] = useState(false);
+    const [showDiagRename, setShowDiagRename] = useState(false);
+
+    const current_variant = idx == 0 ? undefined : container.variants[idx - 1];
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setIdx(newValue);
     };
 
-    const handleVariantRemove = () => {
-        container.variants = container.variants.filter((_, i) => i != idx - 1);
+    const handleVariantRemove = (index: number = idx) => {
+        container.variants = container.variants.filter((_, i) => i != index - 1);
         onProfileChanged({ ...profile });
-        if (idx >= container.variants.length - 1)
+        if (index >= container.variants.length - 1)
             setIdx(container.variants.length - 1);
     }
 
@@ -60,13 +66,49 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
 
     const addVariant = (name: string) => {
         createVariant(container, name);
-        setShowDiag(false);
+        setShowDiagAdd(false);
+    }
+
+    const renameVariant = (newName: string) => {
+        if (!current_variant) return;
+        current_variant.variant = newName;
+        onProfileChanged({ ...profile });
+        setShowDiagRename(false);
+    }
+
+    const getTab = (variant: ICSHasVariant, index: number, isVariant: boolean) => {
+        return <Tab key={index} label={
+            <Stack direction="row" alignItems="center" justifyContent="center">
+                {/* Name */}
+                {variant.variant || "empty"}
+                {/* Edit */}
+                <IconButton
+                    component="span"
+                    size="small"
+                    onClick={() => setShowDiagRename(true)}
+                    sx={{ ml: "0.25em", mr: 0, p: 0, color: index + 1 == idx ? green[300] : grey[600] }}
+                >
+                    <EditIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
+                </IconButton>
+                {/* Delete */}
+                <IconButton
+                    component="span"
+                    size="small"
+                    onClick={() => handleVariantRemove(idx)}
+                    sx={{ ml: "0.25em", mr: 0, p: 0, color: index + 1 == idx ? red[300] : grey[600] }}
+                >
+                    <HighlightOffIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
+                </IconButton>
+            </Stack>
+        }
+            sx={{ textTransform: 'none', height: "48px" }} />
+
     }
 
     return <>
         <Box component="div" sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <Stack direction="row" alignItems="center" justifyContent="space-between">
-                <Typography sx={{ paddingLeft: 2, paddingRight: 2 }}>Variants:</Typography>
+                <Typography sx={{ pl: 2, pr: 2 }}>Variants:</Typography>
                 <Tabs
                     value={idx}
                     onChange={handleChange}
@@ -75,16 +117,13 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
                     allowScrollButtonsMobile
                     sx={{ width: '100%' }}>
                     <Tab label="Baseline" sx={{ textTransform: 'none' }} />
-                    {container.variants.map((v, i) => <Tab sx={{ textTransform: 'none' }} key={i} label={`Variant "${v.variant}"`} />)}
+                    {container.variants.map((v, i) => getTab(v, i, true))}
                 </Tabs>
-                {!hideButtons && <>
-                    <IconButton color="success" onClick={() => setShowDiag(true)}>
+                {!hideButtons &&
+                    <IconButton color="success" onClick={() => setShowDiagAdd(true)}>
                         <AddCircleIcon />
                     </IconButton>
-                    <IconButton disabled={idx == 0} color="error" onClick={handleVariantRemove}>
-                        <DeleteIcon />
-                    </IconButton>
-                </>}
+                }
             </Stack>
         </Box>
         <TabPanel value={idx} index={0}>
@@ -96,6 +135,7 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
         <TabPanel value={idx} index={container.variants.length + 1}>
             <></>
         </TabPanel>
-        <CSVariantDialog show={showDiag} onValidate={validateVariantName} onCancel={() => setShowDiag(false)} onSubmit={addVariant} />
+        <CSVariantDialogAdd show={showDiagAdd} onValidate={validateVariantName} onCancel={() => setShowDiagAdd(false)} onSubmit={addVariant} />
+        {current_variant && <CSVariantDialogRename name={current_variant.variant || ""} show={showDiagRename} onValidate={validateVariantName} onCancel={() => setShowDiagRename(false)} onSubmit={renameVariant} />}
     </>;
 }
