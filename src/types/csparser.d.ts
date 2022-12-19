@@ -1,3 +1,5 @@
+import { ICSProfile } from "../Plugins/CobaltStrike/CSProfileTypes";
+
 declare module "csparser"
 
 interface IPosition {

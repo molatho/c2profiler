@@ -54,10 +54,11 @@ interface Props {
     titleElement?: JSX.Element;
     children?: JSX.Element;
     startExpanded?: boolean;
+    keepChildren?: boolean;
     renderChildrenCollapsed?: boolean;
 }
 
-export default function IndentedAccordeon({ title, titleVariant, titleElement, children, startExpanded = false, renderChildrenCollapsed = false }: Props) {
+export default function IndentedAccordeon({ title, titleVariant, titleElement, children, startExpanded = false, renderChildrenCollapsed = false, keepChildren = false }: Props) {
     const [expanded, setExpanded] = useState(startExpanded);
 
     const _title = titleElement ? titleElement : <Typography variant={titleVariant}>{title}</Typography>;
@@ -71,7 +72,7 @@ export default function IndentedAccordeon({ title, titleVariant, titleElement, c
                 {_title}
             </AccordionSummary>
             <AccordionDetails>
-                {renderChildren && children}
+                {(renderChildren || keepChildren) && children}
             </AccordionDetails>
         </Accordion>
     )

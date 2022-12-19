@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { IC2ImporterProps } from "../../Misc/IC2Provider";
 import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
-import { parse } from "../../Plugins/CobaltStrike/csparser"
 import { Button, Grid, Typography } from "@mui/material";
 import CodeMirror from '@uiw/react-codemirror';
-import { PeggySyntaxError } from "../../csparser";
 import { EditorView } from "@codemirror/view";
 import { Diagnostic, linter } from "@codemirror/lint";
 import { isFirefox } from "react-device-detect";
 import { DropZone } from "../DropZone";
+import { PeggySyntaxError } from "../../types/csparser";
+import { parse } from "../../Plugins/CobaltStrike/csparser";
 
 export const CSProfileImport = ({ onImported }: IC2ImporterProps) => {
     const [profileInput, setProfileInput] = useState<string>("");

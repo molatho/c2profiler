@@ -1,4 +1,4 @@
-import { TopBlockName } from "./CSMetadataTypes";
+import { TopBlockName, TopBlockNames } from "./CSMetadataTypes";
 import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation, ICSBlockHttpsCertificate } from "./CSProfileTypes";
 
 export class CSProfileHelper {
@@ -136,6 +136,14 @@ export class CSProfileHelper {
                 return this.create_process_inject(profile);
         }
         return profile;
+    }
+
+    static create_empty_profile = (): ICSProfile => {
+        var csprofile = {} as unknown as ICSProfile;
+        for (const name of TopBlockNames)
+            this.create_top_block(csprofile, name);
+        csprofile.options = [];
+        return csprofile;
     }
 
     static create_variant = (profile: ICSProfile, blockName: "http_get" | "http_post" | "http_stager" | "http_config" | "dns_beacon", name: string): ICSProfile => {

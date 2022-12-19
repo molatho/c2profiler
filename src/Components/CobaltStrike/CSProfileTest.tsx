@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IC2TestProps } from "../../Misc/IC2Provider";
 import { CSProfileFormatter } from "../../Plugins/CobaltStrike/CSProfileFormatter";
 import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
-import { HttpView } from "../Misc/HttpVisualizer";
+import { HttpView } from "../Misc/HttpView";
 import { PaperItem } from "../PaperItems/PaperItem";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 

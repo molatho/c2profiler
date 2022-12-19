@@ -9,9 +9,10 @@ import { Box } from '@mui/system';
 interface HttpProps {
     label: string;
     text: string;
+    onTextChanged?: (text: string) => void;
 }
 
-export const HttpView = ({ label, text }: HttpProps) => {
+export const HttpView = ({ label, text, onTextChanged }: HttpProps) => {
     const [wrap, setWrap] = useState(true);
     const [autoSize, setAutoSize] = useState(true);
 
@@ -44,7 +45,8 @@ export const HttpView = ({ label, text }: HttpProps) => {
                 value={text}
                 height={autoSize ? "auto" : "400px"}
                 theme="dark"
-                readOnly
+                readOnly={onTextChanged === undefined}
+                onChange={onTextChanged ? (s) =>  onTextChanged(s) : undefined}
                 extensions={opts}
             />
         </Grid>

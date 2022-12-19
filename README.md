@@ -8,7 +8,8 @@ git clone c2profiler
 cd c2profiler
 npm install
 npm install -g peggy
-# (Optionally) build Peggy parser
+# (Optionally) build Peggy parsers
+peggy src/Plugins/HTTP/http-grammar.pegjs -o src/Plugins/HTTP/httpparser/index.js --format es
 peggy src/Plugins/CobaltStrike/cs-grammar.pegjs -o src/Plugins/CobaltStrike/csparser/index.js --format es
 ```
 
