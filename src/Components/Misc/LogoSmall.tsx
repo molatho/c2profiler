@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber"
-import { Suspense, useRef } from "react"
+import { Suspense, useMemo, useRef } from "react"
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader";
 import { OrbitControls } from "@react-three/drei";
@@ -17,6 +17,7 @@ const Scene = () => {
         materials.preload();
         loader.setMaterials(materials);
     });
+    const copiedScene = useMemo(() => obj.clone(), [obj])
 
     const mesh = useRef();
 
@@ -35,15 +36,15 @@ const Scene = () => {
 
     return <primitive
         ref={mesh}
-        object={obj}
+        object={copiedScene}
         scale={100}
         rotation={[1.5707963, 0, 0]}
         position={[0, 0, -200]} />;
 };
 
 
-export const Logo = () => {
-    return <div style={{ height: "100px", width: '60vw' }}>
+export const LogoSmall = () => {
+    return <div style={{ height: "100px", width: '100%' }}>
         <Canvas orthographic
             camera={{
                 position: [0, 0, 0]

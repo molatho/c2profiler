@@ -39,8 +39,8 @@ export const C2ImporterHost = ({ c2, onImported }: Props) => {
     return (
         <>
             <AppBar position="sticky">
-                <Tabs value={c2.importers.indexOf(selectedImporter)} onChange={handleChange}>
-                    {c2.importers.map((imp, idx) => <Tab label={imp.name} key={idx}></Tab>)}
+                <Tabs value={c2.importers.indexOf(selectedImporter)} onChange={handleChange} variant="fullWidth">
+                    {c2.importers.map((imp, idx) => <Tab label={imp.name} key={idx} sx={{ textTransform: 'none' }} />)}
                 </Tabs>
             </AppBar>
             <Box component="main" sx={{ backgroundColor: '#242424' }}>

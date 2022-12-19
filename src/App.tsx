@@ -14,6 +14,9 @@ import { C2SetupView } from './Components/C2SetupView';
 import { AppFlow } from './Misc/Common';
 import { AppNavigation } from './Components/AppNavigation';
 import { Logo } from './Components/Misc/Logo';
+import InfoIcon from '@mui/icons-material/Info';
+import { IconButton } from "@mui/material";
+import { About } from './Misc/About';
 
 const theme = createTheme({
   palette: {
@@ -36,6 +39,7 @@ function App() {
   const [c2Provider, setC2Provider] = useState<IC2Provider | null>(null);
   const [c2Profile, setC2Profile] = useState<any | null>(null);
   const [step, setStep] = useState<AppFlow>("setup");
+  const [showAbout, setShowAbout] = useState(false);
 
   const inSetup = !c2Provider || !c2Profile;
 
@@ -103,8 +107,12 @@ function App() {
       <CssBaseline />
       <AppBar position="relative" className="App-Title-Container">
         <Toolbar>
-          <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: "100vw" }}>
+            <div style={{ width: "2em" }} />
             <Logo />
+            <IconButton onClick={() => setShowAbout(true)}>
+              <InfoIcon />
+            </IconButton>
           </Stack>
         </Toolbar>
       </AppBar>
@@ -121,6 +129,7 @@ function App() {
       {/* Footer */}
       <AppFooter />
       {/* End footer */}
+      <About open={showAbout} onClose={() => setShowAbout(false)} />
     </ThemeProvider>
   );
 }
