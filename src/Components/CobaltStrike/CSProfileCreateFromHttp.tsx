@@ -1,21 +1,20 @@
-import { Button } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useState } from "react";
 import { IC2ImporterProps } from "../../Misc/IC2Provider";
 import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
+import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { IHttpRequest, IHttpResponse } from "../../Plugins/HTTP/HttpTypes";
 import { BaseBlock } from "../BaseBlock";
 import { CSHttpImport } from "./EditBlocks/Controls/CSHttpImport";
 
 export const CSProfileCreateFromHttp = ({ onImported }: IC2ImporterProps) => {
-    const [csprofile, setCsProfile] = useState(CSProfileHelper.create_empty_profile());
+    const [csprofile, setCsProfile] = useState({ options: [] } as unknown as ICSProfile);
 
     const clearHttpGet = () => {
         csprofile.http_get = null;
         setCsProfile({ ...csprofile });
     }
     const setHttpGet = (request: IHttpRequest, response: IHttpResponse) => {
-        console.log(request)
-        console.log(response)
         CSProfileHelper.create_http_get(csprofile);
         if (!csprofile.http_get) return;
         csprofile.http_get.baseline.options = [
@@ -29,7 +28,7 @@ export const CSProfileCreateFromHttp = ({ onImported }: IC2ImporterProps) => {
         csprofile.http_get.baseline.server = {
             headers: response.headers.map(h => { return { name: h.key, value: h.value || "" } }) || []
         }
-        console.log(csprofile);
+        setCsProfile({ ...csprofile });
     }
 
     const clearHttpPost = () => {
@@ -44,21 +43,30 @@ export const CSProfileCreateFromHttp = ({ onImported }: IC2ImporterProps) => {
             { name: "verb", value: request.verb }
         ]
         csprofile.http_post.baseline.client = {
-            headers: request.headers?.map(h => { return { name: h.key, value: h.value || "" } }) || [],
+            headers: request.headers.map(h => { return { name: h.key, value: h.value || "" } }) || [],
             parameters: request.path.parameters.map(p => { return { name: p.name, value: p.value || "" } }) || []
         }
         csprofile.http_post.baseline.server = {
-            headers: response.headers?.map(h => { return { name: h.key, value: h.value || "" } }) || []
+            headers: response.headers.map(h => { return { name: h.key, value: h.value || "" } }) || []
         }
-        console.log(csprofile);
+        setCsProfile({ ...csprofile });
     }
 
     return <>
-        <BaseBlock title="HTTP Get" keepChildren>
-            <CSHttpImport onInvalidate={clearHttpGet} onValidate={setHttpGet} />
-        </BaseBlock>
-        <BaseBlock title="HTTP Post" keepChildren>
-            <CSHttpImport onInvalidate={clearHttpPost} onValidate={setHttpPost} />
-        </BaseBlock>
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <BaseBlock title="HTTP Get" keepChildren>
+                    <CSHttpImport onInvalidate={clearHttpGet} onValidate={setHttpGet} />
+                </BaseBlock>
+            </Grid>
+            <Grid item xs={12}>
+                <BaseBlock title="HTTP Post" keepChildren>
+                    <CSHttpImport onInvalidate={clearHttpPost} onValidate={setHttpPost} />
+                </BaseBlock>
+            </Grid>
+            <Grid item xs={12}>
+                <Button variant="contained" color="success" disabled={csprofile.http_get == null && csprofile.http_post == null} onClick={() => onImported(csprofile)}>Create!</Button>
+            </Grid>
+        </Grid>
     </>
 }
