@@ -14,6 +14,8 @@ export const CSProfileCreateFromHttp = ({ onImported }: IC2ImporterProps) => {
         csprofile.http_get = null;
         setCsProfile({ ...csprofile });
     }
+    
+    //TODO: Implement delimiter to split body into append/prepend statements for DTL (client.metadata, server.output, ...)
     const setHttpGet = (request: IHttpRequest, response: IHttpResponse) => {
         CSProfileHelper.create_http_get(csprofile);
         if (!csprofile.http_get) return;

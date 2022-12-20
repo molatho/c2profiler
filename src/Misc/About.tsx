@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardMedia, Dialog, Grid, List, ListItem, ListItemAvatar, ListItemText, Stack, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardActions, CardContent, CardMedia, Dialog, Grid, List, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
 import { LogoSmall } from "../Components/Misc/LogoSmall";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -13,7 +13,7 @@ export interface SimpleDialogProps {
 
 export const About = ({ open, onClose }: SimpleDialogProps) => {
     return <Dialog onClose={onClose} open={open}>
-        <Card sx={{ maxWidth: 400 }}>
+        <Card sx={{ maxWidth: 400, overflow: "scroll" }}>
             <CardMedia
                 component="div"
             ><LogoSmall /></CardMedia>
@@ -22,9 +22,17 @@ export const About = ({ open, onClose }: SimpleDialogProps) => {
                 <Typography gutterBottom variant="h5">
                     About
                 </Typography>
-                <Typography gutterBottom variant="body2" color="text.secondary" sx={{ mb: "2em" }}>
-                    TBD
+                <Typography gutterBottom variant="body2" color="text.secondary">
+                    Creating, editing and testing malleable profiles can be quite the tedious task to do. Out of this inconvenience c2profiler was born, with a clear determination to make working with malleable profiles easier.
                 </Typography>
+                <Typography gutterBottom variant="body2" color="text.secondary" sx={{ mb: "1em" }}>
+                    c2profiler is a progressive web app (PWA) and handles your profiles <b>locally in your browser, without sending any data to any servers</b>. It's written in TypeScript and runs atop of ReactJS. If you'd like to improve it, please feel free to do so and create a pull-request:
+                </Typography>
+                <a href="https://github.com/molatho/c2profiler" target="_blank">
+                    <Button variant="contained" startIcon={<GitHubIcon />} size="small" sx={{ textTransform: "none", mb: "2em", width: "100%" }}>
+                        github.com/molatho/c2profiler
+                    </Button>
+                </a>
                 {/* Credits */}
                 <Typography gutterBottom variant="h5">
                     Credits
@@ -58,12 +66,38 @@ export const About = ({ open, onClose }: SimpleDialogProps) => {
                 </List>
                 {/* Thanks */}
                 <Typography gutterBottom variant="h5">
-                    Special thanks to 
+                    Special Thanks
                 </Typography>
                 <Typography gutterBottom variant="body2" color="text.secondary" sx={{ mb: "2em" }}>
-                    Credits where credits are due! The following people supported the development either directly or indirectly.
+                    Credit where credit is due: the following people supported the development of c2profiler either directly or indirectly.
                 </Typography>
                 <List sx={{ width: '100%', p: 0, m: 0 }}>
+                    {/* Adrian */}
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar src="https://avatars.githubusercontent.com/u/29756854" />
+                        </ListItemAvatar>
+                        <Grid container>
+                            <Grid item xs={9}>
+                                <Typography>Adrian Gast</Typography>
+                                <Typography color={grey[500]}>UI/UX support</Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Stack direction="row" alignItems="center" justifyContent="center">
+                                    <a href="https://github.com/itsEzz" target="_blank">
+                                        <IconButton size="small">
+                                            <GitHubIcon />
+                                        </IconButton>
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/adrian-g-852669182/" target="_blank">
+                                        <IconButton size="small">
+                                            <LinkedInIcon />
+                                        </IconButton>
+                                    </a>
+                                </Stack>
+                            </Grid>
+                        </Grid>
+                    </ListItem>
                     {/* Patrick */}
                     <ListItem>
                         <ListItemAvatar>

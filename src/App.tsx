@@ -1,9 +1,7 @@
 import AppBar from '@mui/material/AppBar';
-import GradingIcon from '@mui/icons-material/Grading';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
@@ -17,6 +15,7 @@ import { Logo } from './Components/Misc/Logo';
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from "@mui/material";
 import { About } from './Misc/About';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 const theme = createTheme({
   palette: {
@@ -110,9 +109,16 @@ function App() {
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ width: "100vw" }}>
             <div style={{ width: "2em" }} />
             <Logo />
-            <IconButton onClick={() => setShowAbout(true)}>
-              <InfoIcon />
-            </IconButton>
+            <div>
+              <a href="https://github.com/molatho/c2profiler" target="_blank">
+                <IconButton>
+                  <GitHubIcon />
+                </IconButton>
+              </a>
+              <IconButton onClick={() => setShowAbout(true)}>
+                <InfoIcon />
+              </IconButton>
+            </div>
           </Stack>
         </Toolbar>
       </AppBar>
