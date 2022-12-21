@@ -169,4 +169,4 @@ export const CSHttpPost = ({ item, onProfileChanged, profile }: Props) => {
             <CSCreateNew item={http_post.server} onCreate={createServer} itemView={getServer} />
         </BaseBlock>
     </>
-}
+} //TODO: Add "import from HTTP traffic" button (copy-paste parts from HTTP importer)

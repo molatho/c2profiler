@@ -81,24 +81,25 @@ export const CSVariants = <T extends ICSHasVariant>({ profile, container, onProf
             <Stack direction="row" alignItems="center" justifyContent="center">
                 {/* Name */}
                 {variant.variant || "empty"}
-                {/* Edit */}
-                <IconButton
-                    component="span"
-                    size="small"
-                    onClick={() => setShowDiagRename(true)}
-                    sx={{ ml: "0.25em", mr: 0, p: 0, color: index + 1 == idx ? green[300] : grey[600] }}
-                >
-                    <EditIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
-                </IconButton>
-                {/* Delete */}
-                <IconButton
-                    component="span"
-                    size="small"
-                    onClick={() => handleVariantRemove(idx)}
-                    sx={{ ml: "0.25em", mr: 0, p: 0, color: index + 1 == idx ? red[300] : grey[600] }}
-                >
-                    <HighlightOffIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
-                </IconButton>
+                {/* Edit & Delete */}
+                {!hideButtons && <>
+                    <IconButton
+                        component="span"
+                        size="small"
+                        onClick={() => setShowDiagRename(true)}
+                        sx={{ ml: "0.25em", mr: 0, p: 0, color: index + 1 == idx ? green[300] : grey[600] }}
+                    >
+                        <EditIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
+                    </IconButton>
+                    <IconButton
+                        component="span"
+                        size="small"
+                        onClick={() => handleVariantRemove(idx)}
+                        sx={{ ml: "0.25em", mr: 0, p: 0, color: index + 1 == idx ? red[300] : grey[600] }}
+                    >
+                        <HighlightOffIcon fontSize="inherit" sx={{ m: 0, p: 0 }} />
+                    </IconButton>
+                </>}
             </Stack>
         }
             sx={{ textTransform: 'none', height: "48px" }} />

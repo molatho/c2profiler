@@ -1,9 +1,10 @@
-import { Stack, IconButton, Typography } from "@mui/material";
-import { AppFlow, AppFlowItems, isFirstFlowStep, isLastFlowStep } from "../Misc/Common";
+import { Stack, IconButton, Typography, Grid } from "@mui/material";
+import { AppFlow, AppFlowItemDisplayNames, AppFlowItems, isFirstFlowStep, isLastFlowStep } from "../Misc/Common";
 import { Section } from "../Misc/IC2Provider";
 import { PaperItem } from "./PaperItems/PaperItem"
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { AppNavigationStepper } from "./AppNavigationStepper";
 
 interface Props {
     section: Section;
@@ -26,18 +27,25 @@ export const AppNavigation = ({ section, step, setStep, progressBlocked }: Props
 
     return <>
         <PaperItem>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
-                <IconButton disabled={!canGoBack} onClick={navigatePrev}>
-                    <ArrowBackIosIcon />
-                </IconButton>
-                <Stack direction="column">
-                    <Typography align="center" variant="h4" gutterBottom>{section.title}</Typography>
-                    <Typography align="center">{section.description}</Typography>
-                </Stack>
-                <IconButton disabled={!canGoForward || progressBlocked} onClick={navigateNext}>
-                    <ArrowForwardIosIcon />
-                </IconButton>
-            </Stack>
+            <Grid container spacing={4}>
+                <Grid item xs={12}>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
+                        <IconButton disabled={!canGoBack} onClick={navigatePrev}>
+                            <ArrowBackIosIcon />
+                        </IconButton>
+                        <Stack direction="column">
+                            <Typography align="center" variant="h4" gutterBottom>{section.title}</Typography>
+                            <Typography align="center">{section.description}</Typography>
+                        </Stack>
+                        <IconButton disabled={!canGoForward || progressBlocked} onClick={navigateNext}>
+                            <ArrowForwardIosIcon />
+                        </IconButton>
+                    </Stack>
+                </Grid>
+                <Grid item xs={12}>
+                    <AppNavigationStepper step={step} setStep={setStep} progressBlocked={progressBlocked} />
+                </Grid>
+            </Grid>
         </PaperItem>
     </>
 }

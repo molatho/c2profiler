@@ -466,7 +466,7 @@
       },
       {
         "name": "bof_allocator",
-        "defaultValue": "VirtualAllocEx",
+        "defaultValue": "VirtualAlloc",
         "type": "string",
         "description": "The preferred method to allocate memory in the current process to execute a BOF. Specify VirtualAlloc, MapViewOfFile, or HeapAlloc."
       },

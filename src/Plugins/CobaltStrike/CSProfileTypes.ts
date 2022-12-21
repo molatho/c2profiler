@@ -4,7 +4,6 @@
 // - https://github.com/Cobalt-Strike/Malleable-C2-Profiles/blob/master/normal/reference.profile
 // - https://bigb0sss.github.io/posts/redteam-cobalt-strike-malleable-profile/
 
-
 export interface ICSProfile extends ICSHasOptions {
     http_get: ICSVariantContainer<ICSBlockHttpGet> | null;
     http_post: ICSVariantContainer<ICSBlockHttpPost> | null;
@@ -17,8 +16,6 @@ export interface ICSProfile extends ICSHasOptions {
     code_signer: ICSBlockCodeSigner | null;
     process_inject: ICSBlockProcessInject | null;
 }
-
-
 
 export interface ICSVariantContainer<T extends ICSHasVariant> {
     baseline: T;
@@ -104,7 +101,6 @@ export interface ICSBlockHttpStagerClient extends ICSHasHeaders {
 export interface ICSBlockHttpStagerServer extends ICSHasHeaders {
     output?: ICSBlockTransformInformation;
 }
-
 
 // Payloads
 

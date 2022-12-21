@@ -141,3 +141,6 @@ function App() {
 }
 
 export default App;
+
+// TODO: Implement opsec-safe warnings for default-values in options
+// TODO: Implement versioning of profiles in localStorage (opt-in)

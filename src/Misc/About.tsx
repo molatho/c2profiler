@@ -13,7 +13,7 @@ export interface SimpleDialogProps {
 
 export const About = ({ open, onClose }: SimpleDialogProps) => {
     return <Dialog onClose={onClose} open={open}>
-        <Card sx={{ maxWidth: 600, minWidth: 400, overflow: "scroll" }}>
+        <Card sx={{ maxWidth: 600, minWidth: 400, overflow: "auto" }}>
             <CardMedia
                 component="div"
             ><LogoSmall /></CardMedia>
@@ -30,8 +30,8 @@ export const About = ({ open, onClose }: SimpleDialogProps) => {
                 </Typography>
                 <Stack direction="row" justifyContent="center">
                     <a href="https://github.com/molatho/c2profiler" target="_blank">
-                        <Button variant="contained" startIcon={<GitHubIcon />} size="small" sx={{ textTransform: "none", mb: "2em" }}>
-                            github.com/molatho/c2profiler
+                        <Button variant="contained" startIcon={<GitHubIcon />} size="small" sx={{ mb: "2em" }}>
+                            GitHub
                         </Button>
                     </a>
                 </Stack>

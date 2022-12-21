@@ -1,6 +1,7 @@
 import { CSProfileCreate } from "../Components/CobaltStrike/CSProfileCreate";
 import { CSProfileCreateFromHttp } from "../Components/CobaltStrike/CSProfileCreateFromHttp";
 import { CSProfileEdit } from "../Components/CobaltStrike/CSProfileEdit";
+import { CSProfileExport } from "../Components/CobaltStrike/CSProfileExport";
 import { CSProfileImport } from "../Components/CobaltStrike/CSProfileImport";
 import { CSProfileTest } from "../Components/CobaltStrike/CSProfileTest";
 import { AppFlow } from "./Common";
@@ -90,6 +91,6 @@ export const CobaltStrike: IC2Provider = {
     exportView: {
         title: "CS Malleable Profile Export",
         description: "Here's your exported profile - use it responsibly!",
-        view: DummyView
+        view: CSProfileExport
     }
 }
