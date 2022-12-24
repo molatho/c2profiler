@@ -455,8 +455,8 @@ function peg$parse(input, options) {
   var peg$f42 = function(str) { return mk(COMMAND, { "type": "stringw", "operand": str }); };
   var peg$f43 = function(str) { return mk(COMMAND, { "type": "string", "operand": str }); };
   var peg$f44 = function(str) { return mk(COMMAND, { "type": "data", "operand": str }); };
-  var peg$f45 = function(body) {return mk(TRANSFORMX86, { "type": "x86", "operations": filter(body, TRANSFORMOPERATION) }); };
-  var peg$f46 = function(body) {return mk(TRANSFORMX64, { "type": "x64", "operations": filter(body, TRANSFORMOPERATION) }); };
+  var peg$f45 = function(body) {return mk(TRANSFORMX86, { "type": "transform-x86", "operations": filter(body, TRANSFORMOPERATION) }); };
+  var peg$f46 = function(body) {return mk(TRANSFORMX64, { "type": "transform-x64", "operations": filter(body, TRANSFORMOPERATION) }); };
   var peg$f47 = function(str) { return mk(TRANSFORMOPERATION, { "type": "prepend", "operand1": str }); };
   var peg$f48 = function(str) { return mk(TRANSFORMOPERATION, { "type": "append", "operand1": str }); };
   var peg$f49 = function(orig, repl) { return mk(TRANSFORMOPERATION, { "type": "strrep", "operand1": orig, "operand2": repl }); };

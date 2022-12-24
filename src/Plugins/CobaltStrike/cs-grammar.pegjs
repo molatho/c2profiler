@@ -292,8 +292,8 @@ block_stage_command
     / "data" _+ str:string ";" comment? { return mk(COMMAND, { "type": "data", "operand": str }); }
 
 block_stage_transform
-	= "transform-x86" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORMX86, { "type": "x86", "operations": filter(body, TRANSFORMOPERATION) }); }
-    / "transform-x64" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORMX64, { "type": "x64", "operations": filter(body, TRANSFORMOPERATION) }); }
+	= "transform-x86" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORMX86, { "type": "transform-x86", "operations": filter(body, TRANSFORMOPERATION) }); }
+    / "transform-x64" _+ "{" _* body:block_transform_body* _* "}" {return mk(TRANSFORMX64, { "type": "transform-x64", "operations": filter(body, TRANSFORMOPERATION) }); }
     
 block_transform_body
 	= block_transform_operation

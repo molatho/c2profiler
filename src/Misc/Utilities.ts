@@ -1,0 +1,1 @@
+export const sortStr = (a: string, b: string): number => a.localeCompare(b);
