@@ -16,6 +16,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from "@mui/material";
 import { About } from './Misc/About';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import { ProfileAlertView } from './Components/ProfileAlertView';
 
 const theme = createTheme({
   palette: {
@@ -83,7 +84,10 @@ function App() {
   const getExportView = () => {
     if (c2Provider) {
       const ExportView: (profile: any) => JSX.Element = c2Provider && c2Provider.exportView.view;
-      return <ExportView profile={c2Profile} />
+      return <>
+        {c2Provider.validator && <ProfileAlertView profile={c2Profile} validator={c2Provider.validator} />}
+        <ExportView profile={c2Profile} />
+      </>
     }
     return <></>
   }

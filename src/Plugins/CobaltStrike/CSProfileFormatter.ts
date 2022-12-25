@@ -1,6 +1,5 @@
-import { TopBlockMetaName } from "../../Components/CobaltStrike/CSProfileEdit";
 import { sortStr } from "../../Misc/Utilities";
-import { IMetaOptionDefinition } from "./CSMetadataTypes";
+import { IMetaOptionDefinition, TopBlockMetaName } from "./CSMetadataTypes";
 import { ICSOption, ICSDataTransform, ICSHeader, ICSParameter, ICSBlockHttpGet, ICSBlockHttpPost, ICSProfile, ICSHasVariant, ICSBlockHttpGetClient, ICSBlockHttpGetServer, ICSBlockHttpPostClient, ICSBlockHttpPostServer, ICSBlockTransformInformation, ICSHasOptions, ICSBlockHttpsCertificate, ICSBlockHttpConfig, ICSBlockHttpStager, ICSBlockHttpStagerClient, ICSBlockHttpStagerServer, ICSBlockStage, ICSPayloadCommand, ICSPayloadTransform, ICSBlockDnsBeacon, ICSBlockPostEx, ICSBlockProcessInject, ICSProcessInjectExecute } from "./CSProfileTypes";
 import metadata from "./metadata.json"
 
@@ -242,7 +241,7 @@ export class CSProfileToCSFormatter {
 
     static format_out_options_block = (indent: string, blockName: string, block: ICSHasOptions): string => {
         const options = block.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
-        return `${indent} {\n${options}\n}\n`;
+        return `${indent}${blockName} {\n${options}\n}\n`;
     }
 
     static format_out_process_inject = (process_inject: ICSBlockProcessInject): string => {

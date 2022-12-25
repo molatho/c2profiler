@@ -4,6 +4,8 @@ import { CSProfileEdit } from "../Components/CobaltStrike/CSProfileEdit";
 import { CSProfileExport } from "../Components/CobaltStrike/CSProfileExport";
 import { CSProfileImport } from "../Components/CobaltStrike/CSProfileImport";
 import { CSProfileTest } from "../Components/CobaltStrike/CSProfileTest";
+import { TopBlockMetaName } from "../Plugins/CobaltStrike/CSMetadataTypes";
+import { CSValidate } from "../Plugins/CobaltStrike/CSProfileValidation";
 import { AppFlow } from "./Common";
 
 export interface Section {
@@ -40,12 +42,29 @@ export interface ExportView extends Section {
     view: (props: IC2ExportProps) => JSX.Element;
 }
 
+export type MessageLevel = "info" | "warning" | "error";
+export const MessageLevelDisplayName = {
+    "info": "Info",
+    "warning": "Warning",
+    "error": "Error"
+}
+
+export interface ValidationMessage {
+    block?: TopBlockMetaName; //TODO: Refactor into generic component (e.g. "meta" that can be casted like profile is)
+    level: MessageLevel;
+    message: string;
+    items?: string[];
+}
+
+export type ValidateCb = (profile: any) => ValidationMessage[];
+
 export interface IC2Provider {
     name: string;
     importers: IC2Importer[];
     editView: EditView;
     testView: TestView;
     exportView: ExportView;
+    validator?: ValidateCb;
 }
 
 
@@ -92,5 +111,6 @@ export const CobaltStrike: IC2Provider = {
         title: "CS Malleable Profile Export",
         description: "Here's your exported profile - use it responsibly!",
         view: CSProfileExport
-    }
+    },
+    validator: CSValidate
 }

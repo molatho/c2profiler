@@ -280,7 +280,12 @@
       {
         "name": "allocator",
         "defaultValue": "MapViewOfFile",
-        "type": "string",
+        "type": "option",
+        "options": [
+          "HeapAlloc",
+          "MapViewOfFile",
+          "VirtualAlloc"
+        ],
         "description": "HeapAlloc, MapViewOfFile, and VirtualAlloc"
       },
       {
@@ -442,7 +447,7 @@
       {
         "name": "pipename",
         "defaultValue": "msrpc_####, win\\\\msrpc_##",
-        "type": "string"
+        "type": "list"
       },
       {
         "name": "smartinject",
@@ -462,20 +467,33 @@
       {
         "name": "keylogger",
         "defaultValue": "GetAsyncKeyState",
-        "type": "string"
+        "type": "option",
+        "options": [
+          "GetAsyncKeyState",
+          "SetWindowsHookEx"
+        ]
       }
     ],
     "process_inject": [
       {
         "name": "allocator",
         "defaultValue": "VirtualAllocEx",
-        "type": "string",
+        "type": "option",
+        "options": [
+          "VirtualAllocEx",
+          "NtMapViewOfSection"
+        ],
         "description": "The preferred method to allocate memory in the remote process. Specify VirtualAllocEx or NtMapViewOfSection. The NtMapViewOfSection option is for same-architecture injection only. VirtualAllocEx is always used for cross-arch memory allocations."
       },
       {
         "name": "bof_allocator",
         "defaultValue": "VirtualAlloc",
-        "type": "string",
+        "type": "option",
+        "options": [
+          "VirtualAlloc",
+          "MapViewOfFile",
+          "HeapAlloc"
+        ],
         "description": "The preferred method to allocate memory in the current process to execute a BOF. Specify VirtualAlloc, MapViewOfFile, or HeapAlloc."
       },
       {

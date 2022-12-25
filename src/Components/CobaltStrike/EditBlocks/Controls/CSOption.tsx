@@ -1,70 +1,94 @@
-import { Checkbox, Stack, Switch, TableCell, TableRow, Typography } from "@mui/material";
+import { Autocomplete, Checkbox, Stack, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { unique } from "../../../../Misc/Utilities";
+import { IMetaOptionDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { CodeTextField } from "../../../CodeTextField";
+import { ListInput } from "../../../Misc/ListInput";
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
+import GppMaybeIcon from '@mui/icons-material/GppMaybe';
 
 interface Props {
     enabled: boolean;
-    name: string;
     value?: string;
-    defaultValue: string;
-    description?: string;
-    type: "string" | "number" | "boolean";
+    meta: IMetaOptionDefinition;
     onEnabledChanged: (name: string, value: string, enabled: boolean) => void;
     onValueChanged: (name: string, value: string) => void;
 }
 
-//TODO: Implement opsec, required
-export const CSOption = ({ enabled, name, value, defaultValue, description, type, onEnabledChanged, onValueChanged }: Props) => {
+
+export const CSOption = ({ enabled, value, meta, onEnabledChanged, onValueChanged }: Props) => {
+    const _value = value !== undefined ? value : meta.defaultValue;
+
     const getTypeView = () => {
-        switch (type) {
+        switch (meta.type) {
             case "number":
                 return <CodeTextField
                     type="number"
                     value={parseInt(value ? value : "0") | 0}
-                    onChange={(ev) => onValueChanged(name, ev.target.value.toString())}
+                    onChange={(ev) => onValueChanged(meta.name, ev.target.value.toString())}
                     InputLabelProps={{
                         shrink: true,
                     }}
                     size="small"
                     fullWidth
                     disabled={!enabled}
+                    error={_value.length == 0}
                 />;
             case "boolean":
                 return <Stack direction="row" alignItems="center" spacing={2}>
                     <Switch
-                        checked={value == "true"}
-                        onChange={(ev) => onValueChanged(name, ev.target.checked ? "true" : "false")}
+                        checked={value === "true"}
+                        onChange={(ev) => onValueChanged(meta.name, ev.target.checked ? "true" : "false")}
                         disabled={!enabled}
                     />
-                    <Typography>{value == "true" ? "True" : "False"}</Typography>
+                    <Typography>{value === "true" ? "True" : "False"}</Typography>
                 </Stack>;
-        } //TODO: Implement select (also in metadata)
+            case "option":
+                return <Autocomplete
+                    freeSolo
+                    autoSelect
+                    value={_value}
+                    onChange={(_, newValue) => newValue && onValueChanged(meta.name, newValue as string)}
+                    options={unique((meta.options ? meta.options : []).concat([_value]))}
+                    size="small"
+                    disabled={!enabled}
+                    renderInput={(params) => <TextField {...params} error={_value.length == 0} />}
+                />
+            case "list":
+                return <ListInput
+                    values={_value.split(",").map(v => v.trim()).filter(v => v.length > 0)}
+                    setValues={(v) => { console.log("setValues", v); onValueChanged(meta.name, v.join(", ")) }}
+                />
+        }
         return <CodeTextField
-            value={value ? value : defaultValue}
-            onChange={(ev) => onValueChanged(name, ev.target.value)}
+            value={_value}
+            onChange={(ev) => onValueChanged(meta.name, ev.target.value)}
             InputLabelProps={{
                 shrink: true,
             }}
             size="small"
             fullWidth
             disabled={!enabled}
+            error={_value.length == 0}
         />;
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        onEnabledChanged(name, value ? value : defaultValue, event.target.checked);
+        onEnabledChanged(meta.name, _value, event.target.checked);
     };
 
     return <TableRow
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-        <TableCell padding="checkbox"> <Checkbox checked={enabled} onChange={handleChange} /></TableCell>
+        <TableCell padding="checkbox"> <Checkbox checked={enabled} onChange={handleChange} disabled={meta.required}/></TableCell>
         <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography>{name}</Typography>
-                {description && <SupportIconTooltip description={description} />}
+                <Typography>{meta.name}{meta.required && <span style={{ color: "#FF0000" }}>*</span>}</Typography>
+                <Stack direction="row" alignItems="center" spacing={0.5}>
+                    {(meta.description || meta.link) && <SupportIconTooltip description={meta.description} link={meta.link} />}
+                    {meta.opsec && <Tooltip title="OPSEC"><GppMaybeIcon fontSize="small" color="warning" /></Tooltip>}
+                </Stack>
             </Stack>
         </TableCell>
-        <TableCell> {getTypeView()}</TableCell>
+        <TableCell sx={{width: "70%"}}> {getTypeView()}</TableCell>
     </TableRow>;
 }

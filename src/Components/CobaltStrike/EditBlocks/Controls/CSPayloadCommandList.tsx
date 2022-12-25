@@ -1,5 +1,5 @@
 import { ICSPayloadCommand } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
-import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, IconButton, ButtonGroup, Typography, Stack, Grid } from "@mui/material";
+import { TableContainer, Paper, Table, TableRow, TableCell, TableBody, IconButton, ButtonGroup, Typography, Stack, Grid, TextField } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';

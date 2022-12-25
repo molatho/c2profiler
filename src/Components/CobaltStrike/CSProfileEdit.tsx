@@ -4,7 +4,7 @@ import { CSOptionsList } from "./EditBlocks/Controls/CSOptionsList";
 import { CSAddBlockList } from "./EditBlocks/Controls/CSAddBlock";
 import { CSVariants } from "./EditBlocks/Controls/CSVariants";
 import { CSHttpGet } from "./EditBlocks/CSHttpGet";
-import { TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
+import { TopBlockMetaName, TopBlockName, TopBlockNames } from "../../Plugins/CobaltStrike/CSMetadataTypes";
 import { CSProfileHelper } from "../../Plugins/CobaltStrike/CSProfileHelper";
 import { CSHttpPost } from "./EditBlocks/CSHttpPost";
 import { CSStage } from "./EditBlocks/CSStage";
@@ -23,9 +23,6 @@ interface Props {
     profile: any;
     onProfileChanged: ProfileChangedCb;
 }
-
-export type TopBlockMetaName = "global" | TopBlockName;
-const TopBlockMetaNames: string[] = ["global"].concat(TopBlockNames);
 
 interface TabViewProps {
     csprofile: ICSProfile;

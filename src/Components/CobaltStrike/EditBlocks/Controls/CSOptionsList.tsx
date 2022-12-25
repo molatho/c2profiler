@@ -1,10 +1,8 @@
 import { ICSOption } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
 import { CSOption } from './CSOption';
-import { IMetaOptionDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
-import { TopBlockMetaName } from "../../CSProfileEdit";
+import { IMetaOptionDefinition, TopBlockMetaName } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { TableContainer, Paper, Table, TableBody } from "@mui/material";
-import { useState } from "react";
 
 interface Props {
     blockOptions: ICSOption[];
@@ -14,8 +12,8 @@ interface Props {
 
 export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaName }: Props) => {
     const _opts = metadata.options[blockMetaName] as IMetaOptionDefinition[];
-    const getOption = (name: string) => blockOptions.filter(o => o.name === name);
-    const isEnabled = (name: string) => getOption(name).length > 0;
+    const getOption = (name: string) => blockOptions.find(o => o.name === name);
+    const isEnabled = (name: string) => getOption(name) !== undefined;
 
 
     const handleEnabledChange = (name: string, value: string, enabled: boolean) => {
@@ -25,8 +23,11 @@ export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaNa
     }
 
     const handleValueChange = (name: string, value: string) => {
-        getOption(name)[0].value = value;
-        onBlockOptionsChanged([...blockOptions]);
+        var opt = getOption(name);
+        if (opt) {
+            opt.value = value;
+            onBlockOptionsChanged([...blockOptions]);
+        }
     }
     //TODO: Support custom options
     return <TableContainer component={Paper} sx={{ maxHeight: 440 }}>
@@ -34,12 +35,9 @@ export const CSOptionsList = ({ blockOptions, onBlockOptionsChanged, blockMetaNa
             <TableBody>
                 {_opts.map((opt, idx) => <CSOption
                     key={idx}
+                    meta={opt}
                     enabled={isEnabled(opt.name)}
-                    name={opt.name}
-                    type={opt.type}
-                    value={isEnabled(opt.name) ? getOption(opt.name)[0].value : undefined}
-                    description={opt.description}
-                    defaultValue={opt.defaultValue}
+                    value={isEnabled(opt.name) ? getOption(opt.name)?.value : undefined}
                     onEnabledChanged={handleEnabledChange}
                     onValueChanged={handleValueChange}
                 />)}
