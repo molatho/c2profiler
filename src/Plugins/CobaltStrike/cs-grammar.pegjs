@@ -176,7 +176,7 @@ block_http_transformation_elements_tail
     = (comment / _)* term:termination (comment / _)* { return term; }
 
 block_http_transformation
-	= transforms:block_http_transformation_elements_head+ term:block_http_transformation_elements_tail { return mk(BLOCKTRANFORMINFORMATION, { "transforms": filter(transforms, DSL), "termination": clean(term) }); }
+	= transforms:block_http_transformation_elements_head* term:block_http_transformation_elements_tail { return mk(BLOCKTRANFORMINFORMATION, { "transforms": filter(transforms, DSL), "termination": clean(term) }); }
 
 block_http_get
 	= option

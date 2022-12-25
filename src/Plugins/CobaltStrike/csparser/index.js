@@ -2051,23 +2051,14 @@ function peg$parse(input, options) {
     s0 = peg$currPos;
     s1 = [];
     s2 = peg$parseblock_http_transformation_elements_head();
-    if (s2 !== peg$FAILED) {
-      while (s2 !== peg$FAILED) {
-        s1.push(s2);
-        s2 = peg$parseblock_http_transformation_elements_head();
-      }
-    } else {
-      s1 = peg$FAILED;
+    while (s2 !== peg$FAILED) {
+      s1.push(s2);
+      s2 = peg$parseblock_http_transformation_elements_head();
     }
-    if (s1 !== peg$FAILED) {
-      s2 = peg$parseblock_http_transformation_elements_tail();
-      if (s2 !== peg$FAILED) {
-        peg$savedPos = s0;
-        s0 = peg$f28(s1, s2);
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
+    s2 = peg$parseblock_http_transformation_elements_tail();
+    if (s2 !== peg$FAILED) {
+      peg$savedPos = s0;
+      s0 = peg$f28(s1, s2);
     } else {
       peg$currPos = s0;
       s0 = peg$FAILED;

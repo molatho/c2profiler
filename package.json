@@ -21,7 +21,6 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.9",
     "@uiw/react-codemirror": "^4.19.2",
-    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
@@ -57,7 +56,6 @@
     ]
   },
   "devDependencies": {
-    "@types/lodash.debounce": "^4.0.7",
     "@types/three": "^0.146.0",
     "gh-pages": "^4.0.0"
   }

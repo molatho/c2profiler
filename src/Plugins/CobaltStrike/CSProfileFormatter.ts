@@ -239,9 +239,14 @@ export class CSProfileToCSFormatter {
         ].filter(f => f.length > 0).join("\n\n");
     }
 
+    static format_out_empty = (prefix: string, body: string, suffix: string): string => {
+        if (body.length == 0) return "";
+        return [prefix, body.trimEnd(), suffix].join("\n");
+    }
+
     static format_out_options_block = (indent: string, blockName: string, block: ICSHasOptions): string => {
         const options = block.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
-        return `${indent}${blockName} {\n${options}\n}\n`;
+        return this.format_out_empty(`${indent}${blockName} {`, options, `${indent}}`);
     }
 
     static format_out_process_inject = (process_inject: ICSBlockProcessInject): string => {
@@ -252,9 +257,11 @@ export class CSProfileToCSFormatter {
         const transformx86 = process_inject["transform-x86"] ? this.format_out_payload_transform("  ", process_inject["transform-x86"]) : "";
         const transformx64 = process_inject["transform-x64"] ? this.format_out_payload_transform("  ", process_inject["transform-x64"]) : "";
 
-        return `process-inject {\n` +
-            [options, transformx86, transformx64, execute].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `}`;
+        return this.format_out_empty(
+            "process-inject {",
+            [options, transformx86, transformx64, execute].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        );
     }
 
     static format_out_process_inject_execute = (indent: string, execute: ICSProcessInjectExecute): string => {
@@ -263,17 +270,21 @@ export class CSProfileToCSFormatter {
             : `${indent}  ${o.type};`
         ).join("\n");
 
-        return `${indent}execute {\n` +
-            [commands].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}execute {`,
+            [commands].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        );
     }
 
     static format_out_post_ex = (post_ex: ICSBlockPostEx): string => {
         const options = post_ex.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
 
-        return `post-ex {\n` +
-            [options].filter(f => f.length > 0).join("\n\n") + "\n" +
-            "}";
+        return this.format_out_empty(
+            "post-ex {",
+            [options].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        );
     }
 
     static annotate_block = (annotation: string, block: string): string => {
@@ -288,27 +299,33 @@ export class CSProfileToCSFormatter {
         const transformx86 = stage["transform-x86"] ? this.format_out_payload_transform("  ", stage["transform-x86"]) : "";
         const transformx64 = stage["transform-x64"] ? this.format_out_payload_transform("  ", stage["transform-x64"]) : "";
 
-        return `stage {\n` +
-            [options, transformx86, transformx64, commands].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `}`;
+        return this.format_out_empty(
+            "stage {",
+            [options, transformx86, transformx64, commands].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        )
     }
 
     static format_out_http_config = (config: ICSBlockHttpConfig): string => {
         const options = config.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
         const headers = config.headers.map(h => this.format_out_header("  ", h)).join("\n");
 
-        return `http-config {\n` +
-            [options, headers].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `}`;
+        return this.format_out_empty(
+            "http-config {",
+            [options, headers].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        )
     }
 
     static format_out_http_stager_client = (indent: string, client: ICSBlockHttpStagerClient): string => {
         const params = client.parameters.map(p => this.format_out_parameter(indent + "  ", p)).join("\n");
         const headers = client.headers.map(h => this.format_out_header(indent + "  ", h)).join("\n");
 
-        return `${indent}client {\n` +
-            [params, headers].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}client {`,
+            [params, headers].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        )
     }
 
     static format_out_http_stager_server = (indent: string, server: ICSBlockHttpStagerServer): string => {
@@ -317,9 +334,11 @@ export class CSProfileToCSFormatter {
             ? this.format_out_block_transform_information(indent + "  ", "output", server.output)
             : "";
 
-        return `${indent}server {\n` +
-            [headers, output].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}server {`,
+            [headers, output].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        )
     }
 
     static format_out_http_stager = (stager: ICSBlockHttpStager): string => {
@@ -331,9 +350,11 @@ export class CSProfileToCSFormatter {
             ? this.format_out_http_stager_server("  ", stager.server)
             : ""
 
-        return `${this.format_out_variant("http-stager", stager)} {\n` +
-            [options, client, server].filter(f => f.length > 0).join("\n\n") + "\n" +
-            "}";
+        return this.format_out_empty(
+            `${this.format_out_variant("http-stager", stager)} {`,
+            [options, client, server].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        )
     }
 
     static format_out_payload_transform = (indent: string, transform: ICSPayloadTransform): string => {
@@ -341,9 +362,11 @@ export class CSProfileToCSFormatter {
             ? `${indent}  ${o.type} "${o.operand1}" "${o.operand2}";`
             : `${indent}  ${o.type} "${o.operand1}";`);
 
-        return `${indent}${transform.type} {\n` +
-            operations.filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}${transform.type} {`,
+            operations.filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        )
     }
 
     static format_out_command = (indent: string, command: ICSPayloadCommand): string => `${indent}${command.type} "${command.operand}";`;
@@ -365,17 +388,21 @@ export class CSProfileToCSFormatter {
             ? `${indent}  ${blockTransform.termination.type} "${blockTransform.termination.operand}";`
             : `${indent}  ${blockTransform.termination.type};`
 
-        return `${indent}${name} {\n` +
-            [transforms, termination].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}${name} {`,
+            [transforms, termination].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        );
     }
 
     static format_out_https_certificate = (https: ICSBlockHttpsCertificate): string => {
         const options = https.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
 
-        return `${this.format_out_variant("https-certificate", https)} {\n` +
-            [options].filter(f => f.length > 0).join("\n\n") + "\n" +
-            "}";
+        return this.format_out_empty(
+            `${this.format_out_variant("https-certificate", https)} {`,
+            [options].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        );
     }
 
     static format_out_http_get_client = (indent: string, client: ICSBlockHttpGetClient): string => {
@@ -385,9 +412,11 @@ export class CSProfileToCSFormatter {
             ? this.format_out_block_transform_information(indent + "  ", "metadata", client.metadata)
             : "";
 
-        return `${indent}client {\n` +
-            [params, headers, metadata].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}client {`,
+            [params, headers, metadata].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        );
     }
 
     static format_out_http_get_server = (indent: string, server: ICSBlockHttpGetServer): string => {
@@ -396,9 +425,11 @@ export class CSProfileToCSFormatter {
             ? this.format_out_block_transform_information(indent + "  ", "output", server.output)
             : "";
 
-        return `${indent}server {\n` +
-            [headers, output].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}server {`,
+            [headers, output].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        );
     }
 
     static format_out_http_get = (http_get: ICSBlockHttpGet): string => {
@@ -410,17 +441,21 @@ export class CSProfileToCSFormatter {
             ? this.format_out_http_get_server("  ", http_get.server)
             : ""
 
-        return `${this.format_out_variant("http-get", http_get)} {\n` +
-            [options, client, server].filter(f => f.length > 0).join("\n\n") + "\n" +
-            "}";
+        return this.format_out_empty(
+            `${this.format_out_variant("http-get", http_get)} {`,
+            [options, client, server].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        );
     }
 
     static format_out_dns_beacon = (dns_beacon: ICSBlockDnsBeacon): string => {
         const options = dns_beacon.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
 
-        return `${this.format_out_variant("dns-beacon", dns_beacon)} {\n` +
-            [options].filter(f => f.length > 0).join("\n\n") + "\n" +
-            "}";
+        return this.format_out_empty(
+            `${this.format_out_variant("dns-beacon", dns_beacon)} {`,
+            [options].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        );
     }
 
     static format_out_http_post_client = (indent: string, client: ICSBlockHttpPostClient): string => {
@@ -433,9 +468,11 @@ export class CSProfileToCSFormatter {
             ? this.format_out_block_transform_information(indent + "  ", "id", client.id)
             : "";
 
-        return `${indent}client {\n` +
-            [params, headers, output, id].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}client {`,
+            [params, headers, output, id].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        );
     }
 
     static format_out_http_post_server = (indent: string, server: ICSBlockHttpPostServer): string => {
@@ -444,9 +481,11 @@ export class CSProfileToCSFormatter {
             ? this.format_out_block_transform_information(indent + "  ", "output", server.output)
             : "";
 
-        return `${indent}server {\n` +
-            [headers, output].filter(f => f.length > 0).join("\n\n") + "\n" +
-            `${indent}}`;
+        return this.format_out_empty(
+            `${indent}server {`,
+            [headers, output].filter(f => f.length > 0).join("\n\n"),
+            `${indent}}`
+        );
     }
 
     static format_out_http_post = (http_post: ICSBlockHttpPost): string => {
@@ -458,8 +497,10 @@ export class CSProfileToCSFormatter {
             ? this.format_out_http_post_server("  ", http_post.server) + "\n"
             : ""
 
-        return `${this.format_out_variant("http-post", http_post)} {\n` +
-            [options, client, server].filter(f => f.length > 0).join("\n\n") +
-            "}";
+        return this.format_out_empty(
+            `${this.format_out_variant("http-post", http_post)} {`,
+            [options, client, server].filter(f => f.length > 0).join("\n\n"),
+            "}"
+        );
     }
 }

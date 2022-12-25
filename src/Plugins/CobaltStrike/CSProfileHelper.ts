@@ -9,7 +9,7 @@ export class CSProfileHelper {
     }
     static create_http_post_variant(name?: string): ICSBlockHttpPost {
         return {
-            options: [],
+            options: this.create_required_options("http_post"),
             variant: name
         };
     }

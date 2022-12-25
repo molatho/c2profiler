@@ -17,6 +17,7 @@ interface Props {
 
 export const CSOption = ({ enabled, value, meta, onEnabledChanged, onValueChanged }: Props) => {
     const _value = value !== undefined ? value : meta.defaultValue;
+    const _delimiter = meta.listDelimiter ? meta.listDelimiter : ",";
 
     const getTypeView = () => {
         switch (meta.type) {
@@ -55,8 +56,9 @@ export const CSOption = ({ enabled, value, meta, onEnabledChanged, onValueChange
                 />
             case "list":
                 return <ListInput
-                    values={_value.split(",").map(v => v.trim()).filter(v => v.length > 0)}
-                    setValues={(v) => { console.log("setValues", v); onValueChanged(meta.name, v.join(", ")) }}
+                    values={_value.split(_delimiter).map(v => v.trim()).filter(v => v.length > 0)}
+                    setValues={(v) => { console.log("setValues", v); onValueChanged(meta.name, v.join(_delimiter)) }}
+                    delimiter={_delimiter}
                 />
         }
         return <CodeTextField
@@ -79,7 +81,9 @@ export const CSOption = ({ enabled, value, meta, onEnabledChanged, onValueChange
     return <TableRow
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
     >
-        <TableCell padding="checkbox"> <Checkbox checked={enabled} onChange={handleChange} disabled={meta.required}/></TableCell>
+        <TableCell padding="checkbox">
+            <Checkbox checked={enabled} onChange={handleChange} disabled={meta.required && enabled} />
+        </TableCell>
         <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
                 <Typography>{meta.name}{meta.required && <span style={{ color: "#FF0000" }}>*</span>}</Typography>
@@ -89,6 +93,6 @@ export const CSOption = ({ enabled, value, meta, onEnabledChanged, onValueChange
                 </Stack>
             </Stack>
         </TableCell>
-        <TableCell sx={{width: "70%"}}> {getTypeView()}</TableCell>
+        <TableCell sx={{ width: "70%" }}> {getTypeView()}</TableCell>
     </TableRow>;
 }

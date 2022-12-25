@@ -209,5 +209,5 @@ export const CSProfileEdit = ({ profile, onProfileChanged }: Props) => {
                 {getBlockView()}
             </>
         </PaperItem >
-    </>; //TODO: Try inlining delete icons
+    </>;
 }

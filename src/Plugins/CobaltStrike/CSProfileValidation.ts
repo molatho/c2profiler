@@ -4,8 +4,14 @@ import { ICSHasOptions, ICSHasVariant, ICSOption, ICSProfile, ICSVariantContaine
 import metadata from "./metadata.json"
 
 const ValidateOptions = (block: TopBlockMetaName, metas: IMetaOptionDefinition[], container: ICSHasOptions, variant?: string): ValidationMessage[] => {
-    const missing = metas
+    const required_missing = metas
         .filter(m => m.required && !container.options.find(o => o.name === m.name));
+
+    const required_empty = container.options
+        .filter(o => o.value.length == 0)
+        .map(o => metas.find(m => m.name == o.name))
+        .filter(m => m && m.required)
+        .map(m => m as IMetaOptionDefinition);
     
     const opsec_default = metas
         .filter(m => m.opsec)
@@ -38,12 +44,21 @@ const ValidateOptions = (block: TopBlockMetaName, metas: IMetaOptionDefinition[]
         }
         : null;
 
-    const missing_msg: ValidationMessage | null = missing.length > 0
+    const required_missing_msg: ValidationMessage | null = required_missing.length > 0
         ? {
             block: block,
             level: "error",
             message: format_message("Missing the required options:"),
-            items: missing.map(m => m.name)
+            items: required_missing.map(m => m.name)
+        }
+        : null;
+
+    const required_empty_msg: ValidationMessage | null = required_empty.length > 0
+        ? {
+            block: block,
+            level: "error",
+            message: format_message("Empty the required options:"),
+            items: required_empty.map(m => m.name)
         }
         : null;
 
@@ -67,7 +82,8 @@ const ValidateOptions = (block: TopBlockMetaName, metas: IMetaOptionDefinition[]
 
     return [
         empty_msg,
-        missing_msg,
+        required_missing_msg,
+        required_empty_msg,
         opsec_default_msg,
         opsec_missing_msg
     ]
@@ -88,10 +104,20 @@ const ValidateOpSecOps = (csprofile: ICSProfile): ValidationMessage[] => {
     const http_post = csprofile.http_post
         ? ValidateVariantOptions("http_post", metadata.options.http_post as IMetaOptionDefinition[], csprofile.http_post)
         : [];
+    const http_stager = csprofile.http_stager
+        ? ValidateVariantOptions("http_stager", metadata.options.http_post as IMetaOptionDefinition[], csprofile.http_stager)
+        : [];
+    const https_certificate = csprofile.https_certificate
+        ? ValidateVariantOptions("https_certificate", metadata.options.https_certificate as IMetaOptionDefinition[], csprofile.https_certificate)
+        : [];
+    const dns_beacon = csprofile.dns_beacon
+        ? ValidateVariantOptions("dns_beacon", metadata.options.dns_beacon as IMetaOptionDefinition[], csprofile.dns_beacon)
+        : [];
 
     return global
         .concat(http_get)
-        .concat(http_post);
+        .concat(http_post)
+        .concat(http_stager);
 }
 
 export const CSValidate = (profile: any): ValidationMessage[] => {

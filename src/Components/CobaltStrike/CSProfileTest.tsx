@@ -11,7 +11,6 @@ interface TabViewProps {
     csprofile: ICSProfile;
 }
 
-//TODO: Fix views showing default data on empty profiles :)
 const TAB_DATA = [
     {
         name: "HTTP GET",

@@ -52,7 +52,8 @@
       {
         "name": "headers_remove",
         "defaultValue": "",
-        "type": "string",
+        "type": "list",
+        "listDelimiter": ",",
         "description": "Comma-separated list of HTTP client headers to remove from Beacon C2"
       },
       {
@@ -188,8 +189,9 @@
       {
         "name": "uri",
         "defaultValue": "/api/v1/Updates",
-        "type": "string",
-        "required": true
+        "required": true,
+        "type": "list",
+        "listDelimiter": " "
       },
       {
         "name": "verb",
@@ -202,8 +204,9 @@
       {
         "name": "uri",
         "defaultValue": "/api/v1/Telemetry/Id/",
-        "type": "string",
-        "required": true
+        "required": true,
+        "type": "list",
+        "listDelimiter": " "
       },
       {
         "name": "verb",
@@ -447,7 +450,8 @@
       {
         "name": "pipename",
         "defaultValue": "msrpc_####, win\\\\msrpc_##",
-        "type": "list"
+        "type": "list",
+        "listDelimiter": ","
       },
       {
         "name": "smartinject",
