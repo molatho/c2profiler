@@ -1,7 +1,12 @@
-import { TopBlockName, TopBlockNames } from "./CSMetadataTypes";
-import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation, ICSBlockHttpsCertificate } from "./CSProfileTypes";
+import { IMetaOptionDefinition, TopBlockName, TopBlockNames } from "./CSMetadataTypes";
+import { ICSBlockHttpPost, ICSBlockHttpStager, ICSBlockDnsBeacon, ICSProfile, ICSBlockHttpGet, ICSBlockTransformInformation, ICSBlockHttpsCertificate, ICSOption } from "./CSProfileTypes";
+import metadata from './metadata.json'
 
 export class CSProfileHelper {
+    static create_required_options(blockName: TopBlockName): ICSOption[] {
+        const options = metadata.options[blockName] as IMetaOptionDefinition[];
+        return options.filter(o => o.required).map(o => { return { name: o.name, value: o.defaultValue } });
+    }
     static create_http_post_variant(name?: string): ICSBlockHttpPost {
         return {
             options: [],
@@ -10,38 +15,38 @@ export class CSProfileHelper {
     }
     static create_http_stager_variant(name?: string): ICSBlockHttpStager {
         return {
-            options: [],
+            options: this.create_required_options("http_stager"),
             variant: name
         }
     }
     static create_dns_beacon_variant(name?: string): ICSBlockDnsBeacon {
         return {
-            options: [],
+            options: this.create_required_options("dns_beacon"),
             variant: name
         }
     }
     static create_http_config(profile: ICSProfile): ICSProfile {
         profile.http_config = {
-            options: [],
+            options: this.create_required_options("http_config"),
             headers: []
         }
         return profile;
     }
     static create_post_ex(profile: ICSProfile): ICSProfile {
         profile.post_ex = {
-            options: []
+            options: this.create_required_options("post_ex")
         }
         return profile;
     }
     static create_code_signer(profile: ICSProfile): ICSProfile {
         profile.code_signer = {
-            options: []
+            options: this.create_required_options("code_signer")
         }
         return profile;
     }
     static create_process_inject(profile: ICSProfile): ICSProfile {
         profile.process_inject = {
-            options: []
+            options: this.create_required_options("process_inject")
         }
         return profile;
     }
@@ -55,7 +60,7 @@ export class CSProfileHelper {
     static create_stage(profile: ICSProfile): ICSProfile {
         profile.stage = {
             commands: [],
-            options: []
+            options: this.create_required_options("stage")
         }
         return profile;
     }
@@ -67,7 +72,7 @@ export class CSProfileHelper {
         return profile;
     }
     static create_https_certificate_variant(name?: string): ICSBlockHttpsCertificate {
-        return { options: [] }
+        return { options: this.create_required_options("https_certificate") }
     }
     static create_http_stager(profile: ICSProfile): ICSProfile {
         profile.http_stager = {
@@ -85,7 +90,7 @@ export class CSProfileHelper {
     }
     static create_http_get_variant = (name?: string): ICSBlockHttpGet => {
         return {
-            options: [],
+            options: this.create_required_options("http_get"),
             variant: name
         }
     }

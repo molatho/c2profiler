@@ -71,13 +71,15 @@
         "name": "pipename",
         "defaultValue": "msagent_##",
         "type": "string",
-        "description": "Default name of pipe to use for SMB Beacon's peer-to- peer communication. Each # is replaced with a random hex value."
+        "description": "Default name of pipe to use for SMB Beacon's peer-to- peer communication. Each # is replaced with a random hex value.",
+        "opsec": true
       },
       {
         "name": "pipename_stager",
         "defaultValue": "status_##",
         "type": "string",
-        "description": "Name of pipe to use for SMB Beacon's named pipe stager. Each # is replaced with a random hex value."
+        "description": "Name of pipe to use for SMB Beacon's named pipe stager. Each # is replaced with a random hex value.",
+        "opsec": true
       },
       {
         "name": "sample_name",
@@ -89,7 +91,8 @@
         "name": "sleeptime",
         "defaultValue": "60000",
         "type": "number",
-        "description": "Default sleep time (in milliseconds)"
+        "description": "Default sleep time (in milliseconds)",
+        "opsec": true
       },
       {
         "name": "smb_frame_header",
@@ -100,13 +103,15 @@
         "name": "ssh_banner",
         "defaultValue": "Cobalt Strike 4.2",
         "type": "string",
-        "description": "SSH client banner"
+        "description": "SSH client banner",
+        "opsec": true
       },
       {
         "name": "ssh_pipename",
         "defaultValue": "postex_ssh_####",
         "type": "string",
-        "description": "Name of pipe for SSH sessions. Each # is replaced with a random hex value."
+        "description": "Name of pipe for SSH sessions. Each # is replaced with a random hex value.",
+        "opsec": true
       },
       {
         "name": "steal_token_access_mask",
@@ -142,7 +147,8 @@
         "name": "tcp_port",
         "defaultValue": "4444",
         "type": "number",
-        "description": "Default TCP Beacon listen port"
+        "description": "Default TCP Beacon listen port",
+        "opsec": true
       },
       {
         "name": "useragent",
@@ -182,7 +188,8 @@
       {
         "name": "uri",
         "defaultValue": "/api/v1/Updates",
-        "type": "string"
+        "type": "string",
+        "required": true
       },
       {
         "name": "verb",
@@ -195,7 +202,8 @@
       {
         "name": "uri",
         "defaultValue": "/api/v1/Telemetry/Id/",
-        "type": "string"
+        "type": "string",
+        "required": true
       },
       {
         "name": "verb",
@@ -500,13 +508,15 @@
         "name": "uri_x86",
         "defaultValue": "/api/v1/GetLicence",
         "type": "string",
-        "description": "TODO"
+        "description": "TODO",
+        "required": true
       },
       {
         "name": "uri_x64",
         "defaultValue": "/api/v2/GetLicence",
         "type": "string",
-        "description": "TODO"
+        "description": "TODO",
+        "required": true
       }
     ]
   },

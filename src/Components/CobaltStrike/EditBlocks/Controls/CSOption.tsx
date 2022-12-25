@@ -1,4 +1,4 @@
-import { Checkbox, Stack, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
+import { Checkbox, Stack, Switch, TableCell, TableRow, Typography } from "@mui/material";
 import { CodeTextField } from "../../../CodeTextField";
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
 
@@ -13,6 +13,7 @@ interface Props {
     onValueChanged: (name: string, value: string) => void;
 }
 
+//TODO: Implement opsec, required
 export const CSOption = ({ enabled, name, value, defaultValue, description, type, onEnabledChanged, onValueChanged }: Props) => {
     const getTypeView = () => {
         switch (type) {

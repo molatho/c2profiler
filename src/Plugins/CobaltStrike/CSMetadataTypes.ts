@@ -19,6 +19,7 @@ export interface IMetaOptionDefinition extends IHasDocumentation {
     type: "string" | "number" | "boolean";
     defaultValue: string;
     opsec?: boolean;
+    required?: boolean;
 }
 
 export type TransformName = "append" | "prepend" | "base64" | "base64url" | "mask" | "netbios" | "netbiosu";

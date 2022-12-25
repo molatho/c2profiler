@@ -1,7 +1,7 @@
 import { AppBar, Stack, Typography, Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 import { IC2TestProps } from "../../Misc/IC2Provider";
-import { CSProfileFormatter } from "../../Plugins/CobaltStrike/CSProfileFormatter";
+import { CSProfileToHttpFormatter } from "../../Plugins/CobaltStrike/CSProfileFormatter";
 import { ICSProfile } from "../../Plugins/CobaltStrike/CSProfileTypes";
 import { HttpView } from "../Misc/HttpView";
 import { PaperItem } from "../PaperItems/PaperItem";
@@ -24,8 +24,8 @@ const TAB_DATA = [
                     onProfileChanged={() => { }}
                     createVariant={() => { }}
                     hideButtons
-                    itemView={(http_get) => <>{CSProfileFormatter.format_http_get_req(http_get).map((r, i) => <HttpView key={i} label="Request" text={r} />)}
-                        <HttpView label="Response" text={CSProfileFormatter.format_http_get_res(http_get)} />
+                    itemView={(http_get) => <>{CSProfileToHttpFormatter.format_http_get_req(http_get).map((r, i) => <HttpView key={i} label="Request" text={r} />)}
+                        <HttpView label="Response" text={CSProfileToHttpFormatter.format_http_get_res(http_get)} />
                     </>} />
             }
         </>
@@ -41,8 +41,8 @@ const TAB_DATA = [
                     onProfileChanged={() => { }}
                     createVariant={() => { }}
                     hideButtons
-                    itemView={(http_post) => <>{CSProfileFormatter.format_http_post_req(http_post).map((r, i) => <HttpView key={i} label="Request" text={r} />)}
-                        <HttpView label="Response" text={CSProfileFormatter.format_http_post_res(http_post)} />
+                    itemView={(http_post) => <>{CSProfileToHttpFormatter.format_http_post_req(http_post).map((r, i) => <HttpView key={i} label="Request" text={r} />)}
+                        <HttpView label="Response" text={CSProfileToHttpFormatter.format_http_post_res(http_post)} />
                     </>} />
             }
         </>
