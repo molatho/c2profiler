@@ -5,17 +5,26 @@ export const AppFooter = () => {
     <Box sx={{ bgcolor: 'background.paper', p: 6 }} component="footer">
       <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
         <Typography variant="h6">
-          c2profiler
+          <span style={{ color: "#f44336" }}>c2</span>profiler
         </Typography>
         <Typography> - </Typography>
-        <Typography
-          variant="subtitle1"
-          color="text.secondary"
-          component="p"
-        >
-          Malleable profiles made easy.
-        </Typography>
+        <Stack direction="column">
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            component="p"
+          >
+            Editing malleable profiles in your browser only.
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            textAlign="center"
+            component="p">
+            No data is uploaded to any servers.
+          </Typography>
+        </Stack>
       </Stack>
     </Box>
   )
-} //TODO: Add note about local data use only
+}

@@ -14,7 +14,7 @@ import { AppNavigation } from './Components/AppNavigation';
 import { Logo } from './Components/Misc/Logo';
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from "@mui/material";
-import { About } from './Misc/About';
+import { About } from './Components/Misc/About';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { ProfileAlertView } from './Components/ProfileAlertView';
 

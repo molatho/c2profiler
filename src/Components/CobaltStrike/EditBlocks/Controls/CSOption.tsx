@@ -86,7 +86,7 @@ export const CSOption = ({ enabled, value, meta, onEnabledChanged, onValueChange
         </TableCell>
         <TableCell>
             <Stack direction="row" alignItems="center" spacing={2}>
-                <Typography>{meta.name}{meta.required && <span style={{ color: "#FF0000" }}>*</span>}</Typography>
+                <Typography>{meta.name}{meta.required && <span style={{ color: "#f44336" }}>*</span>}</Typography>
                 <Stack direction="row" alignItems="center" spacing={0.5}>
                     {(meta.description || meta.link) && <SupportIconTooltip description={meta.description} link={meta.link} />}
                     {meta.opsec && <Tooltip title="OPSEC"><GppMaybeIcon fontSize="small" color="warning" /></Tooltip>}

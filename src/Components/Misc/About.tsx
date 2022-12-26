@@ -1,10 +1,11 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardMedia, Dialog, Grid, List, ListItem, ListItemAvatar, Stack, Typography } from "@mui/material";
-import { LogoSmall } from "../Components/Misc/LogoSmall";
+import { LogoSmall } from "./LogoSmall";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { IconButton } from "@mui/material";
 import { grey } from '@mui/material/colors';
+import { DiscordIcon } from "./Icons/DiscordIcon";
 
 export interface SimpleDialogProps {
     open: boolean;
@@ -60,6 +61,11 @@ export const About = ({ open, onClose }: SimpleDialogProps) => {
                                         <a href="https://www.linkedin.com/in/moritz-thomas-34992718a/" target="_blank">
                                             <IconButton size="small">
                                                 <LinkedInIcon />
+                                            </IconButton>
+                                        </a>
+                                        <a href="http://discordapp.com/users/317395302304710656" target="_blank">
+                                            <IconButton size="small">
+                                                <DiscordIcon />
                                             </IconButton>
                                         </a>
                                     </Stack>
