@@ -18,4 +18,4 @@ export const AppFooter = () => {
       </Stack>
     </Box>
   )
-}
+} //TODO: Add note about local data use only

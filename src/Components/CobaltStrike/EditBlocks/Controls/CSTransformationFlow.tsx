@@ -106,6 +106,7 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
     const getTransformMetadata = (name: TransformName): IMetaTransformDefinition => metadata.transforms[name] as IMetaTransformDefinition;
     const getTerminationMetadata = (name: TerminationName): IMetaTerminationDefinition => metadata.terminations[name] as IMetaTerminationDefinition;
 
+    //TODO: Put help into InfoAlert
     return <>
         <Grid container spacing={2}>
             {/* Help */}
