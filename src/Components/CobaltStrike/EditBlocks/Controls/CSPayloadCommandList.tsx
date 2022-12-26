@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
-import { CodeTextField } from "../../../CodeTextField";
+import { CodeTextField } from "../../../Misc/CodeTextField";
 import { IMetaPayloadCommandDefinition, PayloadCommandName, PayloadCommandNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { InfoAddChip } from "../../../InfoAddChip";
 

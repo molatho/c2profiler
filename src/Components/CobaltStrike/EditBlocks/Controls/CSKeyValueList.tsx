@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { CodeTextField } from "../../../CodeTextField";
+import { CodeTextField } from "../../../Misc/CodeTextField";
 
 interface ItemProps {
     item: ICSKeyValue;

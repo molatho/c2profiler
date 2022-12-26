@@ -7,7 +7,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './CSTransformationFlow.css';
 import { InfoAddChip } from "../../../InfoAddChip";
-import { CodeTextField } from "../../../CodeTextField";
+import { CodeTextField } from "../../../Misc/CodeTextField";
 
 interface TransformItemProps {
     meta: IMetaPayloadTransformDefinition;

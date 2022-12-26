@@ -11,7 +11,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './CSTransformationFlow.css';
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
 import { InfoAddChip } from "../../../InfoAddChip";
-import { CodeTextField } from "../../../CodeTextField";
+import { CodeTextField } from "../../../Misc/CodeTextField";
 
 interface TransformItemProps {
     meta: IMetaTransformDefinition;

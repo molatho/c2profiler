@@ -1,7 +1,7 @@
 import { Autocomplete, Checkbox, Stack, Switch, TableCell, TableRow, TextField, Tooltip, Typography } from "@mui/material";
 import { unique } from "../../../../Misc/Utilities";
 import { IMetaOptionDefinition } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
-import { CodeTextField } from "../../../CodeTextField";
+import { CodeTextField } from "../../../Misc/CodeTextField";
 import { ListInput } from "../../../Misc/ListInput";
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
 import GppMaybeIcon from '@mui/icons-material/GppMaybe';

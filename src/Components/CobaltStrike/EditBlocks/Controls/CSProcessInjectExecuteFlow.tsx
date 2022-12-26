@@ -6,7 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { InfoAddChip } from "../../../InfoAddChip";
-import { CodeTextField } from "../../../CodeTextField";
+import { CodeTextField } from "../../../Misc/CodeTextField";
 
 //TODO: Create re-usable component for the pick&choose style of cases
 interface ExecuteCommandProps {
