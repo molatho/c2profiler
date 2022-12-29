@@ -1,6 +1,7 @@
 {
   "name": "c2profiler",
   "version": "0.1.0",
+  "license": "AGPL-3.0-or-later",
   "homepage": "https://molatho.github.io/c2profiler",
   "private": true,
   "dependencies": {

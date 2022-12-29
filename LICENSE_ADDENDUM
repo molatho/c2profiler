@@ -1,0 +1,15 @@
+                       c2profiler LICENSE ADDENDUM
+                       Version 1, 29 December 2022
+
+                            Preamble
+
+Individual files are exempt from the GNU AFFERO GENERAL PUBLIC LICENSE
+that c2profiler is licensed under. These files' contents originated
+from publicly accessible but unlicensed or proprietary sources, such as
+GitHub repositories or official documentation of vendors of proprietary
+software.
+As such, the following files are not subject to the AGPL included in
+this project:
+- src/Plugins/CobaltStrike/cs-reference-havex.profile
+- src/Plugins/CobaltStrike/cs-reference.profile
+- src/Plugins/CobaltStrike/metadata.json
