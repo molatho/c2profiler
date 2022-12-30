@@ -16,6 +16,14 @@ peggy src/Plugins/HTTP/http-grammar.pegjs -o src/Plugins/HTTP/httpparser/index.j
 peggy src/Plugins/CobaltStrike/cs-grammar.pegjs -o src/Plugins/CobaltStrike/csparser/index.js --format es
 ```
 
+# Contributing & bugs
+
+Please fork the repository, make the changes in your fork and include tests. When you're done making changes, send in a pull request.
+
+## Bug reports
+
+Please include a minimal profile that can be used to replicate the bug. Feel free to censor as needed.
+
 # License
 This application is licensed under [AGPLv3](https://choosealicense.com/licenses/agpl-3.0/), a copy of the exact license can be found in the [LICENSE](LICENSE) file. This license is extended in the [LICENSE_ADDENDUM](LICENSE_ADDENDUM) file.
 
