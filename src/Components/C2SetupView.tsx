@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { useState } from "react";
-import { CobaltStrike, IC2Provider } from "../Misc/IC2Provider";
+import { BruteRatelC4, CobaltStrike, IC2Provider } from "../Misc/IC2Provider";
 import { C2ImporterHost } from "./C2ImporterHost";
 import { C2ProviderSelector } from "./C2ProviderSelector";
 import { PaperItem } from "./PaperItems/PaperItem";
@@ -10,7 +10,7 @@ interface Props {
     onSetupDone: (c2: IC2Provider, profile: any) => void;
 }
 
-const PROVIDERS: IC2Provider[] = [CobaltStrike];
+const PROVIDERS: IC2Provider[] = [BruteRatelC4, CobaltStrike];
 
 export const C2SetupView = ({ onSetupDone }: Props) => {
     const [c2Provider, setC2Provider] = useState<IC2Provider | null>(null);
