@@ -1,6 +1,3 @@
-// Tranforms: (append [i][+]) (mask[i][+])
-// Flow (append [operand][h/s][x]) => (mask [x]) =>  
-
 import CodeMirror from '@uiw/react-codemirror';
 import { Stack, Grid, Typography, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup, SelectChangeEvent, Select, MenuItem } from "@mui/material";
 import { IMetaTerminationDefinition, IMetaTransformDefinition, TerminationName, TerminationNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
@@ -13,8 +10,8 @@ import './CSTransformationFlow.css';
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
 import { InfoAddChip } from "../../../InfoAddChip";
 import { CodeTextField } from "../../../Misc/CodeTextField";
+import { EditorView } from "@codemirror/view";
 import { CSProfileToHttpFormatter } from "../../../../Plugins/CobaltStrike/CSProfileFormatter";
-import { EditorView } from '@codemirror/view';
 
 interface TransformItemProps {
     meta: IMetaTransformDefinition;
@@ -102,7 +99,7 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
     };
 
     const handleTerminationOperand = (event: React.ChangeEvent<HTMLInputElement>) => {
-        flow.termination.operand = event.currentTarget.value;
+        flow.termination.operand = event.target.value;
         onProfileChanged({ ...profile });
     };
 
@@ -192,14 +189,15 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                     InputLabelProps={{
                         shrink: true,
                     }}
+                    label="Operand"
                     size="small"
                     fullWidth
                     error={getTerminationMetadata(flow.termination.type).operand && (flow.termination.operand === undefined || (flow.termination.operand?.length === 0))}
                     disabled={!getTerminationMetadata(flow.termination.type).operand}
-                    placeholder={getTerminationMetadata(flow.termination.type).operand ? "Operand" : `Termination type "${metadata.terminations[flow.termination.type].displayName}" doesn't support operands.`}
+                    placeholder={!getTerminationMetadata(flow.termination.type).operand ? `Termination type "${metadata.terminations[flow.termination.type].displayName}" doesn't support operands.` : undefined}
                 />
             </Grid>
-            {/* Flow display */}
+            {/* Example */}
             <Grid item xs={12} sx={{ marginTop: 4 }}>
                 <Typography variant="subtitle1">Applying transforms on input string "[data]":</Typography>
             </Grid>

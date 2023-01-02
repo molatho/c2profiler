@@ -386,7 +386,7 @@ export class CSProfileToCSFormatter {
             .map(t => t.operand ? `${indent}  ${t.type} "${t.operand}";` : `${indent}  ${t.type};`)
             .join("\n");
 
-        const termination = blockTransform.termination.operand
+        const termination = metadata.terminations[blockTransform.termination.type].operand
             ? `${indent}  ${blockTransform.termination.type} "${blockTransform.termination.operand}";`
             : `${indent}  ${blockTransform.termination.type};`
 
