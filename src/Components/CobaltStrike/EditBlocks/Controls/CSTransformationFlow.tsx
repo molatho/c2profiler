@@ -1,7 +1,8 @@
 // Tranforms: (append [i][+]) (mask[i][+])
 // Flow (append [operand][h/s][x]) => (mask [x]) =>  
 
-import { Stack, Grid, Typography, TextField, Card, CardContent, Button, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup, SelectChangeEvent, Select, MenuItem, Icon } from "@mui/material";
+import CodeMirror from '@uiw/react-codemirror';
+import { Stack, Grid, Typography, IconButton, TableContainer, Paper, Table, TableCell, TableHead, TableRow, TableBody, ButtonGroup, SelectChangeEvent, Select, MenuItem } from "@mui/material";
 import { IMetaTerminationDefinition, IMetaTransformDefinition, TerminationName, TerminationNames, TransformName, TransformNames } from "../../../../Plugins/CobaltStrike/CSMetadataTypes";
 import { ICSBlockTransformInformation, ICSDataTransform } from "../../../../Plugins/CobaltStrike/CSProfileTypes";
 import metadata from "../../../../Plugins/CobaltStrike/metadata.json"
@@ -12,6 +13,8 @@ import './CSTransformationFlow.css';
 import { SupportIconTooltip } from "../../../SupportIconTooltip";
 import { InfoAddChip } from "../../../InfoAddChip";
 import { CodeTextField } from "../../../Misc/CodeTextField";
+import { CSProfileToHttpFormatter } from "../../../../Plugins/CobaltStrike/CSProfileFormatter";
+import { EditorView } from '@codemirror/view';
 
 interface TransformItemProps {
     meta: IMetaTransformDefinition;
@@ -191,7 +194,22 @@ export const CSTransformationFlow = ({ profile, flow, onProfileChanged }: Props)
                     }}
                     size="small"
                     fullWidth
+                    error={getTerminationMetadata(flow.termination.type).operand && (flow.termination.operand === undefined || (flow.termination.operand?.length === 0))}
                     disabled={!getTerminationMetadata(flow.termination.type).operand}
+                    placeholder={getTerminationMetadata(flow.termination.type).operand ? "Operand" : `Termination type "${metadata.terminations[flow.termination.type].displayName}" doesn't support operands.`}
+                />
+            </Grid>
+            {/* Flow display */}
+            <Grid item xs={12} sx={{ marginTop: 4 }}>
+                <Typography variant="subtitle1">Applying transforms on input string "[data]":</Typography>
+            </Grid>
+            <Grid item xs>
+                <CodeMirror
+                    value={CSProfileToHttpFormatter.format_transforms(flow.transforms)}
+                    height="auto"
+                    theme="dark"
+                    readOnly={true}
+                    extensions={[EditorView.lineWrapping]}
                 />
             </Grid>
         </Grid>
