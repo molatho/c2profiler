@@ -1,6 +1,6 @@
 import { sortStr } from "../../Misc/Utilities";
-import { IMetaOptionDefinition, TopBlockMetaName } from "./CSMetadataTypes";
-import { ICSOption, ICSDataTransform, ICSHeader, ICSParameter, ICSBlockHttpGet, ICSBlockHttpPost, ICSProfile, ICSHasVariant, ICSBlockHttpGetClient, ICSBlockHttpGetServer, ICSBlockHttpPostClient, ICSBlockHttpPostServer, ICSBlockTransformInformation, ICSHasOptions, ICSBlockHttpsCertificate, ICSBlockHttpConfig, ICSBlockHttpStager, ICSBlockHttpStagerClient, ICSBlockHttpStagerServer, ICSBlockStage, ICSPayloadCommand, ICSPayloadTransform, ICSBlockDnsBeacon, ICSBlockPostEx, ICSBlockProcessInject, ICSProcessInjectExecute } from "./CSProfileTypes";
+import { IMetaOptionDefinition, IMetaPayloadTransformDefinition, TopBlockMetaName } from "./CSMetadataTypes";
+import { ICSOption, ICSDataTransform, ICSHeader, ICSParameter, ICSBlockHttpGet, ICSBlockHttpPost, ICSProfile, ICSHasVariant, ICSBlockHttpGetClient, ICSBlockHttpGetServer, ICSBlockHttpPostClient, ICSBlockHttpPostServer, ICSBlockTransformInformation, ICSHasOptions, ICSBlockHttpsCertificate, ICSBlockHttpConfig, ICSBlockHttpStager, ICSBlockHttpStagerClient, ICSBlockHttpStagerServer, ICSBlockStage, ICSPayloadCommand, ICSPayloadTransform, ICSBlockDnsBeacon, ICSBlockPostEx, ICSBlockProcessInject, ICSProcessInjectExecute, ICSPayloadTransformOperation } from "./CSProfileTypes";
 import metadata from "./metadata.json"
 
 export class CSProfileToHttpFormatter {
@@ -358,13 +358,15 @@ export class CSProfileToCSFormatter {
     }
 
     static format_out_payload_transform = (indent: string, transform: ICSPayloadTransform): string => {
-        const operations = transform.operations.map(o => o.operand2
+        const getOperationMeta = (o: ICSPayloadTransformOperation) => metadata.payloadTransforms[o.type] as IMetaPayloadTransformDefinition;
+
+        const operations = transform.operations.map(o => getOperationMeta(o).operand2
             ? `${indent}  ${o.type} "${o.operand1}" "${o.operand2}";`
             : `${indent}  ${o.type} "${o.operand1}";`);
 
         return this.format_out_empty(
             `${indent}${transform.type} {`,
-            operations.filter(f => f.length > 0).join("\n\n"),
+            operations.filter(f => f.length > 0).join("\n"),
             `${indent}}`
         )
     }
@@ -489,12 +491,12 @@ export class CSProfileToCSFormatter {
     }
 
     static format_out_http_post = (http_post: ICSBlockHttpPost): string => {
-        const options = http_post.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n") + "\n";
+        const options = http_post.options.sort((a, b) => sortStr(a.name, b.name)).map(o => this.format_out_option("  ", o)).join("\n");
         const client = http_post.client
-            ? this.format_out_http_post_client("  ", http_post.client) + "\n"
+            ? this.format_out_http_post_client("  ", http_post.client)
             : ""
         const server = http_post.server
-            ? this.format_out_http_post_server("  ", http_post.server) + "\n"
+            ? this.format_out_http_post_server("  ", http_post.server)
             : ""
 
         return this.format_out_empty(
