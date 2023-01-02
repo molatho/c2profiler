@@ -29,9 +29,9 @@ export const BRProfileImport = ({ onImported }: IC2ImporterProps) => {
         setProfileInput(newInput);
         if (newInput.length > 0) {
             try {
-                let result = parse(newInput);
-                setProfileData(result as IBRProfile);
-                setInputError("");
+                // let result = parse(newInput);
+                // setProfileData(result as IBRProfile);
+                // setInputError("");
             } catch (ex) {
                 setProfileData(null);
                 if (ex instanceof Error) {
@@ -52,7 +52,7 @@ export const BRProfileImport = ({ onImported }: IC2ImporterProps) => {
 
     const csLint = (view: EditorView): Diagnostic[] => {
         try {
-            parse(view.state.doc.toString())
+            // parse(view.state.doc.toString())
         } catch (ex) {
             if (ex instanceof Error) {
                 const _ex = ex as unknown as PeggySyntaxError;

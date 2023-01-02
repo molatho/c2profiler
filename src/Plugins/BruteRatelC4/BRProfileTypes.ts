@@ -40,7 +40,14 @@ export interface IBaseCommunication {
     proxy: string;
 }
 
-export interface IHttpListener extends IBaseCommunication { }
+export interface IHttpListener extends IBaseCommunication {
+    append?: string;
+    append_response?: string;
+    prepend?: string;
+    prepend_response?: string;
+    request_headers?: { [key: string]: string };
+    response_headers?: { [key: string]: string };
+}
 
 export interface IDohListener extends IBaseCommunication {
     dnshost: string;
