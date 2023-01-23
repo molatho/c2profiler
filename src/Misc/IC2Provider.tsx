@@ -1,3 +1,5 @@
+import { BRProfileCreate } from "../Components/BruteRatelC4/BRProfileCreate";
+import { BRProfileEdit } from "../Components/BruteRatelC4/BRProfileEdit";
 import { BRProfileImport } from "../Components/BruteRatelC4/BRProfileImport";
 import { CSProfileCreate } from "../Components/CobaltStrike/CSProfileCreate";
 import { CSProfileCreateFromHttp } from "../Components/CobaltStrike/CSProfileCreateFromHttp";
@@ -122,12 +124,16 @@ export const BruteRatelC4: IC2Provider = {
         {
             name: "Use existing profile",
             view: BRProfileImport
+        },
+        {
+            name: "Create new",
+            view: BRProfileCreate
         }
     ],
     editView: {
         title: "BR Malleable Profile Editing",
         description: "Here you can edit your Brute Ratel C4 malleable profile.",
-        view: DummyView
+        view: BRProfileEdit
     },
     testView: {
         title: "BR Malleable Profile Test",

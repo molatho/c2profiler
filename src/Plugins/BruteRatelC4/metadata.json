@@ -1,0 +1,43 @@
+{
+    "options": {
+        "BaseListener": [
+            {
+                "name": "auth_type",
+                "displayName": "Authentication Type",
+                "defaultValue": "Regular keys",
+                "type": "option",
+                "options": [
+                    "Regular keys",
+                    "One Time Auth keys"
+                ],
+                "description": "Authentication type to use for badgers"
+            },
+            {
+                "name": "c2_authkeys",
+                "displayName": "Authentication keys",
+                "defaultValue": "",
+                "type": "array"
+            },
+            {
+                "name": "c2_uri",
+                "displayName": "C2 URIs",
+                "defaultValue": "",
+                "type": "array"
+            },
+            {
+                "name": "extra_headers",
+                "displayName": "Extra headers",
+                "defaultValue": "",
+                "type": "dict"
+            },
+            {
+                "name": "host",
+                "displayName": "Host",
+                "defaultValue": "",
+                "type": "string"
+            }
+        ],
+        "HTTPListener": {},
+        "DoHListener": {}
+    }
+}

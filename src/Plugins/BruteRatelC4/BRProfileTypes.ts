@@ -2,7 +2,7 @@
 // https://bruteratel.com/tabs/commander/c4profiler/
 
 export interface IBRProfile {
-    listeners: IListener[];
+    listeners:{ [key: string]: IListener };
     payload_config?: { [key: string]: IPayload };
     register_dll?: { [key: string]: IRegisterDll };
     register_pe?: { [key: string]: IRegisterPe };
@@ -29,15 +29,15 @@ export interface IBaseCommunication {
     c2_authkeys: string[];
     c2_uri: string[];
     extra_headers: { [key: string]: string };
-    host: string;
-    is_random: boolean;
+    host?: string;
+    is_random?: boolean;
     os_type: string;
     port: string;
     rotational_host: string;
-    ssl: boolean;
+    ssl?: boolean;
     useragent: string;
-    die_offline: boolean;
-    proxy: string;
+    die_offline?: boolean;
+    proxy?: string;
 }
 
 export interface IHttpListener extends IBaseCommunication {
