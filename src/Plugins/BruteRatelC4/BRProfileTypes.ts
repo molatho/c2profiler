@@ -2,7 +2,7 @@
 // https://bruteratel.com/tabs/commander/c4profiler/
 
 export interface IBRProfile {
-    listeners:{ [key: string]: IListener };
+    listeners: { [key: string]: IListener };
     payload_config?: { [key: string]: IPayload };
     register_dll?: { [key: string]: IRegisterDll };
     register_pe?: { [key: string]: IRegisterPe };
@@ -21,32 +21,44 @@ export interface IBRProfile {
 }
 
 /* Listeners */
-export type IListener = IHttpListener | IDohListener;
+export type IListener = IDohListener | IHttpListener;
+
+export type SleepMaskType = "APC" | "Pooling-0" | "Pooling-1";
+export const SleepMaskTypes: SleepMaskType[] = ["APC", "Pooling-0", "Pooling-1"];
+
+export type OperatingSystemType = "windows";
+export const OperatingSystemTypes: OperatingSystemType[] = ["windows"];
+
+export type AuthentitcationType = "Regular keys" | "One Time Auth keys";
+export const AuthentitcationTypes: AuthentitcationType[] = ["Regular keys", "One Time Auth keys"];
 
 export interface IBaseCommunication {
     auth_count: number;
     auth_type: boolean;
     c2_authkeys: string[];
     c2_uri: string[];
-    extra_headers: { [key: string]: string };
     host?: string;
     is_random?: boolean;
-    os_type: string;
+    obfsleep: SleepMaskType;
+    os_type: OperatingSystemType;
     port: string;
     rotational_host: string;
     ssl?: boolean;
     useragent: string;
     die_offline?: boolean;
     proxy?: string;
+    sleep: number;
+    jitter: number;
 }
 
 export interface IHttpListener extends IBaseCommunication {
-    append?: string;
-    append_response?: string;
-    prepend?: string;
-    prepend_response?: string;
-    request_headers?: { [key: string]: string };
-    response_headers?: { [key: string]: string };
+    append: string;
+    append_response: string;
+    prepend: string;
+    prepend_response: string;
+    request_headers: { [key: string]: string };
+    response_headers: { [key: string]: string };
+    empty_response: string;
 }
 
 export interface IDohListener extends IBaseCommunication {
@@ -54,6 +66,7 @@ export interface IDohListener extends IBaseCommunication {
     idleA: string;
     spoofTxt: string;
     checkinA: string;
+    extra_headers: { [key: string]: string };
 }
 
 export type PayloadType = "HTTP" | "DOH" | "SMB" | "TCP";
